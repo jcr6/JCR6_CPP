@@ -36,7 +36,7 @@ namespace jcr6 {
    }
 
 
-   void RegisterDirDriver(JC_DirDriver Driver){
+   void RegisterDirDriver(JD_DirDriver Driver){
      JAMJCR_Error = "Ok";
      // code comes later
    }
