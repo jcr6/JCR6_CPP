@@ -98,7 +98,7 @@ namespace jcr6 {
      bool ret{true};
      char x;
      const char head[6] = "JCR6\032";
-     std::ifstream bt
+     std::ifstream bt;
      bt.open (file, ios::binary);
      for (int i=0;i<6;i++) {
          bt.read(x,1);
