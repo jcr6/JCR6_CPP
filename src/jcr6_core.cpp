@@ -47,7 +47,7 @@ namespace jcr6 {
    }
 
    static std::map<std::string,JD_DirDriver> JC_DirDrivers;
-   void RegisterDirDriver(JC_DirDriver Driver){
+   void RegisterDirDriver(JD_DirDriver Driver){
      JAMJCR_Error = "Ok";
      // code comes later
    }
