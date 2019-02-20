@@ -12,5 +12,5 @@ all:mkobjects/*.$(PLATFORM).o
 
 mkobjects/*.$(PLATFORM).o:src/* headers/*
 	@echo Compiling JCR6
-	@g++ -c -std=c++11 -o mkobjects/jcr6.$(PLATFORM).o src/*.cpp
+	@g++ -c -std=c++11 -o mkobjects/jcr6.$(PLATFORM).o -pedantic-errors src/*.cpp
 	@echo Done
