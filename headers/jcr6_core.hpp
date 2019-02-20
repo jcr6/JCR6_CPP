@@ -74,7 +74,7 @@ namespace jcr6{
      typedef struct {
        std::string Name;
        int ( * Compress ) (char *Uncompressed,char *Compressed, int size_uncompressed); // This function will need to do the compression and return the size of the compressed data, or -1 if something went wrong.
-       bool ( * Expand )(char *Compressed, char *UnCompressed, int size_uncompressed, int size_compressed); // This function will expand. The size_compressed parameter will check if the expanded data is indeed as long as we wanted. Will return 'true' if succesful, and 'false' if failed.
+       bool ( * Expand )(char *Compressed, char *UnCompressed, int size_compressed, int size_uncompressed); // This function will expand. The size_compressed parameter will check if the expanded data is indeed as long as we wanted. Will return 'true' if succesful, and 'false' if failed.
      } JC_CompressDriver;
      void RegisterCompressDriver(JC_CompressDriver);
 

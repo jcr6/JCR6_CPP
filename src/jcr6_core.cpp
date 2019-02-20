@@ -36,6 +36,10 @@ namespace jcr6 {
 
    std::string Get_JCR_Error_Message() { return JAMJCR_Error; }
 
+   void JamError(std::string errormessage){
+     JAMJCR_Error = errormessage;
+   }
+
    // Chapter 1: Reading
    std::map <std::string,JT_Entry> &JT_Dir::Entries(){
      // code comes later
@@ -65,12 +69,29 @@ namespace jcr6 {
      // code comes later
    }
 
-   static std::map<std::string,JD_DirDriver> JC_DirDrivers;
+   static std::map<std::string,JD_DirDriver> DirDrivers;
    void RegisterDirDriver(JD_DirDriver Driver){
      JAMJCR_Error = "Ok";
-     // code comes later
+     if (DirDrivers[Driver.Name]) { JamError("Duplicate directory driver!"); return; }
+     DirDrivers[Driver.Name]=Driver;
    }
+
+   static void FakeStore(char * ibuffer,char obuffer int size){
+      for (int i=0;i<size;++i) obuffer[i]=ibuffer[i]; // Copying the buffer as a whole in stead of just copying the pointer is essential to make sure still will not get deleted when it shouldn't be!
+   }
+
+   static void FakeRestore(char *ibuffer, char obuffer, int size1, int size2){
+     FakeStore(ibuffer,obuffer,size2);
+   }
+
 
    // Chapter 2: Writing
 
+   // Epilogue: InitJCR6
+   void init_JCR6(){
+     JC_CompressDriver comp;
+     comp.Compress=FakeStore;
+     comp.Expand=FakeRestore;
+     comp.Name="Store";
+   }
 }
