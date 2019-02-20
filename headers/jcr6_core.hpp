@@ -68,7 +68,7 @@ namespace jcr6{
        (*bool) Recognize(std::File);
        (*JT_Dir) Dir(std::File);
      } JD_DirDriver;
-     void RegisterDirDriver(JC_DirDriver Driver);
+     void RegisterDirDriver(JD_DirDriver Driver);
 
      typedef struct {
        std::string Name;
