@@ -14,7 +14,8 @@ static std::string Upper(std::string strToConvert)
 namespace jcr6 {
    // Prologue: Declarations
    static std::string JAMJCR_Error;
-   const std::string &JCR_Error=tJCR_Error;
+
+   std:string() Get_JCR_Error_Message() { return JAMJCR_Error; }
 
    // Chapter 1: Reading
    std::map <std::string,JT_Entry> &JT_Entry::Entries(){
