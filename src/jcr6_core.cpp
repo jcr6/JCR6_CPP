@@ -108,8 +108,20 @@ namespace jcr6 {
      return ret;
    }
 
-   static JT_Dir(std::string file){
-     
+   static J6_Dir(std::string file){
+     const char head[6] = "JCR6\032";
+     JT_Dir ret;
+     std::ifstream bt;
+     bt.open (file, ios::binary);
+     {
+       bool isj = true;
+       for (int i=0;i<6;i++) {
+         bt.read(x,1);
+         isj = isj && x==head[i];
+       }
+       if (!isj) { JamError("JCR6 Header error"); bt.close(); return; } // Now this is a safety precaution, as it should never be possible this error pops up.
+     }
+     bt.close();
    }
 
 
