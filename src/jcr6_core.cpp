@@ -18,8 +18,9 @@ namespace jcr6 {
    std::string Get_JCR_Error_Message() { return JAMJCR_Error; }
 
    // Chapter 1: Reading
-   std::map <std::string,JT_Entry> &JT_Entry::Entries(){
+   std::map <std::string,JT_Entry> &JT_Dir::Entries(){
      // code comes later
+     return EntryMap;     
    }
 
    JT_Entry *CreateEntry(std::string Name){
