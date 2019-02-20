@@ -19,6 +19,7 @@
 // EndLic
 
 #include <iostream>
+#include <fstream>
 #include "../headers/jcr6_core.hpp"
 
 
@@ -91,6 +92,20 @@ namespace jcr6 {
    static bool FakeRestore(char *ibuffer, char *obuffer, int size1, int size2){
      FakeStore(ibuffer,obuffer,size2);
      return true;
+   }
+
+   static bool Recognize(std:string file){
+     bool ret{true};
+     char x;
+     const char head[6] = "JCR6\032";
+     std::ifstream bt
+     bt.open (file, ios::binary);
+     for (int i=0;i<6;i++) {
+         bt.read(x,1);
+         ret = ret && x==head[i];
+     }
+     bt.close();
+     return ret;
    }
 
 
