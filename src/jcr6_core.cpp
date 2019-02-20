@@ -17,6 +17,7 @@
 //      misrepresented as being the original software.
 //   3. This notice may not be removed or altered from any source distribution.
 // EndLic
+
 #include "../headers/jcr6_core.hpp"
 
 
@@ -31,6 +32,7 @@ static std::string Upper(std::string strToConvert)
 
 
 namespace jcr6 {
+  
    // Prologue: Declarations
    static std::string JAMJCR_Error;
 
