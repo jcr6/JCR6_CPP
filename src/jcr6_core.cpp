@@ -32,7 +32,7 @@ static std::string Upper(std::string strToConvert)
 
 
 namespace jcr6 {
-  
+
    // Prologue: Declarations
    static std::string JAMJCR_Error;
 
@@ -78,12 +78,14 @@ namespace jcr6 {
      DirDrivers[Driver.Name]=Driver;
    }
 
-   static void FakeStore(char * ibuffer,char obuffer int size){
+   static int FakeStore(char * ibuffer,char obuffer int size){
       for (int i=0;i<size;++i) obuffer[i]=ibuffer[i]; // Copying the buffer as a whole in stead of just copying the pointer is essential to make sure still will not get deleted when it shouldn't be!
+      return size;
    }
 
-   static void FakeRestore(char *ibuffer, char obuffer, int size1, int size2){
+   static bool FakeRestore(char *ibuffer, char obuffer, int size1, int size2){
      FakeStore(ibuffer,obuffer,size2);
+     return true;
    }
 
 
