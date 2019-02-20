@@ -38,10 +38,7 @@ namespace jcr6 {
    }
 
 
-   void RegisterDirDriver(JD_DirDriver Driver){
-     JAMJCR_Error = "Ok";
-     // code comes later
-   }
+
 
    static std::map<std::string,JC_CompressDriver> CompDrivers;
    void RegisterCompressDriver(JC_CompressDriver){
