@@ -74,7 +74,7 @@ namespace jcr6 {
    static std::map<std::string,JD_DirDriver> DirDrivers;
    void RegisterDirDriver(JD_DirDriver Driver){
      JAMJCR_Error = "Ok";
-     if (DirDrivers[Driver.Name]) { JamError("Duplicate directory driver!"); return; }
+     if (DirDrivers.count(Driver.Name)) { JamError("Duplicate directory driver!"); return; }
      DirDrivers[Driver.Name]=Driver;
    }
 
