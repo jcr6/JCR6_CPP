@@ -43,13 +43,13 @@ namespace jcr6 {
      // code comes later
    }
 
-   static map<std::string,JC_CompressDriver> CompDrivers;
+   static std::map<std::string,JC_CompressDriver> CompDrivers;
    void RegisterCompressDriver(JC_CompressDriver){
      JAMJCR_Error = "Ok";
      // code comes later
    }
 
-   static map<std::string,JC_DirDriver> JC_DirDrivers;
+   static std::map<std::string,JC_DirDriver> JC_DirDrivers;
    void RegisterDirDriver(JC_DirDriver Driver){
      JAMJCR_Error = "Ok";
      // code comes later
