@@ -2,9 +2,9 @@
 PLATFORM=mac
 
 
-all:src/* header/*
+all:src/* headers/*
 
-mkobjects/*.$(PLATFORM).o:src/* header/*
+mkobjects/*.$(PLATFORM).o:src/* headers/*
 	@echo Compiling JCR6
 	@g++ --std:c++11 -o mkobjects/jcr6.$(PLATFORM).o src/*.cpp
 	@echo Done
