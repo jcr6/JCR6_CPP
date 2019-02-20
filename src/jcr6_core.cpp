@@ -94,7 +94,7 @@ namespace jcr6 {
      return true;
    }
 
-   static bool Recognize(std:string file){
+   static bool J6_Recognize(std::string file){
      bool ret{true};
      char x;
      const char head[6] = "JCR6\032";
@@ -106,6 +106,10 @@ namespace jcr6 {
      }
      bt.close();
      return ret;
+   }
+
+   static JT_Dir(std::string file){
+     
    }
 
 
