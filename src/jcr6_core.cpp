@@ -20,10 +20,10 @@ namespace jcr6 {
    // Chapter 1: Reading
    std::map <std::string,JT_Entry> &JT_Dir::Entries(){
      // code comes later
-     return EntryMap;     
+     return EntryMap;
    }
 
-   JT_Entry *CreateEntry(std::string Name){
+   JT_Entry *JT_Dir::CreateEntry(std::string Name){
      JAMJCR_Error = "Ok";
      std::string id = Upper(Name);
      // Is there a more elegant solution for this one?
