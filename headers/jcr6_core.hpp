@@ -40,6 +40,8 @@
 
 namespace jcr6{
 
+     const std::string &JCR_Error;
+
      class JT_Entry {
      private:
      public:
