@@ -32,7 +32,7 @@ namespace jcr6 {
      // Create pointer
      JT_Entry *ret = &cr;
      // Base config
-     ret->CFG_String["__ENTRY"] = name;
+     ret->CFG_String["__ENTRY"] = Name;
      // return
      return ret;
    }
