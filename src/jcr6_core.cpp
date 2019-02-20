@@ -40,6 +40,10 @@ namespace jcr6 {
 
    void JamError(std::string errormessage){
      JAMJCR_Error = errormessage;
+     if (JCR_ErrorCrash) {
+       std::cout << errormessage;
+       exit(1);
+     }
    }
 
    // Chapter 1: Reading
