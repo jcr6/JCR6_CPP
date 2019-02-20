@@ -41,3 +41,6 @@ MKL*
 
 # And no Windows Thumbnail files either!!!
 Thumb.db
+
+# And let's ignore our test binaries as well
+testbin
