@@ -42,6 +42,7 @@ namespace jcr6{
 
      // const std::string &JCR_Error; The clean way can't work, eh?
      #define JCR_Error jcr6::Get_JCR_Error_Message()
+     std::string() Get_JCR_Error_Message();
 
      class JT_Entry {
      private:
