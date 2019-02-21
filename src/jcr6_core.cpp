@@ -154,7 +154,7 @@ namespace jcr6 {
      comp.Compress=FakeStore;
      comp.Expand=FakeRestore;
      comp.Name="Store";
-     JC_DirDriver dir;
+     JD_DirDriver dir;
      dir.Recognize = J6_Recognize;
      dir.Dir = J6_Dir;
      dir.Name="JCR6";
