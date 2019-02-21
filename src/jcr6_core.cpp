@@ -24,7 +24,7 @@
 #include "../headers/jcr6_core.hpp"
 
 
-#define DEBUGCHAT
+#undef DEBUGCHAT
 static void chat(std::vector<std::string> args){
   #ifdef DEBUGCHAT
   std::cout << "DEBUG: ";
@@ -32,6 +32,7 @@ static void chat(std::vector<std::string> args){
   std::cout << "\n";
   #endif
 }
+
 
 // Just to use by JCR6, as I did not want to rely on "boost".
 // There is not guarantee all compilers support that, and this way I'm safe.
@@ -124,9 +125,10 @@ namespace jcr6 {
      const char head[6] = "JCR6\032";
      std::ifstream bt;
      bt.open (file, std::ios::binary);
-     for (int i=0;i<6;i++) {
+     for (int i=0;i<5;i++) {
          bt.read(&x,1);
          ret = ret && x==head[i];
+         chat({"Reading file;  pos",std::to_string(i)," char",std::to_string((int)x)," result",std::to_string(ret)});
      }
      bt.close();
      return ret;
@@ -154,8 +156,13 @@ namespace jcr6 {
      JAMJCR_Error = "Ok";
      for (auto& kv : DirDrivers) { // I'm still keeping to C++ 11 for now...
            //std::cout << kv.first << " has value " << kv.second << std::endl;
-           chat({"Checking: ",kv.second.Name,kv.first});
-           if (kv.second.Recognize(file)) return kv.second.Name;
+           chat({"Checking: ",kv.second.Name,"/",kv.first,"; "});
+           if (kv.second.Recognize(file)) {
+             return kv.second.Name;
+             chat({"Cool!"});
+           } else {
+             chat({"Nope, not correct!"});
+           }
      }
      return ""; // Empty string means unrecognized.... BOO!
    }
