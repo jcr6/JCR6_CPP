@@ -266,6 +266,7 @@ namespace jcr6 {
        bt.close();
        return ret;
      }
+     // read File Table Header (how big is it, and how is it compress (if in fact it is)).
      bt.close();
      return ret;
    }
