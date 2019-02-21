@@ -93,7 +93,7 @@ namespace jcr6is{ // JCR6 internal stream routines.
   }
   // Please note, JCR6 does not care about null-termination, yet C++ does.
   // Normally this should not lead to trouble, but in theory it can.
-  std::string ReadString(&std::ifstream bt,int length=0){
+  std::string ReadString(std::ifstream &bt,int length=0){
     char c{0};
     std::string ret = "";
     int l=length
