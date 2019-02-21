@@ -243,6 +243,14 @@ namespace jcr6 {
      return ""; // Empty string means unrecognized.... BOO!
    }
 
+   JT_Dir Dir(std::string file){
+     JT_Dir retD; // return Dir
+     std::string rec = Recognize(file);
+     if (rec=="") { JamError("File not recognized by any Dir Drivers."); return retD; }
+     retD = DirDrivers[rec].Dir(file);
+     return retD;
+   }
+
 
    // Chapter 2: Writing
 
