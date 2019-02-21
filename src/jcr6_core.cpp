@@ -70,7 +70,7 @@ template <typename ecconv> ecconv EndianConvert(ecconv num,bool force=false){
   }
 
   for (int i=0;i<sizeof(ecconv);++i ){
-    a2.ev_reverse[sizeof(eccov)-(i+1)] = a1.ev_reverse[i];
+    a2.ev_reverse[sizeof(ecconv)-(i+1)] = a1.ev_reverse[i];
   }
   switch (sizeof(ecconv)){
     case 4: return a2.ev_int;
