@@ -123,7 +123,7 @@ namespace jcr6 {
      const char head[6] = "JCR6\032";
      JT_Dir ret;
      std::ifstream bt;
-     bt.open (file, ios::binary);
+     bt.open (file, std::ios::binary);
      {
        bool isj = true;
        for (int i=0;i<6;i++) {
