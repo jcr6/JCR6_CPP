@@ -64,7 +64,9 @@ namespace jcr6{
        std::map <std::string,JT_Entry> EntryMap;
      public:
        int FT_offset{0};
-       std::map <std::string,std::string> Config;
+       std::map <std::string,std::string> Config_string;
+       std::map <std::string,int>         Config_int;
+       std::map <std::string,bool>        Config_bool;
        std::map <std::string,std::string> Comments;
        // methods
        std::map <std::string,JT_Entry> &Entries(); // Get all Entries
