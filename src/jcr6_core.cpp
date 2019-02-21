@@ -241,7 +241,7 @@ namespace jcr6 {
      unsigned char TTag = 0;
      std::string Tag = "";
      do {
-       TTag = jcr6is::ReadByte();
+       TTag = jcr6is::ReadByte(bt);
        if (TTag != 255) { Tag = jcr6is::ReadString(bt); }
        switch (TTag) {
          case 1:
