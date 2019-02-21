@@ -38,7 +38,7 @@ typedef union {
   unsigned char ec_byte;
   int ec_int;
   long ec_long;
-  char ev_reverse[10];
+  char ec_reverse[10];
 } uEndianCheckUp;
 bool LittleEndian(){
   static bool checked{false};
@@ -52,9 +52,36 @@ bool LittleEndian(){
   #endif
   return ret;
 }
+template <typename ecconv> ecconv EndianConvert(eccov num,bool force=false){
+  if (LittleEndian() && !force) return num;
+  uEndianCheckUp a1;
+  uEndianCheckUp a2;
+  switch sizeof(eccov){
+    case 4:
+      a1.ec_int = num; break;
+    case 8:
+      a1.ec_long = num; break;
+    default:
+      std::cout << "FATAL ERROR! I do not know how to handle size " << sizeof(eccov) << "!\n";
+      exit(2);
+  }
+
+  for (int i=0;i<sizeof(eccov);++i ){
+    a2.ev_reverse[sizeof(eccov)-(i+1)] = a1.ev_revers[i];
+  }
+  switch sizeof(eccov){
+    case 4: return a2.ev_int;
+    case 8: return a2.ev_long;
+    default: return num;
+  }
+
+}
 
 namespace jcr6is{ // JCR6 internal stream routines.
-  
+  int ReadInt(&std::ifstream){
+
+  }
+
 }
 
 
