@@ -61,20 +61,20 @@ template <typename ecconv> ecconv EndianConvert(ecconv num,bool force=false){
   uEndianCheckUp a2;
   switch (sizeof(ecconv)){
     case 4:
-      a1.ev_int = num; break;
+      a1.ec_int = num; break;
     case 8:
-      a1.ev_long = num; break;
+      a1.ec_long = num; break;
     default:
       std::cout << "FATAL ERROR! I do not know how to handle size " << sizeof(ecconv) << "!\n";
       exit(2);
   }
 
   for (int i=0;i<sizeof(ecconv);++i ){
-    a2.ev_reverse[sizeof(ecconv)-(i+1)] = a1.ev_reverse[i];
+    a2.ec_reverse[sizeof(ecconv)-(i+1)] = a1.ec_reverse[i];
   }
   switch (sizeof(ecconv)){
-    case 4: return a2.ev_int;
-    case 8: return a2.ev_long;
+    case 4: return a2.ec_int;
+    case 8: return a2.ec_long;
     default: return num;
   }
 
@@ -83,13 +83,13 @@ template <typename ecconv> ecconv EndianConvert(ecconv num,bool force=false){
 namespace jcr6is{ // JCR6 internal stream routines.
   int ReadInt(std::ifstream &bt){
     uEndianCheckUp i;
-    for (int j=0; j<4; ++j) bt.read(&(i.ev_reverse[j]));
-    return EndianConvert(i.ev_int);
+    for (int j=0; j<4; ++j) bt.read(&(i.ec_reverse[j]));
+    return EndianConvert(i.ec_int);
   }
   long ReadLong(std::ifstream &bt){
     uEndianCheckUp i;
-    for (int j=0; j<8; ++j) bt.read(&(i.ev_reverse[j]));
-    return EndianConvert(i.ev_long);
+    for (int j=0; j<8; ++j) bt.read(&(i.ec_reverse[j]));
+    return EndianConvert(i.ec_long);
   }
   // Please note, JCR6 does not care about null-termination, yet C++ does.
   // Normally this should not lead to trouble, but in theory it can.
