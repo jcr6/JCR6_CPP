@@ -34,6 +34,27 @@ static void chat(std::vector<std::string> args){
 }
 
 
+typedef union {
+  unsigned char ec_byte;
+  int ec_int;
+  long ec_long;
+  char ev_reverse[10];
+} uEndianCheckUp;
+bool LittleEndian(){
+  static bool checked{false};
+  static bool ret{false};
+  if (checked) return ret;
+  eEndianCheckUp e;
+  e.ec_int = 20;
+  ret = e.ec_byte>0; // In big Endian the Byte would always be 0
+  #ifdef DEBUGCHAT
+  if (ret) { chat({"System has been detected as: LittleEndian"});} else {chat({"System has been detected as BigEndian"});}
+  #endif
+  return ret;
+}
+
+
+
 // Just to use by JCR6, as I did not want to rely on "boost".
 // There is not guarantee all compilers support that, and this way I'm safe.
 static std::string Upper(std::string strToConvert)
