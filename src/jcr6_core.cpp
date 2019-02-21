@@ -134,6 +134,7 @@ namespace jcr6 {
        if (!isj) { JamError("JCR6 Header error"); bt.close(); return ret; } // Now this is a safety precaution, as it should never be possible this error pops up.
      }
      bt.close();
+     return ret;
    }
 
    std::string Recognize(std::string file){
