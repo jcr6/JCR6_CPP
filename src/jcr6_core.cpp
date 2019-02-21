@@ -131,7 +131,7 @@ namespace jcr6 {
          bt.read(&x,1);
          isj = isj && x==head[i];
        }
-       if (!isj) { JamError("JCR6 Header error"); bt.close(); return; } // Now this is a safety precaution, as it should never be possible this error pops up.
+       if (!isj) { JamError("JCR6 Header error"); bt.close(); return ret; } // Now this is a safety precaution, as it should never be possible this error pops up.
      }
      bt.close();
    }
