@@ -93,9 +93,9 @@ namespace jcr6is{ // JCR6 internal stream routines.
     return EndianConvert(i.ec_long);
   }
   unsigned char ReadByte(std::ifstream &bt){
-    unsigned char c{0};
-    bt.read(&c,1);
-    return c;
+    uEndianCheckUp c;
+    bt.read(&c.ec_char,1);
+    return c.ec_byte;
   }
   // Please note, JCR6 does not care about null-termination, yet C++ does.
   // Normally this should not lead to trouble, but in theory it can.
