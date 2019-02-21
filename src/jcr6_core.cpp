@@ -165,6 +165,7 @@ namespace jcr6 {
 
    // Epilogue: InitJCR6
    void init_JCR6(){
+     chat({"Init JCR6"});
      JC_CompressDriver comp;
      comp.Compress=FakeStore;
      comp.Expand=FakeRestore;
