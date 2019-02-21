@@ -20,8 +20,18 @@
 
 #include <iostream>
 #include <fstream>
+#include <vector>
 #include "../headers/jcr6_core.hpp"
 
+
+#define DEBUGCHAT
+static void chat(std::vector<std::string> args){
+  #ifdef DEBUGCHAT
+  std::cout << "DEBUG: ";
+  for (std::string a:args) std::cout << a;
+  std::cout << "\n";
+  #endif
+}
 
 // Just to use by JCR6, as I did not want to rely on "boost".
 // There is not guarantee all compilers support that, and this way I'm safe.
@@ -144,6 +154,7 @@ namespace jcr6 {
      JAMJCR_Error = "Ok";
      for (auto& kv : DirDrivers) { // I'm still keeping to C++ 11 for now...
            //std::cout << kv.first << " has value " << kv.second << std::endl;
+           chat({"Checking: ",kv.second.Name,kv.first});
            if (kv.second.Recognize(file)) return kv.second.Name;
      }
      return ""; // Empty string means unrecognized.... BOO!

@@ -35,8 +35,12 @@
 #ifndef DEFINED_JCR6CORE
 #define DEFINED_JCR6CORE
 
+
+
 #include <map>
 #include <string>
+
+
 
 namespace jcr6{
 
