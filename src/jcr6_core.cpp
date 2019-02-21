@@ -65,7 +65,7 @@ template <typename ecconv> ecconv EndianConvert(ecconv num,bool force=false){
     case 8:
       a1.ec_long = num; break;
     default:
-      std::cout << "FATAL ERROR! I do not know how to handle size " << sizeof(eccov) << "!\n";
+      std::cout << "FATAL ERROR! I do not know how to handle size " << sizeof(ecconv) << "!\n";
       exit(2);
   }
 
