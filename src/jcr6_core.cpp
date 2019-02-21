@@ -40,7 +40,7 @@ private:
 public:
   int pos = 0;
   mybankstream(int size){ buf = new unsigned char[size]; bufsize=size; }
-  ~mybankstream(int size) { delete buf;}
+  ~mybankstream() { delete buf;}
 }
 
 
