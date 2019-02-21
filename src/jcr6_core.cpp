@@ -55,11 +55,11 @@ bool LittleEndian(){
 
 // Please note! I only use LittleEndian computers myself, so I really don't
 // know if this works, as I have no way to test this.
-template <typename ecconv> ecconv EndianConvert(eccov num,bool force=false){
+template <typename ecconv> ecconv EndianConvert(ecconv num,bool force=false){
   if (LittleEndian() && !force) return num;
   uEndianCheckUp a1;
   uEndianCheckUp a2;
-  switch sizeof(eccov){
+  switch sizeof(ecconv){
     case 4:
       a1.ec_int = num; break;
     case 8:
@@ -72,7 +72,7 @@ template <typename ecconv> ecconv EndianConvert(eccov num,bool force=false){
   for (int i=0;i<sizeof(eccov);++i ){
     a2.ev_reverse[sizeof(eccov)-(i+1)] = a1.ev_reverse[i];
   }
-  switch sizeof(eccov){
+  switch sizeof(ecconv){
     case 4: return a2.ev_int;
     case 8: return a2.ev_long;
     default: return num;
