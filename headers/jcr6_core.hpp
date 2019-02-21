@@ -63,6 +63,7 @@ namespace jcr6{
      private:
        std::map <std::string,JT_Entry> EntryMap;
      public:
+       int FT_offset{0};
        std::map <std::string,std::string> Config;
        std::map <std::string,std::string> Comments;
        // methods
