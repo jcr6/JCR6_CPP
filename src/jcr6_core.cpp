@@ -125,9 +125,10 @@ namespace jcr6 {
      std::ifstream bt;
      bt.open (file, std::ios::binary);
      {
+       char x;
        bool isj = true;
        for (int i=0;i<6;i++) {
-         bt.read(x,1);
+         bt.read(&x,1);
          isj = isj && x==head[i];
        }
        if (!isj) { JamError("JCR6 Header error"); bt.close(); return; } // Now this is a safety precaution, as it should never be possible this error pops up.
