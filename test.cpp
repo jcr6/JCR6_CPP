@@ -27,7 +27,7 @@ int main(){
 	// causing git to malfunction when you try to update your clone from the actual repository.  Perhaps it's better to copy this file first
 	// before you make any modifications, in order to keep git happy :-P
 
-	jcr6::InitJCR6();
+	jcr6::Init_JCR6();
 
 	std::cout << "test.jcr recognized as " << jcr6::Recognize("test.jcr") << "; " << JCR_Error << "\n";
 	return 0;
