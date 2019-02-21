@@ -86,6 +86,8 @@ namespace jcr6{
 
      std::string Recognize(std::string file);
 
+     void init_JCR6();
+
 }
 
 
