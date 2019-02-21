@@ -112,14 +112,14 @@ namespace jcr6 {
      std::ifstream bt;
      bt.open (file, std::ios::binary);
      for (int i=0;i<6;i++) {
-         bt.read(x,1);
+         bt.read(&x,1);
          ret = ret && x==head[i];
      }
      bt.close();
      return ret;
    }
 
-   static J6_Dir(std::string file){
+   static JT_Dir J6_Dir(std::string file){
      const char head[6] = "JCR6\032";
      JT_Dir ret;
      std::ifstream bt;
