@@ -53,6 +53,10 @@ bool LittleEndian(){
   return ret;
 }
 
+namespace jcr6is{ // JCR6 internal stream routines.
+  
+}
+
 
 
 // Just to use by JCR6, as I did not want to rely on "boost".
