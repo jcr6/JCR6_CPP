@@ -91,6 +91,11 @@ namespace jcr6is{ // JCR6 internal stream routines.
     for (int j=0; j<8; ++j) bt.read(&(i.ec_reverse[j]),1);
     return EndianConvert(i.ec_long);
   }
+  unsigned char ReadByte(std::ifstream &bt){
+    unsigned char c{0};
+    bt.read(&c,1);
+    return c;
+  }
   // Please note, JCR6 does not care about null-termination, yet C++ does.
   // Normally this should not lead to trouble, but in theory it can.
   std::string ReadString(std::ifstream &bt,int length=0){
@@ -224,6 +229,42 @@ namespace jcr6 {
        if (!isj) { JamError("JCR6 Header error"); bt.close(); return ret; } // Now this is a safety precaution, as it should never be possible this error pops up.
      }
      ret.FT_offset = jcr6is::ReadInt(bt);
+     // Read Startup Config
+     // Please note I just copied this code from the C# version, and I
+     // manually converted it to C++, so this may not be the most beautiful code. :P
+     if (ret.FT_offset <= 0) {
+       JamError("Invalid FAT offset. Maybe you are trying to read a JCR6 file that has never been properly finalized");
+       bt.close();
+       return ret;
+     }
+     unsigned char TTag = 0;
+     std::string Tag = "";
+     do {
+       TTag = jcr6is::ReadByte();
+       if (TTag != 255) { Tag = jcr6is::ReadString(bt); }
+       switch (TTag) {
+         case 1:
+          ret.Config_string[Tag] = jcr6is::ReadString(bt);
+          break;
+         case 2:
+          ret.Config_bool[Tag] = jcr6is::ReadByte(bt) == 1;
+          break;
+         case 3:
+          ret.Config_int[Tag] = jcr6is::ReadInt(bt);
+          break;
+         case 255:
+          break;
+         default:
+          std::string e = "Invalid config tag ("; e+=std::to_string(TTag); e+")"; e+=file;
+          bt.close();
+         return ret;
+       }
+     } while (TTag != 255);
+     if (ret.Config_bool.count("_CaseSensitive") && ret.Config_bool["_CaseSensitive"]) {
+       JamError("Case Sensitive dir support was already deprecated and removed from JCR6 before it went to the Go language. It's only obvious that support for this was never implemented in C++ in the first place.");
+       bt.close();
+       return ret;
+     }
      bt.close();
      return ret;
    }
