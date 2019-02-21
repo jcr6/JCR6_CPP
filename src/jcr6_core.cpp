@@ -72,7 +72,7 @@ template <typename ecconv> ecconv EndianConvert(ecconv num,bool force=false){
   for (int i=0;i<sizeof(eccov);++i ){
     a2.ev_reverse[sizeof(eccov)-(i+1)] = a1.ev_reverse[i];
   }
-  switch sizeof(ecconv){
+  switch (sizeof(ecconv)){
     case 4: return a2.ev_int;
     case 8: return a2.ev_long;
     default: return num;
@@ -82,14 +82,14 @@ template <typename ecconv> ecconv EndianConvert(ecconv num,bool force=false){
 
 namespace jcr6is{ // JCR6 internal stream routines.
   int ReadInt(std::ifstream &bt){
-    int i;
-    bt.read(&i,4);
-    return EndianConvert(i);
+    uEndianCheckUp i;
+    bt.read(&i.ec_reverse,4);
+    return EndianConvert(i.ec_int);
   }
   long ReadLong(std::ifstream &bt){
-    long i;
-    bt.read(&i,8);
-    return EndianConvert(i);
+    uEndianCheckUp i;
+    bt.read(&i.ec_reverse,8);
+    return EndianConvert(i.ec_long);
   }
   // Please note, JCR6 does not care about null-termination, yet C++ does.
   // Normally this should not lead to trouble, but in theory it can.
