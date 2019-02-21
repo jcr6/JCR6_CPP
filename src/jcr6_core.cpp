@@ -1,7 +1,7 @@
 // Lic:
 //   jcr6_core.cpp
 //   JCR6 for C++ -- Code code
-//   version: 19.02.20
+//   version: 19.02.21
 //   Copyright (C) 2019 Jeroen P. Broks
 //   This software is provided 'as-is', without any express or implied
 //   warranty.  In no event will the authors be held liable for any damages
