@@ -33,6 +33,8 @@ static std::string Upper(std::string strToConvert)
 }
 
 
+
+
 namespace jcr6 {
 
    // Prologue: Declarations
