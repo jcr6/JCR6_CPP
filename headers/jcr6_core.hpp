@@ -44,8 +44,7 @@ namespace jcr6{
      #define JCR_Error jcr6::Get_JCR_Error_Message()
      std::string Get_JCR_Error_Message();
      void JamError(std::string errormessage);
-     extern bool JCR_ErrorCrash;
-     bool JCR_ErrorCrash { false }; // You may set this to 'true' in your own program to make JCR6 crash upon errors.
+     void SetErrorCrash(bool value);
 
      class JT_Entry {
      private:

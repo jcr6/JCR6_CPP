@@ -48,6 +48,9 @@ namespace jcr6 {
 
    // Prologue: Declarations
    static std::string JAMJCR_Error;
+   static bool JCR_ErrorCrash { false };
+   void SetErrorCrash(bool value) { JCR_ErrorCrash=value;}
+
 
    std::string Get_JCR_Error_Message() { return JAMJCR_Error; }
 
