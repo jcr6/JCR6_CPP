@@ -260,7 +260,11 @@ namespace jcr6 {
          return ret;
        }
      } while (TTag != 255);
+<<<<<<< HEAD
      if (ret.Config_bool.count("_CaseSensitive") && ret.Config_bool["_CaseSensitive"]) {
+=======
+     if (ret.CFGbool.ContainsKey("_CaseSensitive") && ret.CFGbool["_CaseSensitive"]) {
+>>>>>>> 300939fb802e33e77c284e321b2b37649a0bafc4
        JamError("Case Sensitive dir support was already deprecated and removed from JCR6 before it went to the Go language. It's only obvious that support for this was never implemented in C++ in the first place.");
        bt.close();
        return ret;
