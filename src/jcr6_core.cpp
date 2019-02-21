@@ -81,12 +81,12 @@ template <typename ecconv> ecconv EndianConvert(ecconv num,bool force=false){
 }
 
 namespace jcr6is{ // JCR6 internal stream routines.
-  int ReadInt(&std::ifstream bt){
+  int ReadInt(std::ifstream &bt){
     int i;
     bt.read(&i,4);
     return EndianConvert(i);
   }
-  long ReadLong(&std::ifstream bt){
+  long ReadLong(std::ifstream &bt){
     long i;
     bt.read(&i,8);
     return EndianConvert(i);
