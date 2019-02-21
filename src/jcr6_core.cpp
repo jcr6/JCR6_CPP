@@ -36,6 +36,7 @@ static void chat(std::vector<std::string> args){
 
 typedef union {
   unsigned char ec_byte;
+  char ec_char;
   int ec_int;
   long ec_long;
   char ec_reverse[10];
