@@ -81,6 +81,8 @@ namespace jcr6{
      } JC_CompressDriver;
      void RegisterCompressDriver(JC_CompressDriver);
 
+     std::string Recognize(std::string file);
+
 }
 
 

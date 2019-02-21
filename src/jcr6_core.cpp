@@ -32,7 +32,16 @@ static std::string Upper(std::string strToConvert)
     return strToConvert;
 }
 
-
+// I know there might be better routines for this out there, but I wanted JCR6 to be as "self-reliant" as possible.
+class mybankstream {
+private:
+  unsigned char *buf;
+  int bufsize;
+public:
+  int pos = 0;
+  mybankstream(int size){ buf = new unsigned char[size]; bufsize=size; }
+  ~mybankstream(int size) { delete buf;}
+}
 
 
 namespace jcr6 {
@@ -126,6 +135,15 @@ namespace jcr6 {
      bt.close();
    }
 
+   std::string Recognize(std::string file){
+     JAMJCR_Error = "Ok";
+     for (auto& kv : DirDrivers) { // I'm still keeping to C++ 11 for now...
+           //std::cout << kv.first << " has value " << kv.second << std::endl;
+           if (kv.second.Recognize(file)) return kv.second.Name;
+     }
+     return ""; // Empty string means unrecognized.... BOO!
+   }
+
 
    // Chapter 2: Writing
 
@@ -135,5 +153,11 @@ namespace jcr6 {
      comp.Compress=FakeStore;
      comp.Expand=FakeRestore;
      comp.Name="Store";
+     JC_DirDriver dir;
+     dir.Recognize = J6_Recognize;
+     dir.Dir = J6_Dir;
+     dir.Name="JCR6";
+     RegisterDirDriver (dir);
+     RegisterCompressDriver (comp);
    }
 }
