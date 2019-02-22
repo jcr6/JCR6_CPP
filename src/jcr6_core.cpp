@@ -268,7 +268,7 @@ namespace jcr6 {
      chat({"Entry added as: ",Upper(name)});
    }
 
-   std::string JT_Entry::Entry() { return dataString["__ENTRY"]; }
+   std::string JT_Entry::Entry() { return dataString["__Entry"]; }
 
 
    static std::map<std::string,JC_CompressDriver> CompDrivers;
