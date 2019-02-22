@@ -277,8 +277,11 @@ namespace jcr6 {
      DirDrivers[Driver.Name]=Driver;
    }
 
-   static int FakeStore(char * ibuffer,char *obuffer, int size){
-      for (int i=0;i<size;++i) obuffer[i]=ibuffer[i]; // Copying the buffer as a whole in stead of just copying the pointer is essential to make sure still will not get deleted when it shouldn't be!
+   static int FakeStore(char * ibuffer,char * obuffer, int size){
+      for (int i=0;i<size;++i) {
+        obuffer[i]=ibuffer[i]; // Copying the buffer as a whole in stead of just copying the pointer is essential to make sure still will not get deleted when it shouldn't be!
+        chat({"Position:",std::to_string(i),"/",std::to_string(size)," >> ",std::to_string(obuffer[i])}); // debug mode or not, always comment out when not in use!
+      }
       return size;
    }
 
