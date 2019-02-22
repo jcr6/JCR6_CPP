@@ -371,111 +371,117 @@ namespace jcr6 {
 
          case 0x01:
          tag = Upper(dirbank.ReadString());
-         switch (tag) {
+         /*switch (tag)*/ {    // Unbelievably primitive... sigh! C++ does not suppor this.... What year is this? 1832?
 
-           case "FILE":    // Atom's identing is horrible, but as I'm still on Mac, this was the quickest way to get on the road (Maybe I should just have used Geanny) :-/
-           JT_Entry newentry;
-           newentry.MainFile = file;
-           auto ftag = dirbank.ReadByte();
-           while (ftag != 255) {
-             switch (ftag) {
+           //case "FILE":
+           if (tag=="FILE") {
+             JT_Entry newentry;
+             newentry.MainFile = file;
+             auto ftag = dirbank.ReadByte();
+             while (ftag != 255) {
+               switch (ftag) {
 
-               case 1: // string
-               auto k = dirbank.ReadString();
-               auto v = dirbank.ReadString();
-               newentry.dataString[k] = v;
-               break;
+                 case 1: // string
+                 auto k = dirbank.ReadString();
+                 auto v = dirbank.ReadString();
+                 newentry.dataString[k] = v;
+                 break;
 
-               case 2: // Boolean
-               auto kb = dirbank.ReadString();
-               auto vb = dirbank.ReadBoolean();
-               newentry.databool[kb] = vb;
-               break;
+                 case 2: // Boolean
+                 auto kb = dirbank.ReadString();
+                 auto vb = dirbank.ReadBoolean();
+                 newentry.databool[kb] = vb;
+                 break;
 
-               case 3: // Integer
-               auto ki = dirbank.ReadString();
-               auto vi = dirbank.ReadInt();
-               newentry.dataint[ki] = vi;
-               break;
+                 case 3: // Integer
+                 auto ki = dirbank.ReadString();
+                 auto vi = dirbank.ReadInt();
+                 newentry.dataint[ki] = vi;
+                 break;
 
-               case 255: // the end
-               break;
+                 case 255: // the end
+                 break;
 
-               default: // error
-               std::string er = "Illegal tag in FILE part "; er += std::to_string(ftag); er += "on fatpos "; er += std::to_string(dirbank.Position);
-               JamError (er);
-               return ret;
+                 default: // error
+                 std::string er = "Illegal tag in FILE part "; er += std::to_string(ftag); er += "on fatpos "; er += std::to_string(dirbank.Position);
+                 JamError (er);
+                 return ret;
+               }
+               ftag = dirbank.ReadByte();
              }
-             ftag = dirbank.ReadByte();
-           }
-           auto centry = newentry.Entry.ToUpper();
-           ret.Entries[centry] = newentry;
-           break;
+             auto centry = newentry.Entry.ToUpper();
+             ret.Entries[centry] = newentry;
+           } //break;
 
-           case "COMMENT":
-           std::string commentname = dirbank.ReadString();
-           ret.Comments[commentname] = dirbank.ReadString();
-           break;
+           else if (tag=="COMMENT") { //case "COMMENT":
+             std::string commentname = dirbank.ReadString();
+             ret.Comments[commentname] = dirbank.ReadString();
+           } //break;
 
-           case "IMPORT":
-           case "REQUIRE":
-           auto deptag = dirbank.ReadByte();
-           std::string depk;
-           std::string depv;
-           std::map<std::string,std::string> depm //= new Dictionary<string, string>();
-           while (deptag != 255) {
-             depk = dirbank.ReadString();
-             depv = dirbank.ReadString();
-             depm[depk] = depv;
-             deptag = dirbank.ReadByte();
-           }
-           auto depfile = depm["File"];
-           //depsig   := depm["Signature"]
-           auto deppatha = depm.count("AllowPath") && depm["AllowPath"] == "TRUE";
-           auto depcall = "";
-           // var depgetpaths[2][] string
-           vector<string> depgetpaths[2]; // List<string>[] depgetpaths = new List<string>[2];
-           // not needed in C++                    depgetpaths[0] = new List<string>();
-           // not needed in C++                    depgetpaths[1] = new List<string>();
-           auto owndir = ExtractDir(file); //Path.GetDirectoryName(file);
-           int deppath = 0;
-           if (deppatha) {
-             deppath = 1;
-           }
-           if (owndir != "") { owndir += "/"; }
-           depgetpaths[0].push_back(owndir);
-           depgetpaths[1].push_back(owndir);
-           // TODO: JCR6: depgetpaths[1] = append(depgetpaths[1], dirry.Dirry("$AppData$/JCR6/Dependencies/") )
-           if (Left(depfile, 1) != "/" && Left(depfile, 2) != ":") {
-             for (std::string depdir : depgetpaths[deppath]) {
-               if ((depcall == "") && FileExists(depdir + depfile)) {
-                 depcall = depdir + depfile;
+           //case "IMPORT":
+           //case "REQUIRE":
+           else if (tag=="IMPORT" || tag=="REQUIRE") {
+             auto deptag = dirbank.ReadByte();
+             std::string depk{""};
+             std::string depv{""};
+             std::map<std::string,std::string> depm //= new Dictionary<string, string>();
+             while (deptag != 255) {
+               depk = dirbank.ReadString();
+               depv = dirbank.ReadString();
+               depm[depk] = depv;
+               deptag = dirbank.ReadByte();
+             }
+             auto depfile = depm["File"];
+             //depsig   := depm["Signature"]
+             auto deppatha = depm.count("AllowPath") && depm["AllowPath"] == "TRUE";
+             auto depcall = "";
+             // var depgetpaths[2][] string
+             vector<string> depgetpaths[2]; // List<string>[] depgetpaths = new List<string>[2];
+             // not needed in C++                    depgetpaths[0] = new List<string>();
+             // not needed in C++                    depgetpaths[1] = new List<string>();
+             auto owndir = ExtractDir(file); //Path.GetDirectoryName(file);
+             int deppath = 0;
+             if (deppatha) { deppath = 1; }
+             if (owndir != "") { owndir += "/"; }
+             depgetpaths[0].push_back(owndir);
+             depgetpaths[1].push_back(owndir);
+             // TODO: JCR6: depgetpaths[1] = append(depgetpaths[1], dirry.Dirry("$AppData$/JCR6/Dependencies/") )
+             if (Left(depfile, 1) != "/" && Left(depfile, 2) != ":") {
+               for (std::string depdir : depgetpaths[deppath]) {
+                 if ((depcall == "") && FileExists(depdir + depfile)) {
+                   depcall = depdir + depfile;
+                 }
+               }
+             } else {
+               if (FileExists(depfile)) {
+                 depcall = depfile;
                }
              }
-           } else {
-             if (FileExists(depfile)) {
-               depcall = depfile;
+             if (depcall != "") {
+               ret.PatchFile(depcall);
+               if (JAMJCR_Error != "" && JAMJCR_Error != "Ok" && tag == "REQUIRE") { //((!ret.PatchFile(depcall)) && tag=="REQUIRE"){
+                 std::string JERROR = "Required JCR6 addon file (";
+                 JERROR += depcall;
+                 JERROR +=") could not imported! Importer reported: ";
+                 JERROR += JAMJCR_Error; //,fil,"N/A","JCR 6 Driver: Dir()")
+                 JamError(JERROR);
+                 //bt.Close();
+                 return ret;
+               } else if (tag == "REQUIRE") {
+                 std::string JERROR = "Required JCR6 addon file (";
+                 JERROR += depcall ;
+                 JERROR += ") could not found!"; //,fil,"N/A","JCR 6 Driver: Dir()")
+                 // bt.Close();
+                 return ret;
+               }
              }
+           }//           break;
+
+           else {
+             std::string e = "Unknown instruction tag: "; e+=tag;
+             JamError(e);
+             return ret;
            }
-           if (depcall != "") {
-             ret.PatchFile(depcall);
-             if (JAMJCR_Error != "" && JAMJCR_Error != "Ok" && tag == "REQUIRE") { //((!ret.PatchFile(depcall)) && tag=="REQUIRE"){
-               std::string JERROR = "Required JCR6 addon file (";
-               JERROR += depcall;
-               JERROR +=") could not imported! Importer reported: ";
-               JERROR += JAMJCR_Error; //,fil,"N/A","JCR 6 Driver: Dir()")
-               JamError(JERROR);
-               //bt.Close();
-               return ret;
-             } else if (tag == "REQUIRE") {
-               std::string JERROR = "Required JCR6 addon file (";
-               JERROR += depcall ;
-               JERROR += ") could not found!"; //,fil,"N/A","JCR 6 Driver: Dir()")
-               // bt.Close();
-               return ret;
-             }
-           }
-           break;
          }
          break;
          default:
