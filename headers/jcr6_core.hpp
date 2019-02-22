@@ -57,6 +57,7 @@ namespace jcr6{
        std::map <std::string,bool> dataBool;
        std::map <std::string,int> dataInt;
        std::map <std::string,std::string> dataString;
+       std::string Entry();
      };
 
      class JT_Dir {

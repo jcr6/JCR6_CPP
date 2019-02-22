@@ -248,7 +248,7 @@ namespace jcr6 {
    }
    */
 
-
+   std::string JT_Entry::Entry() { return dataString["__ENTRY"];}
 
 
    static std::map<std::string,JC_CompressDriver> CompDrivers;
@@ -410,7 +410,7 @@ namespace jcr6 {
                }
                ftag = dirbank.ReadByte();
              }
-             auto centry = Upper(newentry.Entry);
+             auto centry = Upper(newentry.Entry());
              ret.Entries[centry] = newentry;
            } //break;
 
