@@ -350,39 +350,39 @@ namespace jcr6 {
      CompDrivers[ret.FT_storage].Expand(cmpbank,dirbank,ret.FT_csize,ret.FT_size);
      // Time to actually READ everything
      // This code too was originally written in C# and manually converted to C++
-     while ((!bt.eof()) && (!theend)) {
-       auto mtag = bt.ReadByte();
-       auto ppp  = bt.Position;
+     while ((!dirbank.eof()) && (!theend)) {
+       auto mtag = dirbank.ReadByte();
+       auto ppp  = dirbank.Position;
        switch (mtag) {
          case 0xff:
               theend = true;
               break;
          case 0x01:
-         std::string tag = Upper(bt.ReadString());
+         std::string tag = Upper(dirbank.ReadString());
          switch (tag) {
 
            case "FILE":    // Atom's identing is horrible, but as I'm still on Mac, this was the quickest way to get on the road (Maybe I should just have used Geanny) :-/
            JT_Entry newentry;
            newentry.MainFile = file;
-           auto ftag = bt.ReadByte();
+           auto ftag = dirbank.ReadByte();
            while (ftag != 255) {
              switch (ftag) {
 
                case 1: // string
-               auto k = bt.ReadString();
-               auto v = bt.ReadString();
+               auto k = dirbank.ReadString();
+               auto v = dirbank.ReadString();
                newentry.dataString[k] = v;
                break;
 
                case 2: // Boolean
-               auto kb = bt.ReadString();
-               auto vb = bt.ReadBoolean();
+               auto kb = dirbank.ReadString();
+               auto vb = dirbank.ReadBoolean();
                newentry.databool[kb] = vb;
                break;
 
                case 3: // Integer
-               auto ki = bt.ReadString();
-               auto vi = bt.ReadInt();
+               auto ki = dirbank.ReadString();
+               auto vi = dirbank.ReadInt();
                newentry.dataint[ki] = vi;
                break;
 
@@ -390,32 +390,32 @@ namespace jcr6 {
                break;
 
                default: // error
-               std::string er = "Illegal tag in FILE part "; er += std::to_string(ftag); er += "on fatpos "; er += std::to_string(bt.Position);
+               std::string er = "Illegal tag in FILE part "; er += std::to_string(ftag); er += "on fatpos "; er += std::to_string(dirbank.Position);
                JamError (er);
                return ret;
              }
-             ftag = bt.ReadByte();
+             ftag = dirbank.ReadByte();
            }
            auto centry = newentry.Entry.ToUpper();
            ret.Entries[centry] = newentry;
            break;
 
            case "COMMENT":
-           std::string commentname = bt.ReadString();
-           ret.Comments[commentname] = bt.ReadString();
+           std::string commentname = dirbank.ReadString();
+           ret.Comments[commentname] = dirbank.ReadString();
            break;
 
            case "IMPORT":
            case "REQUIRE":
-           auto deptag = bt.ReadByte();
+           auto deptag = dirbank.ReadByte();
            std::string depk;
            std::string depv;
            std::map<std::string,std::string> depm //= new Dictionary<string, string>();
            while (deptag != 255) {
-             depk = bt.ReadString();
-             depv = bt.ReadString();
+             depk = dirbank.ReadString();
+             depv = dirbank.ReadString();
              depm[depk] = depv;
-             deptag = bt.ReadByte();
+             deptag = dirbank.ReadByte();
            }
            auto depfile = depm["File"];
            //depsig   := depm["Signature"]
@@ -471,7 +471,7 @@ namespace jcr6 {
              std::string JERROR = "Unknown main tag ";
              JERROR += mtag;
              JERROR += ", at file table position ";
-             JERROR += to_string(bt.Position);
+             JERROR += to_string(dirbank.Position);
              JamError(JERROR);
              //bt.Close();
              return ret;
