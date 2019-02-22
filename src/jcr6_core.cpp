@@ -353,7 +353,7 @@ namespace jcr6 {
      bt.close();
      if (!CompDrivers.count(ret.FT_storage)) {
        std::string e = "Unknown File Table Compression Method: "; e+=ret.FT_storage;
-       JamError();
+       JamError(e);
        return ret;
      }
      CompDrivers[ret.FT_storage].Expand(cmpbank,dirbank,ret.FT_csize,ret.FT_size);
