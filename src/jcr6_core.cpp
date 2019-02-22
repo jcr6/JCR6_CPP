@@ -203,6 +203,11 @@ public:
     std::string ret = "";
     if (!l2) l2 = ReadInt();
     for (int i=0;i<l2;i++) ret+=ReadChar();
+    #ifdef DEBUGCHAT
+    std::cout << "Got string \"" << ret << "\" (" << l2 << " bytes";
+    if (l) std::cout << ", " << l << "requested";
+    std::cout << ")\n";
+    #endif
     return ret;
   }
 
