@@ -148,18 +148,13 @@ static std::string Upper(std::string strToConvert)
     return strToConvert;
 }
 
+namespace jcr6 {
 // I know there might be better routines for this out there, but I wanted JCR6 to be as "self-reliant" as possible.
-class mybankstream {
-private:
-  char *buf;
-  int bufsize;
-public:
-  int Position = 0;
-  char *pointme() { return buf; }
-  int getsize() { return bufsize; }
-  bool eof() { return Position >= bufsize; }
+  char *mybankstream::pointme() { return buf; }
+  int mybankstream::getsize() { return bufsize; }
+  bool mybankstream::eof() { return Position >= bufsize; }
 
-  unsigned char ReadByte() {
+  unsigned char mybankstream::ReadByte() {
     assert((!eof() && "End of buffer reached!"));
     uEndianCheckUp c;
     c.ec_char = buf[Position];
@@ -170,7 +165,7 @@ public:
     return c.ec_byte;
   }
 
-  char ReadChar() {
+  char mybankstream::ReadChar() {
     assert((!eof() && "End of buffer reached!"));
     char c = buf[Position];
     #ifdef DEBUGCHAT
@@ -181,9 +176,9 @@ public:
 
   }
 
-  bool ReadBool() { return ReadByte()!=0; }
+  bool mybankstream::ReadBool() { return ReadByte()!=0; }
 
-  int ReadInt() {
+  int mybankstream::ReadInt() {
     uEndianCheckUp ret;
     for (int i=0; i<4; i++) ret.ec_reverse[i] = ReadByte();
     #ifdef DEBUGCHAT
@@ -192,13 +187,13 @@ public:
     return EndianConvert(ret.ec_int);
   }
 
-  long ReadLong() {
+  long mybankstream::ReadLong() {
     uEndianCheckUp ret;
     for (int i=0; i<8; i++) ret.ec_reverse[i] = ReadByte();
     return EndianConvert(ret.ec_long);
   }
 
-  std::string ReadString(int l=0){
+  std::string mybankstream::ReadString(int l){
     int l2{l};
     std::string ret = "";
     if (!l2) l2 = ReadInt();
@@ -212,12 +207,12 @@ public:
   }
 
 
-  mybankstream(int size){ buf = new char[size]; bufsize=size; }
-  ~mybankstream() { delete buf;}
-};
+  mybankstream::mybankstream(int size){ buf = new char[size]; bufsize=size; }
+  mybankstream::~mybankstream() { delete buf;}
 
 
-namespace jcr6 {
+
+
 
    // Prologue: Declarations
    static std::string JAMJCR_Error;

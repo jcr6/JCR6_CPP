@@ -60,6 +60,26 @@ namespace jcr6{
        std::string Entry();
      };
 
+     class mybankstream {
+     private:
+       char *buf;
+       int bufsize;
+     public:
+       int Position = 0;
+       char *pointme();
+       int getsize();
+       unsigned char ReadByte();
+       char ReadChar();
+       int ReadInt();
+       long ReadLong();
+       bool ReadBool();
+       std::string ReadString(int l=0);
+       bool eof();
+       mybankstream(int size);
+       ~mybankstream();
+     };
+
+
      class JT_Dir {
      private:
        std::map <std::string,JT_Entry> EntryMap;
