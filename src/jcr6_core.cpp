@@ -458,8 +458,8 @@ namespace jcr6 {
              ret.PatchFile(depcall);
              if (JAMJCR_Error != "" && JAMJCR_Error != "Ok" && tag == "REQUIRE") { //((!ret.PatchFile(depcall)) && tag=="REQUIRE"){
                std::string JERROR = "Required JCR6 addon file (";
-               JERROR += depcall
-               JERROR +=") could not imported! Importer reported: "
+               JERROR += depcall;
+               JERROR +=") could not imported! Importer reported: ";
                JERROR += JAMJCR_Error; //,fil,"N/A","JCR 6 Driver: Dir()")
                JamError(JERROR);
                //bt.Close();
