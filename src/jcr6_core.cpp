@@ -154,7 +154,7 @@ private:
   int bufsize;
 public:
   int Position = 0;
-  unsigned char *pointme() { return buf; }
+  char *pointme() { return buf; }
   int getsize() { return bufsize; }
   bool eof() { return Position >= bufsize; }
 
