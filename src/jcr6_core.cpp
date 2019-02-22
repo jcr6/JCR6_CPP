@@ -131,6 +131,8 @@ private:
   int bufsize;
 public:
   int pos = 0;
+  unsigned char *pointme() { return buf; }
+  int getsize() { return bufsize; }
   mybankstream(int size){ buf = new unsigned char[size]; bufsize=size; }
   ~mybankstream() { delete buf;}
 };
