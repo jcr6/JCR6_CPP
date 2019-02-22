@@ -368,7 +368,7 @@ namespace jcr6 {
          case 0xff:
               theend = true;
               break;
-              
+
          case 0x01:
          tag = Upper(dirbank.ReadString());
          switch (tag) {
@@ -483,7 +483,7 @@ namespace jcr6 {
              std::string JERROR = "Unknown main tag ";
              JERROR += mtag;
              JERROR += ", at file table position ";
-             JERROR += to_string(dirbank.Position);
+             JERROR += std::to_string(dirbank.Position);
              JamError(JERROR);
              //bt.Close();
              return ret;
