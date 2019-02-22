@@ -267,7 +267,7 @@ namespace jcr6 {
        return ret;
      }
      // read File Table Header (how big is it, and how is it compress (if in fact it is)).
-     bt.seekg( ret.FT_offset, is.beg );
+     bt.seekg( ret.FT_offset, bt.beg );
      bool theend    = false;
      ret.FT_size    = jcr6is::ReadInt(bt);
      ret.FT_csize   = jcr6is::ReadInt(bt);
