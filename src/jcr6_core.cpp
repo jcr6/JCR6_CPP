@@ -149,10 +149,17 @@ static std::string Upper(std::string strToConvert)
 }
 
 namespace jcr6 {
+  static std::map<std::string,JC_CompressDriver> CompDrivers;
+
 // I know there might be better routines for this out there, but I wanted JCR6 to be as "self-reliant" as possible.
   char *mybankstream::pointme() { return buf; }
   int mybankstream::getsize() { return bufsize; }
   bool mybankstream::eof() { return Position >= bufsize; }
+
+  void mybankstream::newbuf(int size){
+    delete buf;
+    buf = new char[size];
+  }
 
   unsigned char mybankstream::ReadByte() {
     assert((!eof() && "End of buffer reached!"));
@@ -240,6 +247,37 @@ namespace jcr6 {
      // code comes later!
    }
 
+   JT_Entry &JT_Dir::Entry(std::string entry){
+     static JT_Entry nothing;
+     std::string capentry = Upper(entry);
+     if (!EntryMap.count(capentry)) {
+       std::string e = "Entry \""; e+=entry; e+="\" not found";
+       JamError(e);
+       return nothing;
+     }
+     return (EntryMap[capentry]);
+   }
+
+   void JT_Dir::B(std::string entry,mybankstream & data){
+     static mybankstream nothing(1);
+     JAMJCR_Error = "Ok";
+     JT_Entry &E = Entry(entry);
+     if (JAMJCR_Error != "" || JAMJCR_Error != "Ok") return ;
+     std::string storage{E.dataString["__Storage"]};
+     if (!CompDrivers.count(storage)){
+       std::string e = "Unknown compression method: "; e+=storage;
+       JamError(e);
+       return ;
+     }
+     std::ifstream bt ;
+     bt.open (E.MainFile, std::ios::binary);
+     mybankstream comp(E.CompressedSize());
+     data.newbuf(E.RealSize());
+     bt.read(comp.pointme(),E.CompressedSize());
+     CompDrivers[storage].Expand(comp.pointme(),data.pointme(),comp.getsize(),data.getsize());
+     return ;
+   }
+
 
    /*
    JT_Entry *JT_Dir::CreateEntry(std::string Name){
@@ -264,9 +302,10 @@ namespace jcr6 {
    }
 
    std::string JT_Entry::Entry() { return dataString["__Entry"]; }
+   int JT_Entry::CompressedSize() { return dataInt["__CSize"]; }
+   int JT_Entry::RealSize() { return dataInt["__Size"]; }
 
 
-   static std::map<std::string,JC_CompressDriver> CompDrivers;
    void RegisterCompressDriver(JC_CompressDriver Driver){
      JAMJCR_Error = "Ok";
      if (CompDrivers.count(Driver.Name)) { JamError("Duplicate storage driver!"); return; }

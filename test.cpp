@@ -40,7 +40,8 @@ int main(){
 	std::cout << "File Table storage: " << jcr.FT_storage << '\n';
 	auto ent = jcr.Entries();
 	for (auto& kv : ent ){
-		std::cout << "\nEntry Key:" << kv.first << "\n";
+		std::cout << "\nEntry Key:" << kv.first;
+		std::cout << "\tMainfile: " << kv.second.MainFile << "\n";
 		for(auto &skv : kv.second.dataString ) { std::cout << "\t string " << skv.first << " = \"" << skv.second << "\"\n"; }
 		for(auto &bkv : kv.second.dataBool   ) { std::cout << "\t bool   " << bkv.first << " = " << bkv.second << "\n"; }
 		for(auto &ikv : kv.second.dataInt    ) { std::cout << "\t int    " << ikv.first << " = " << ikv.second << "\n"; }

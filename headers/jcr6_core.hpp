@@ -58,6 +58,8 @@ namespace jcr6{
        std::map <std::string,int> dataInt;
        std::map <std::string,std::string> dataString;
        std::string Entry();
+       int CompressedSize();
+       int RealSize();
      };
 
      class mybankstream {
@@ -75,6 +77,7 @@ namespace jcr6{
        bool ReadBool();
        std::string ReadString(int l=0);
        bool eof();
+       void newbuf(int size);
        mybankstream(int size);
        ~mybankstream();
      };
@@ -97,6 +100,8 @@ namespace jcr6{
        //JT_Entry *CreateEntry(std::string Name); // Creates a new entry with 'Name' as a name. Please note as JCR6 is case INSENSITIVE, these names will always be converted into caps. A pointer to the created entry is returned.
        void PatchFile(std::string file);
        void AddEntry(std::string name,JT_Entry Entry);
+       JT_Entry &Entry(std::string entry);
+       void B(std::string entry,mybankstream &data); // Reads an entry from a JCR file and returns it as a bankstream.
      };
 
      typedef struct {
@@ -117,6 +122,7 @@ namespace jcr6{
 
      void init_JCR6();
      JT_Dir Dir(std::string file);
+
 
 }
 
