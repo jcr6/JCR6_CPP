@@ -427,7 +427,7 @@ namespace jcr6 {
              auto deptag = dirbank.ReadByte();
              std::string depk{""};
              std::string depv{""};
-             std::map<std::string,std::string> depm //= new Dictionary<string, string>();
+             std::map<std::string,std::string> depm; //= new Dictionary<string, string>();
              while (deptag != 255) {
                depk = dirbank.ReadString();
                depv = dirbank.ReadString();
