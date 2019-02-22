@@ -349,7 +349,7 @@ namespace jcr6 {
      mybankstream dirbank(ret.FT_size);
      mybankstream cmpbank(ret.FT_csize);
      char *dirbuf   = dirbank.pointme();
-     bt.read(dirbuf,ret_FT_csize);
+     bt.read(dirbuf,ret.FT_csize);
      bt.close();
      if (!CompDrivers.count(ret.FT_storage)) {
        std::string e = "Unknown File Table Compression Method: "; e+=ret.FT_storage;
