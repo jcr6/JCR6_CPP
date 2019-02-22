@@ -248,7 +248,9 @@ namespace jcr6 {
    }
    */
 
-   std::string JT_Entry::Entry() { return dataString["__ENTRY"];}
+   void JT_Dir::AddEntry(std::string name,JT_Entry Entry){ EntryMap[Upper(name)] = Entry; }
+
+   std::string JT_Entry::Entry() { return dataString["__ENTRY"]; }
 
 
    static std::map<std::string,JC_CompressDriver> CompDrivers;
@@ -411,7 +413,7 @@ namespace jcr6 {
                ftag = dirbank.ReadByte();
              }
              auto centry = Upper(newentry.Entry());
-             ret.Entries[centry] = newentry;
+             ret.AddEntry(centry,newentry); //ret.Entries[centry] = newentry;
            } //break;
 
            else if (tag=="COMMENT") { //case "COMMENT":
