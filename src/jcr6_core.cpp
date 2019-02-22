@@ -49,7 +49,7 @@ static std::string ExtractDir(const std::string& str)
   return str.substr(0,found);
 }
 
-static inline bool FileExists(const char *fileName) {
+static inline bool FileExists(std::string fileName) {
     std::ifstream infile(fileName);
     return infile.good();
 }
