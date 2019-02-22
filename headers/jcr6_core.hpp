@@ -54,9 +54,9 @@ namespace jcr6{
      private:
      public:
        std::string MainFile;
-       std::map <std::string,bool> CFG_Bool;
-       std::map <std::string,int> CFG_Int;
-       std::map <std::string,std::string> CFG_String;
+       std::map <std::string,bool> dataBool;
+       std::map <std::string,int> dataInt;
+       std::map <std::string,std::string> dataString;
      };
 
      class JT_Dir {

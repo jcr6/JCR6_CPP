@@ -34,6 +34,28 @@ static void chat(std::vector<std::string> args){
   #endif
 }
 
+#undef JCRDEBUGPATHSPLIT
+static std::string ExtractDir(const string& str)
+{
+  size_t found;
+  #ifdef JCRDEBUGPATHSPLIT
+  cout << "Splitting: " << str << endl;
+  #endif
+  found=str.find_last_of("/\\");
+  #ifdef JCRDEBUGPATHSPLIT
+  cout << " folder: " << str.substr(0,found) << endl;
+  cout << " file: " << str.substr(found+1) << endl;
+  #endif
+  return str.substr(0,found)
+}
+
+static inline bool FileExists(const char *fileName) {
+    std::ifstream infile(fileName);
+    return infile.good();
+}
+
+static std::string Left(std::string mstr,int pos=1){ return mstr.substr(0,pos); } // BASIC style Left function
+
 
 typedef union {
   unsigned char ec_byte;
@@ -131,7 +153,7 @@ private:
   unsigned char *buf;
   int bufsize;
 public:
-  int pos = 0;
+  int Position = 0;
   unsigned char *pointme() { return buf; }
   int getsize() { return bufsize; }
   bool eof() { return pos >= bufsize; }
@@ -327,8 +349,137 @@ namespace jcr6 {
      }
      CompDrivers[ret.FT_storage].Expand(cmpbank,dirbank,ret.FT_csize,ret.FT_size);
      // Time to actually READ everything
-     return ret;
-   }
+     // This code too was originally written in C# and manually converted to C++
+     while ((!bt.eof()) && (!theend)) {
+       auto mtag = bt.ReadByte();
+       auto ppp  = bt.Position;
+       switch (mtag) {
+         case 0xff:
+              theend = true;
+              break;
+         case 0x01:
+         std::string tag = Upper(bt.ReadString());
+         switch (tag) {
+
+           case "FILE":    // Atom's identing is horrible, but as I'm still on Mac, this was the quickest way to get on the road (Maybe I should just have used Geanny) :-/
+           JT_Entry newentry;
+           newentry.MainFile = file;
+           auto ftag = bt.ReadByte();
+           while (ftag != 255) {
+             switch (ftag) {
+
+               case 1: // string
+               auto k = bt.ReadString();
+               auto v = bt.ReadString();
+               newentry.dataString[k] = v;
+               break;
+
+               case 2: // Boolean
+               auto kb = bt.ReadString();
+               auto vb = bt.ReadBoolean();
+               newentry.databool[kb] = vb;
+               break;
+
+               case 3: // Integer
+               auto ki = bt.ReadString();
+               auto vi = bt.ReadInt();
+               newentry.dataint[ki] = vi;
+               break;
+
+               case 255: // the end
+               break;
+
+               default: // error
+               std::string er = "Illegal tag in FILE part "; er += std::to_string(ftag); er += "on fatpos "; er += std::to_string(bt.Position);
+               JamError (er);
+               return ret;
+             }
+             ftag = bt.ReadByte();
+           }
+           auto centry = newentry.Entry.ToUpper();
+           ret.Entries[centry] = newentry;
+           break;
+
+           case "COMMENT":
+           std::string commentname = bt.ReadString();
+           ret.Comments[commentname] = bt.ReadString();
+           break;
+
+           case "IMPORT":
+           case "REQUIRE":
+           auto deptag = bt.ReadByte();
+           std::string depk;
+           std::string depv;
+           std::map<std::string,std::string> depm //= new Dictionary<string, string>();
+           while (deptag != 255) {
+             depk = bt.ReadString();
+             depv = bt.ReadString();
+             depm[depk] = depv;
+             deptag = bt.ReadByte();
+           }
+           auto depfile = depm["File"];
+           //depsig   := depm["Signature"]
+           auto deppatha = depm.count("AllowPath") && depm["AllowPath"] == "TRUE";
+           auto depcall = "";
+           // var depgetpaths[2][] string
+           vector<string> depgetpaths[2]; // List<string>[] depgetpaths = new List<string>[2];
+           // not needed in C++                    depgetpaths[0] = new List<string>();
+           // not needed in C++                    depgetpaths[1] = new List<string>();
+           auto owndir = ExtractDir(file); //Path.GetDirectoryName(file);
+           int deppath = 0;
+           if (deppatha) {
+             deppath = 1;
+           }
+           if (owndir != "") { owndir += "/"; }
+           depgetpaths[0].push_back(owndir);
+           depgetpaths[1].push_back(owndir);
+           // TODO: JCR6: depgetpaths[1] = append(depgetpaths[1], dirry.Dirry("$AppData$/JCR6/Dependencies/") )
+           if (Left(depfile, 1) != "/" && Left(depfile, 2) != ":") {
+             for (std::string depdir : depgetpaths[deppath]) {
+               if ((depcall == "") && FileExists(depdir + depfile)) {
+                 depcall = depdir + depfile;
+               }
+             }
+           } else {
+             if (FileExists(depfile)) {
+               depcall = depfile;
+             }
+           }
+           if (depcall != "") {
+             ret.PatchFile(depcall);
+             if (JAMJCR_Error != "" && JAMJCR_Error != "Ok" && tag == "REQUIRE") { //((!ret.PatchFile(depcall)) && tag=="REQUIRE"){
+               std::string JERROR = "Required JCR6 addon file (";
+               JERROR += depcall
+               JERROR +=") could not imported! Importer reported: "
+               JERROR += JAMJCR_Error; //,fil,"N/A","JCR 6 Driver: Dir()")
+               JamError(JERROR);
+               //bt.Close();
+               return ret;
+             } else if (tag == "REQUIRE") {
+               std::string JERROR = "Required JCR6 addon file (";
+               JERROR += depcall ;
+               JERROR += ") could not found!"; //,fil,"N/A","JCR 6 Driver: Dir()")
+               // bt.Close();
+               return ret;
+             }
+           }
+           break;
+         }
+         break;
+         default:
+         {
+             std::string JERROR = "Unknown main tag ";
+             JERROR += mtag;
+             JERROR += ", at file table position ";
+             JERROR += to_string(bt.Position);
+             JamError(JERROR);
+             //bt.Close();
+             return ret;
+           }
+         }
+       }
+       return ret;
+     }
 
    std::string Recognize(std::string file){
      JAMJCR_Error = "Ok";
