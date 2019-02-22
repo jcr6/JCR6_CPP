@@ -163,6 +163,9 @@ public:
     assert((!eof() && "End of buffer reached!"));
     uEndianCheckUp c;
     c.ec_char = buf[Position];
+    #ifdef DEBUGCHAT
+    std::cout << "Read byte " << c.ec_byte << " from position " << Postion << '\n';
+    #endif
     Position++;
     return c.ec_byte;
   }
@@ -170,6 +173,9 @@ public:
   char ReadChar() {
     assert((!eof() && "End of buffer reached!"));
     char c = buf[Position];
+    #ifdef DEBUGCHAT
+    std::cout << "Read char " << c << " from position " << Postion << '\n';
+    #endif
     Position++;
     return c;
 
