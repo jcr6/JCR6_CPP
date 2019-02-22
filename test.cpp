@@ -21,6 +21,8 @@
 #include <string>
 #include "JCR6.hpp"
 
+#define testjcr "test.jcr"
+
 int main(){
 	std::cout << "Testing utility for JCR6 in C++\nCreated by Jeroen P. Broks\nPlease use as you see fit!\n\n";
 	// Of course (this should go without saying), when you modify this file keep in mind you can "spook" up your repository folder
@@ -29,8 +31,8 @@ int main(){
 
 	jcr6::init_JCR6();
 
-	std::cout << "test.jcr recognized as " << jcr6::Recognize("test.jcr") << "; " << JCR_Error << "\n";
-	auto jcr = jcr6::Dir("test.jcr");
+	std::cout << "testjcr recognized as " << jcr6::Recognize(testjcr) << "; " << JCR_Error << "\n";
+	auto jcr = jcr6::Dir(testjcr);
 	std::cout << "Return status:      " << JCR_Error << '\n';
 	std::cout << "File Table offset:  " << jcr.FT_offset << '\n';
 	std::cout << "File Table size:    " << jcr.FT_size << '\n';
@@ -39,6 +41,9 @@ int main(){
 	auto ent = jcr.Entries();
 	for (auto& kv : ent ){
 		std::cout << "\nEntry Key:" << kv.first << "\n";
+		for(auto &skv : kv.second.dataString ) { std::cout << "\t string " << skv.first << " = \"" << skv.second << "\"\n"; }
+		for(auto &bkv : kv.second.dataBool   ) { std::cout << "\t bool   " << bkv.first << " = " << bkv.second << "\n"; }
+		for(auto &ikv : kv.second.dataInt    ) { std::cout << "\t int    " << ikv.first << " = " << ikv.second << "\n"; }
 	}
 	return 0;
 }
