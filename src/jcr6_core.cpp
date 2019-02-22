@@ -21,6 +21,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <cassert>
 #include "../headers/jcr6_core.hpp"
 
 
@@ -133,6 +134,46 @@ public:
   int pos = 0;
   unsigned char *pointme() { return buf; }
   int getsize() { return bufsize; }
+  bool eof() { return pos >= bufsize; }
+
+  unsigned char ReadByte() {
+    assert((!eof() && "End of buffer reached!"));
+    unsigned char c = buf[pos];
+    pos++;
+    return c;
+  }
+
+  char ReadChar() {
+    assert((!eof() && "End of buffer reached!"));
+    char c = buf[pos];
+    pos++;
+    return c;
+
+  }
+
+  bool ReadBool() { return ReadByte()!=0; }
+
+  int ReadInt() {
+    uEndianCheckUp ret;
+    for (int i=0; i<4; i++) ret.ec_reverse[i] = ReadByte();
+    return EndianConvert(ret.ec_int);
+  }
+
+  long ReadLong() {
+    uEndianCheckUp ret;
+    for (int i=0; i<8; i++) ret.ec_reverse[i] = ReadByte();
+    return EndianConvert(ret.ec_long);
+  }
+
+  std::string ReadString(int l=0){
+    int l2{l};
+    std::string ret = "";
+    if (!l2) l2 = ReadInt();
+    for (int i=0;i<l2;i++) ret+=ReadChar();
+    return ret;
+  }
+
+
   mybankstream(int size){ buf = new unsigned char[size]; bufsize=size; }
   ~mybankstream() { delete buf;}
 };
