@@ -25,7 +25,7 @@
 #include "../headers/jcr6_core.hpp"
 
 
-#define DEBUGCHAT
+#undef DEBUGCHAT
 static void chat(std::vector<std::string> args){
   #ifdef DEBUGCHAT
   std::cout << "DEBUG: ";
