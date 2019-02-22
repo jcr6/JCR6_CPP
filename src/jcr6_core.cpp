@@ -437,9 +437,9 @@ namespace jcr6 {
              auto depfile = depm["File"];
              //depsig   := depm["Signature"]
              auto deppatha = depm.count("AllowPath") && depm["AllowPath"] == "TRUE";
-             auto depcall = "";
+             std::string depcall = "";
              // var depgetpaths[2][] string
-             vector<string> depgetpaths[2]; // List<string>[] depgetpaths = new List<string>[2];
+             std::vector<std::string> depgetpaths[2]; // List<string>[] depgetpaths = new List<string>[2];
              // not needed in C++                    depgetpaths[0] = new List<string>();
              // not needed in C++                    depgetpaths[1] = new List<string>();
              auto owndir = ExtractDir(file); //Path.GetDirectoryName(file);
