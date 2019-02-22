@@ -60,6 +60,7 @@ namespace jcr6{
        std::string Entry();
        int CompressedSize();
        int RealSize();
+       int Offset();
      };
 
      class mybankstream {

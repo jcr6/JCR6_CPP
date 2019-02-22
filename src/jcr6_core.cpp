@@ -272,6 +272,7 @@ namespace jcr6 {
      }
      std::ifstream bt ;
      bt.open (E.MainFile, std::ios::binary);
+     bt.seekg(E.Offset(),std::ios::beg);
      mybankstream comp(E.CompressedSize());
      data.newbuf(E.RealSize());
      bt.read(comp.pointme(),E.CompressedSize());
@@ -305,6 +306,7 @@ namespace jcr6 {
    std::string JT_Entry::Entry() { return dataString["__Entry"]; }
    int JT_Entry::CompressedSize() { return dataInt["__CSize"]; }
    int JT_Entry::RealSize() { return dataInt["__Size"]; }
+   int JT_Entry::Offset() { return dataInt["__Offset"];}
 
 
    void RegisterCompressDriver(JC_CompressDriver Driver){
