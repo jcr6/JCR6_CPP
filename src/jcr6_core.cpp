@@ -197,7 +197,7 @@ public:
   }
 
 
-  mybankstream(int size){ buf = new unsigned char[size]; bufsize=size; }
+  mybankstream(int size){ buf = new char[size]; bufsize=size; }
   ~mybankstream() { delete buf;}
 };
 
