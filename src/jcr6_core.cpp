@@ -160,15 +160,15 @@ public:
 
   unsigned char ReadByte() {
     assert((!eof() && "End of buffer reached!"));
-    unsigned char c = buf[pos];
-    pos++;
+    unsigned char c = buf[Position];
+    Position++;
     return c;
   }
 
   char ReadChar() {
     assert((!eof() && "End of buffer reached!"));
-    char c = buf[pos];
-    pos++;
+    char c = buf[Position];
+    Position++;
     return c;
 
   }
