@@ -25,7 +25,7 @@
 #include "../headers/jcr6_core.hpp"
 
 
-#undef DEBUGCHAT
+#define DEBUGCHAT
 static void chat(std::vector<std::string> args){
   #ifdef DEBUGCHAT
   std::cout << "DEBUG: ";
@@ -164,7 +164,7 @@ public:
     uEndianCheckUp c;
     c.ec_char = buf[Position];
     #ifdef DEBUGCHAT
-    std::cout << "Read byte " << c.ec_byte << " from position " << Postion << '\n';
+    std::cout << "Read byte " << (int)c.ec_byte << " from position " << Position << '\n';
     #endif
     Position++;
     return c.ec_byte;
@@ -174,7 +174,7 @@ public:
     assert((!eof() && "End of buffer reached!"));
     char c = buf[Position];
     #ifdef DEBUGCHAT
-    std::cout << "Read char " << c << " from position " << Postion << '\n';
+    std::cout << "Read char " << (int)c << " from position " << Position << '\n';
     #endif
     Position++;
     return c;
@@ -186,6 +186,9 @@ public:
   int ReadInt() {
     uEndianCheckUp ret;
     for (int i=0; i<4; i++) ret.ec_reverse[i] = ReadByte();
+    #ifdef DEBUGCHAT
+    std::cout << "Got int " << ret.ec_int << '\n';
+    #endif
     return EndianConvert(ret.ec_int);
   }
 
@@ -374,6 +377,7 @@ namespace jcr6 {
        auto mtag = dirbank.ReadByte();
        auto ppp  = dirbank.Position;
        std::string tag;
+       chat({"What to do with main tag: ",std::to_string(mtag)});
        switch (mtag) {
          case 0xff:
               theend = true;
@@ -498,7 +502,7 @@ namespace jcr6 {
          default:
          {
              std::string JERROR = "Unknown main tag ";
-             JERROR += mtag;
+             JERROR += std::to_string(mtag);
              JERROR += ", at file table position ";
              JERROR += std::to_string(dirbank.Position);
              JamError(JERROR);
