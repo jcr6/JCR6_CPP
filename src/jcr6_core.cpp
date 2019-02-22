@@ -326,6 +326,7 @@ namespace jcr6 {
        return ret;
      }
      CompDrivers[ret.FT_storage].Expand(cmpbank,dirbank,ret.FT_csize,ret.FT_size);
+     // Time to actually READ everything
      return ret;
    }
 
