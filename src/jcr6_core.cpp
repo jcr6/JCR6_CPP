@@ -348,7 +348,7 @@ namespace jcr6 {
      ret.FT_storage = jcr6is::ReadString(bt);
      mybankstream dirbank(ret.FT_size);
      mybankstream cmpbank(ret.FT_csize);
-     char *cmpbuf   = cmpbank.pointme()
+     char *cmpbuf   = cmpbank.pointme();
      char *dirbuf   = dirbank.pointme();
      bt.read(dirbuf,ret.FT_csize);
      bt.close();
