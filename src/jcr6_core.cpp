@@ -35,7 +35,7 @@ static void chat(std::vector<std::string> args){
 }
 
 #undef JCRDEBUGPATHSPLIT
-static std::string ExtractDir(const string& str)
+static std::string ExtractDir(const std::string& str)
 {
   size_t found;
   #ifdef JCRDEBUGPATHSPLIT
