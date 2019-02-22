@@ -315,8 +315,17 @@ namespace jcr6 {
      ret.FT_size    = jcr6is::ReadInt(bt);
      ret.FT_csize   = jcr6is::ReadInt(bt);
      ret.FT_storage = jcr6is::ReadString(bt);
-     // C# original code... needs to be replaced! var fatcbytes = bt.ReadBytes(ret.FATcsize);
+     mybankstream dirbank(ret.FT_size);
+     mybankstream cmpbank(ret.FT_csize);
+     char *dirbuf   = dirbank.pointme();
+     bt.read(dirbuf,ret_FT_csize);
      bt.close();
+     if (!CompDrivers.count(ret.FT_storage)) {
+       std::string e = "Unknown File Table Compression Method: "; e+=ret.FT_storage;
+       JamError();
+       return ret;
+     }
+     CompDrivers[ret.FT_storage].Expand(cmpbank,dirbank,ret.FT_csize,ret.FT_size);
      return ret;
    }
 
