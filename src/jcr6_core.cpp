@@ -160,7 +160,7 @@ public:
 
   unsigned char ReadByte() {
     assert((!eof() && "End of buffer reached!"));
-    uEndianCheckUp c
+    uEndianCheckUp c;
     c.ec_char = buf[Position];
     Position++;
     return c.ec_byte;
