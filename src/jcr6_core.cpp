@@ -156,7 +156,7 @@ public:
   int Position = 0;
   unsigned char *pointme() { return buf; }
   int getsize() { return bufsize; }
-  bool eof() { return pos >= bufsize; }
+  bool eof() { return Position >= bufsize; }
 
   unsigned char ReadByte() {
     assert((!eof() && "End of buffer reached!"));
