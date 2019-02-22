@@ -21,7 +21,7 @@
 #include <string>
 #include "JCR6.hpp"
 
-#define testjcr "test.jcr"
+#define testjcr "packdatastorefat.jcr"
 
 int main(){
 	std::cout << "Testing utility for JCR6 in C++\nCreated by Jeroen P. Broks\nPlease use as you see fit!\n\n";
