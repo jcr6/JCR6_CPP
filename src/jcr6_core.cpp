@@ -390,13 +390,13 @@ namespace jcr6 {
                  case 2: {// Boolean
                    auto kb = dirbank.ReadString();
                    auto vb = dirbank.ReadBool();
-                   newentry.databool[kb] = vb;
+                   newentry.dataBool[kb] = vb;
                  } break;
 
                  case 3: {// Integer
                    auto ki = dirbank.ReadString();
                    auto vi = dirbank.ReadInt();
-                   newentry.dataint[ki] = vi;
+                   newentry.dataInt[ki] = vi;
                  } break;
 
                  case 255: // the end
