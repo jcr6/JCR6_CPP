@@ -271,7 +271,7 @@ namespace jcr6 {
      bool theend    = false;
      ret.FT_size    = jcr6is::ReadInt(bt);
      ret.FT_csize   = jcr6is::ReadInt(bt);
-     ret.FT_storage = hcr6is::ReadString(bt);
+     ret.FT_storage = jcr6is::ReadString(bt);
      // C# original code... needs to be replaced! var fatcbytes = bt.ReadBytes(ret.FATcsize);
      bt.close();
      return ret;
