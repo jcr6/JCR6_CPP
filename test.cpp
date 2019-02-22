@@ -31,6 +31,7 @@ int main(){
 
 	std::cout << "test.jcr recognized as " << jcr6::Recognize("test.jcr") << "; " << JCR_Error << "\n";
 	auto jcr = jcr6::Dir("test.jcr");
+	std::cout << "Return status:      " << JCR_Error << '\n';
 	std::cout << "File Table offset:  " << jcr.FT_offset << '\n';
 	std::cout << "File Table size:    " << jcr.FT_size << '\n';
 	std::cout << "File Table csize:   " << jcr.FT_csize << '\n';
