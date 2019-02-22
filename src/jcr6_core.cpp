@@ -263,7 +263,10 @@ namespace jcr6 {
    }
    */
 
-   void JT_Dir::AddEntry(std::string name,JT_Entry Entry){ EntryMap[Upper(name)] = Entry; }
+   void JT_Dir::AddEntry(std::string name,JT_Entry Entry){
+     EntryMap[Upper(name)] = Entry;
+     chat({"Entry added as: ",Upper(name)});
+   }
 
    std::string JT_Entry::Entry() { return dataString["__ENTRY"]; }
 
