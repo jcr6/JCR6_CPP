@@ -363,12 +363,14 @@ namespace jcr6 {
      while ((!dirbank.eof()) && (!theend)) {
        auto mtag = dirbank.ReadByte();
        auto ppp  = dirbank.Position;
+       std::string tag;
        switch (mtag) {
          case 0xff:
               theend = true;
               break;
+              
          case 0x01:
-         std::string tag = Upper(dirbank.ReadString());
+         tag = Upper(dirbank.ReadString());
          switch (tag) {
 
            case "FILE":    // Atom's identing is horrible, but as I'm still on Mac, this was the quickest way to get on the road (Maybe I should just have used Geanny) :-/
