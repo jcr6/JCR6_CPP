@@ -381,31 +381,32 @@ namespace jcr6 {
              while (ftag != 255) {
                switch (ftag) {
 
-                 case 1: // string
-                 auto k = dirbank.ReadString();
-                 auto v = dirbank.ReadString();
-                 newentry.dataString[k] = v;
-                 break;
+                 case 1: { // string
+                   auto k = dirbank.ReadString();
+                   auto v = dirbank.ReadString();
+                   newentry.dataString[k] = v;
+                 } break;
 
-                 case 2: // Boolean
-                 auto kb = dirbank.ReadString();
-                 auto vb = dirbank.ReadBool();
-                 newentry.databool[kb] = vb;
-                 break;
+                 case 2: {// Boolean
+                   auto kb = dirbank.ReadString();
+                   auto vb = dirbank.ReadBool();
+                   newentry.databool[kb] = vb;
+                 } break;
 
-                 case 3: // Integer
-                 auto ki = dirbank.ReadString();
-                 auto vi = dirbank.ReadInt();
-                 newentry.dataint[ki] = vi;
-                 break;
+                 case 3: {// Integer
+                   auto ki = dirbank.ReadString();
+                   auto vi = dirbank.ReadInt();
+                   newentry.dataint[ki] = vi;
+                 } break;
 
                  case 255: // the end
                  break;
 
-                 default: // error
-                 std::string er = "Illegal tag in FILE part "; er += std::to_string(ftag); er += "on fatpos "; er += std::to_string(dirbank.Position);
-                 JamError (er);
-                 return ret;
+                 default: {// error
+                   std::string er = "Illegal tag in FILE part "; er += std::to_string(ftag); er += "on fatpos "; er += std::to_string(dirbank.Position);
+                   JamError (er);
+                   return ret;
+                 }
                }
                ftag = dirbank.ReadByte();
              }
