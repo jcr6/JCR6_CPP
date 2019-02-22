@@ -46,7 +46,7 @@ static std::string ExtractDir(const std::string& str)
   cout << " folder: " << str.substr(0,found) << endl;
   cout << " file: " << str.substr(found+1) << endl;
   #endif
-  return str.substr(0,found)
+  return str.substr(0,found);
 }
 
 static inline bool FileExists(const char *fileName) {
