@@ -226,6 +226,10 @@ namespace jcr6 {
      return EntryMap;
    }
 
+   void JT_Dir::PatchFile(std::string file){
+     // code comes later!
+   }
+
 
    /*
    JT_Entry *JT_Dir::CreateEntry(std::string Name){
