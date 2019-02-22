@@ -68,6 +68,7 @@ bool LittleEndian(){
   static bool checked{false};
   static bool ret{false};
   if (checked) return ret;
+  checked=true;
   uEndianCheckUp e;
   e.ec_int = 20;
   ret = e.ec_byte>0; // In big Endian the Byte would always be 0
