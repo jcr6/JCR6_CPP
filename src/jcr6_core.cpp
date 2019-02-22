@@ -389,7 +389,7 @@ namespace jcr6 {
 
                  case 2: // Boolean
                  auto kb = dirbank.ReadString();
-                 auto vb = dirbank.ReadBoolean();
+                 auto vb = dirbank.ReadBool();
                  newentry.databool[kb] = vb;
                  break;
 
