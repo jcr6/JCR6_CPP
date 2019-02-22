@@ -348,6 +348,7 @@ namespace jcr6 {
      ret.FT_storage = jcr6is::ReadString(bt);
      mybankstream dirbank(ret.FT_size);
      mybankstream cmpbank(ret.FT_csize);
+     char *cmpbuf   = cmpbank.pointme()
      char *dirbuf   = dirbank.pointme();
      bt.read(dirbuf,ret.FT_csize);
      bt.close();
@@ -356,7 +357,7 @@ namespace jcr6 {
        JamError(e);
        return ret;
      }
-     CompDrivers[ret.FT_storage].Expand(cmpbank,dirbank,ret.FT_csize,ret.FT_size);
+     CompDrivers[ret.FT_storage].Expand(cmpbuf,dirbuf,ret.FT_csize,ret.FT_size);
      // Time to actually READ everything
      // This code too was originally written in C# and manually converted to C++
      while ((!dirbank.eof()) && (!theend)) {
