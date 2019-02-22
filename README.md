@@ -9,4 +9,5 @@ This is still a work in progress! It will not be fully functional what you find 
 
 ## STATUS
 
-All this library can now do properly is recognize a JCR6 file as such... Big deal, that was the EASY part... :P
+- All this library can now do properly is recognize a JCR6 file as such... Big deal, that was the EASY part... :P
+- A heading config can be read now, but at the current time, nearly no JCR6 files have this, so I cannot test this.
