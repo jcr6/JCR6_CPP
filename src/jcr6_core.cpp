@@ -150,7 +150,7 @@ static std::string Upper(std::string strToConvert)
 // I know there might be better routines for this out there, but I wanted JCR6 to be as "self-reliant" as possible.
 class mybankstream {
 private:
-  unsigned char *buf;
+  char *buf;
   int bufsize;
 public:
   int Position = 0;
@@ -160,9 +160,10 @@ public:
 
   unsigned char ReadByte() {
     assert((!eof() && "End of buffer reached!"));
-    unsigned char c = buf[Position];
+    eEndianCheck c
+    c.ec_char = buf[Position];
     Position++;
-    return c;
+    return c.ec_byte;
   }
 
   char ReadChar() {
