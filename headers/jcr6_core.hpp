@@ -79,7 +79,7 @@ namespace jcr6{
        std::string ReadString(int l=0);
        bool eof();
        void newbuf(int size);
-       mybankstream(int size);
+       mybankstream(int size=1);
        ~mybankstream();
      };
 

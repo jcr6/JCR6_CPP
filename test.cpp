@@ -21,7 +21,9 @@
 #include <string>
 #include "JCR6.hpp"
 
-#define testjcr "packdatastorefat.jcr"
+// #define testjcr "packdatastorefat.jcr"
+#define testjcr "test.jcr"
+#define testentry "0011_reftest/reftest.cpp"
 
 int main(){
 	std::cout << "Testing utility for JCR6 in C++\nCreated by Jeroen P. Broks\nPlease use as you see fit!\n\n";
@@ -46,5 +48,13 @@ int main(){
 		for(auto &bkv : kv.second.dataBool   ) { std::cout << "\t bool   " << bkv.first << " = " << bkv.second << "\n"; }
 		for(auto &ikv : kv.second.dataInt    ) { std::cout << "\t int    " << ikv.first << " = " << ikv.second << "\n"; }
 	}
+	#ifdef testentry
+	std::cout << "\n\nLet's take a look at file: "<<testentry<<"\n";
+	jcr6::mybankstream bt;
+	jcr.B(testentry,bt);
+	std::cout << "Report status: " << JCR_Error    << "\n";
+	std::cout << "Buffer size:   " << bt.getsize() << "\n";
+	while(!bt.eof()) std::cout << bt.ReadChar();
+	#endif
 	return 0;
 }

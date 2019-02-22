@@ -159,7 +159,9 @@ namespace jcr6 {
   void mybankstream::newbuf(int size){
     delete buf;
     buf = new char[size];
+    bufsize = size;
     Position = 0;
+    chat({"Buffer in bankstream recreated: ",std::to_string(bufsize)," bytes"});
   }
 
   unsigned char mybankstream::ReadByte() {
@@ -260,10 +262,11 @@ namespace jcr6 {
    }
 
    void JT_Dir::B(std::string entry,mybankstream & data){
+     chat({"B: Requested: ",entry});
      static mybankstream nothing(1);
      JAMJCR_Error = "Ok";
      JT_Entry &E = Entry(entry);
-     if (JAMJCR_Error != "" || JAMJCR_Error != "Ok") return ;
+     if (JAMJCR_Error != "" && JAMJCR_Error != "Ok") return ;
      std::string storage{E.dataString["__Storage"]};
      if (!CompDrivers.count(storage)){
        std::string e = "Unknown compression method: "; e+=storage;
@@ -306,7 +309,7 @@ namespace jcr6 {
    std::string JT_Entry::Entry() { return dataString["__Entry"]; }
    int JT_Entry::CompressedSize() { return dataInt["__CSize"]; }
    int JT_Entry::RealSize() { return dataInt["__Size"]; }
-   int JT_Entry::Offset() { return dataInt["__Offset"];}
+   int JT_Entry::Offset() { return dataInt["__Offset"]; }
 
 
    void RegisterCompressDriver(JC_CompressDriver Driver){
