@@ -66,6 +66,7 @@ namespace jcr6{
        int FT_offset{0};
        int FT_size{0};
        int FT_csize{0};
+       std::string FT_storage{""};
        std::map <std::string,std::string> Config_string;
        std::map <std::string,int>         Config_int;
        std::map <std::string,bool>        Config_bool;
