@@ -410,7 +410,7 @@ namespace jcr6 {
                }
                ftag = dirbank.ReadByte();
              }
-             auto centry = newentry.Entry.ToUpper();
+             auto centry = Upper(newentry.Entry);
              ret.Entries[centry] = newentry;
            } //break;
 
