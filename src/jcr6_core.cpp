@@ -159,6 +159,7 @@ namespace jcr6 {
   void mybankstream::newbuf(int size){
     delete buf;
     buf = new char[size];
+    Position = 0;
   }
 
   unsigned char mybankstream::ReadByte() {
