@@ -225,7 +225,10 @@ namespace jcr6 {
      return EntryMap;
    }
 
+
+   /*
    JT_Entry *JT_Dir::CreateEntry(std::string Name){
+
      JAMJCR_Error = "Ok";
      std::string id = Upper(Name);
      // Is there a more elegant solution for this one?
@@ -238,6 +241,7 @@ namespace jcr6 {
      // return
      return ret;
    }
+   */
 
 
 

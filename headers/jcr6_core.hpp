@@ -73,7 +73,7 @@ namespace jcr6{
        std::map <std::string,std::string> Comments;
        // methods
        std::map <std::string,JT_Entry> &Entries(); // Get all Entries
-       JT_Entry *CreateEntry(std::string Name); // Creates a new entry with 'Name' as a name. Please note as JCR6 is case INSENSITIVE, these names will always be converted into caps. A pointer to the created entry is returned.
+       //JT_Entry *CreateEntry(std::string Name); // Creates a new entry with 'Name' as a name. Please note as JCR6 is case INSENSITIVE, these names will always be converted into caps. A pointer to the created entry is returned.
      };
 
      typedef struct {
