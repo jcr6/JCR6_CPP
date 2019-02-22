@@ -254,9 +254,10 @@ namespace jcr6 {
 
 
    static std::map<std::string,JC_CompressDriver> CompDrivers;
-   void RegisterCompressDriver(JC_CompressDriver){
+   void RegisterCompressDriver(JC_CompressDriver Driver){
      JAMJCR_Error = "Ok";
-     // code comes later
+     if (CompDrivers.count(Driver.Name)) { JamError("Duplicate storage driver!"); return; }
+     CompDrivers[Driver.Name]=Driver;
    }
 
    static std::map<std::string,JD_DirDriver> DirDrivers;
