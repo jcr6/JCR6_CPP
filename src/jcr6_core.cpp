@@ -280,7 +280,7 @@ namespace jcr6 {
    static int FakeStore(char * ibuffer,char * obuffer, int size){
       for (int i=0;i<size;++i) {
         obuffer[i]=ibuffer[i]; // Copying the buffer as a whole in stead of just copying the pointer is essential to make sure still will not get deleted when it shouldn't be!
-        chat({"Position:",std::to_string(i),"/",std::to_string(size)," >> ",std::to_string(obuffer[i])}); // debug mode or not, always comment out when not in use!
+        //chat({"Position:",std::to_string(i),"/",std::to_string(size)," >> ",std::to_string(obuffer[i])}); // debug mode or not, always comment out when not in use!
       }
       return size;
    }
@@ -366,7 +366,7 @@ namespace jcr6 {
      mybankstream cmpbank(ret.FT_csize);
      char *cmpbuf   = cmpbank.pointme();
      char *dirbuf   = dirbank.pointme();
-     bt.read(dirbuf,ret.FT_csize);
+     bt.read(cmpbuf,ret.FT_csize);
      bt.close();
      if (!CompDrivers.count(ret.FT_storage)) {
        std::string e = "Unknown File Table Compression Method: "; e+=ret.FT_storage;
