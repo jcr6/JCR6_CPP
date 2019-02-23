@@ -260,7 +260,9 @@ namespace jcr6 {
 
 
    void JT_Dir::PatchDir(JT_Dir &dir){
-     // code comes later
+     auto ent = dir.Entries();
+     for (auto& kv : ent ) AddEntry(kv.first,kv.second);
+     for (auto& kv : dir.Comments ) Comments[kv.first] = kv.second;
    }
 
    void JT_Dir::PatchFile(std::string file){
