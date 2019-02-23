@@ -44,3 +44,8 @@ Thumb.db
 
 # And let's ignore our test binaries as well
 testbin
+testmac
+testwindows.exe
+testwindows
+testlinux
+
