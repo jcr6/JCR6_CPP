@@ -76,6 +76,7 @@ namespace jcr6{
        int ReadInt();
        long ReadLong();
        bool ReadBool();
+       std::string ReadLine();
        std::string ReadString(int l=0);
        bool eof();
        void newbuf(int size);

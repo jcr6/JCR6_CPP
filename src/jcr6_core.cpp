@@ -216,6 +216,17 @@ namespace jcr6 {
     return ret;
   }
 
+  std::string mybankstream::ReadLine(){
+    std::string ret{""};
+    do{
+      char c = ReadChar();
+      if (c=='\n' || c=='\r') break;
+      ret += c;
+    } while (!eof());
+    if (!eof() && (buf[Position]=='\r' || buf[Position]=='\n')) Position++; // Make sure both Windows and Unix are supported.
+    return ret;
+  }
+
 
   mybankstream::mybankstream(int size){ buf = new char[size]; bufsize=size; }
   mybankstream::~mybankstream() { delete buf;}

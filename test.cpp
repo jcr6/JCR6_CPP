@@ -54,7 +54,12 @@ int main(){
 	jcr.B(testentry,bt);
 	std::cout << "Report status: " << JCR_Error    << "\n";
 	std::cout << "Buffer size:   " << bt.getsize() << "\n";
+	std::cout << "\n";
+	std::cout << "Byte by byte test:";
 	while(!bt.eof()) std::cout << bt.ReadChar();
+	bt.Position=0;
+	std::cout << "Line by line test:";
+	while(!bt.eof()) std::cout << "- " << bt.ReadLine() << "\n";
 	#endif
 	return 0;
 }
