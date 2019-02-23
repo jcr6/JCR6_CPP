@@ -39,6 +39,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 
 
@@ -104,6 +105,8 @@ namespace jcr6{
        void AddEntry(std::string name,JT_Entry Entry);
        JT_Entry &Entry(std::string entry);
        void B(std::string entry,mybankstream &data); // Reads an entry from a JCR file and returns it as a bankstream.
+       std::vector<std::string> Lines(std::string entry);
+       std::string String(std::string entry);
      };
 
      typedef struct {

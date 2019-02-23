@@ -55,11 +55,14 @@ int main(){
 	std::cout << "Report status: " << JCR_Error    << "\n";
 	std::cout << "Buffer size:   " << bt.getsize() << "\n";
 	std::cout << "\n";
-	std::cout << "Byte by byte test:";
+	std::cout << "Byte by byte test:\n";
 	while(!bt.eof()) std::cout << bt.ReadChar();
 	bt.Position=0;
-	std::cout << "Line by line test:";
+	std::cout << "\n\nLine by line test:\n";
 	while(!bt.eof()) std::cout << "- " << bt.ReadLine() << "\n";
+	std::cout << "\n\nLines test:\n";
+	auto lines = jcr.Lines(testentry);
+	for(int i=0; i<lines.size(); i++) std::cout << i << "\t" << lines[i] << "\n";
 	#endif
 	return 0;
 }

@@ -294,6 +294,17 @@ namespace jcr6 {
      return ;
    }
 
+   std::vector<std::string> JT_Dir::Lines(std::string entry) {
+     std::vector<std::string> ret;
+     mybankstream bt;
+     B(entry,bt);
+     if (JAMJCR_Error!="" && JAMJCR_Error!="Ok") return ret;
+     while(!bt.eof()) ret.push_back(bt.ReadLine());
+     return ret;
+   }
+   std::string JT_Dir::String(std::string entry) { return "";}
+
+
 
    /*
    JT_Entry *JT_Dir::CreateEntry(std::string Name){
