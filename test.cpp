@@ -63,6 +63,7 @@ int main(){
 	std::cout << "\n\nLines test:\n";
 	auto lines = jcr.Lines(testentry);
 	for(int i=0; i<lines.size(); i++) std::cout << i << "\t" << lines[i] << "\n";
+	std::cout << "\n\nEntire string in once test:\n" << jcr.String(testentry) << "\n\n";
 	#endif
 	return 0;
 }

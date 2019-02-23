@@ -302,7 +302,13 @@ namespace jcr6 {
      while(!bt.eof()) ret.push_back(bt.ReadLine());
      return ret;
    }
-   std::string JT_Dir::String(std::string entry) { return "";}
+   std::string JT_Dir::String(std::string entry) {
+     std::string ret;
+     mybankstream bt;
+     B(entry,bt);
+     if (JAMJCR_Error!="" && JAMJCR_Error!="Ok") return "";
+     return bt.pointme();
+   }
 
 
 
