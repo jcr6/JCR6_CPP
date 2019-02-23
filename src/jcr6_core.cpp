@@ -259,7 +259,7 @@ namespace jcr6 {
    }
 
 
-   void JT_Dir::PatchDir(JT_Dir dir){
+   void JT_Dir::PatchDir(JT_Dir &dir){
      // code comes later
    }
 
