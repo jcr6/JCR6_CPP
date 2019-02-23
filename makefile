@@ -1,16 +1,24 @@
-# Let's be frank
-# This make file should NOT be used, unless you know what *I* am doing.
-# I only created this file for testing if compiling works....
-# I would not really recommend using it for building the library for your own uses (yet).
+# This makefile is just a way to create a quick utility testing an existing JCR6 file
+# All the .o files created in the process will live in mkobjects/
 
 
 # change this to your machine
 PLATFORM=mac
 
 
-all:mkobjects/*.$(PLATFORM).o
+all:mkobjects/jcr6_core.$(PLATFORM).o mkobjects/jcr6_zlib.$(PLATFORM).o mkobjects/testme.$(PLATFORM).o test$(PLATFORM)
+#mkobjects/*.$(PLATFORM).o:mkobjects/jcr6_core.$(PLATFORM).o mkobjects/jcr6_zlib.$(PLATFORM).o mkobjects/testme.$(PLATFORM).o test$(PLATFORM)
 
-mkobjects/*.$(PLATFORM).o:src/* headers/*
-	@echo Compiling JCR6
-	@g++ -c -std=c++11 -o mkobjects/jcr6.$(PLATFORM).o -pedantic-errors src/*.cpp
+mkobjects/jcr6_core.$(PLATFORM).o:src/jcr6_core* headers/jcr6_core*
+	@echo Compiling Core
+	@g++ -std=c++11 -o mkobjects/jcr6_core.$(PLATFORM).o -pedantic-errors -c src/jcr6_core.cpp
+mkobjects/jcr6_zlib.$(PLATFORM).o:src/jcr6_zlib* headers/jcr6_zlib*
+	@echo Compiling ZLib Driver
+	@g++ -std=c++11 -o mkobjects/jcr6_zlib.$(PLATFORM).o -pedantic-errors -c src/jcr6_zlib.cpp
+mkobjects/testme.$(PLATFORM).o:test.cpp mkobjects/jcr6_core.$(PLATFORM).o mkobjects/jcr6_zlib.$(PLATFORM).o
+	@echo Compiling Test utility
+	@g++ -std=c++11 -o mkobjects/testme.$(PLATFORM).o -pedantic-errors -c test.cpp
+test$(PLATFORM):mkobjects/jcr6_core.$(PLATFORM).o mkobjects/jcr6_zlib.$(PLATFORM).o mkobjects/testme.$(PLATFORM).o
+	@echo Creating Test utility
+	@g++ -std=c++11 -o test$(PLATFORM) mkobjects/*.$(PLATFORM).o /Volumes/Scyndi/C-Libs/zlib/libz.a
 	@echo Done
