@@ -22,8 +22,8 @@
 #include "JCR6.hpp"
 
 // #define testjcr "packdatastorefat.jcr"
-#define testjcr "test.jcr"
-#define testentry "0011_reftest/reftest.cpp"
+#define testjcr "testbin/fullzlib.jcr"
+#define testentry "jcr6_zlib.hpp"
 
 int main(){
 	std::cout << "Testing utility for JCR6 in C++\nCreated by Jeroen P. Broks\nPlease use as you see fit!\n\n";
@@ -32,8 +32,9 @@ int main(){
 	// before you make any modifications, in order to keep git happy :-P
 
 	jcr6::init_JCR6();
+	JCR_InitZlib();
 
-	std::cout << "testjcr recognized as " << jcr6::Recognize(testjcr) << "; " << JCR_Error << "\n";
+	std::cout << testjcr << " recognized as " << jcr6::Recognize(testjcr) << "; " << JCR_Error << "\n";
 	auto jcr = jcr6::Dir(testjcr);
 	std::cout << "Return status:      " << JCR_Error << '\n';
 	std::cout << "File Table offset:  " << jcr.FT_offset << '\n';
