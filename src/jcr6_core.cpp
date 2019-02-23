@@ -121,6 +121,7 @@ namespace jcr6is{ // JCR6 internal stream routines.
     bt.read(&c.ec_char,1);
     return c.ec_byte;
   }
+
   // Please note, JCR6 does not care about null-termination, yet C++ does.
   // Normally this should not lead to trouble, but in theory it can.
   std::string ReadString(std::ifstream &bt,int length=0){
@@ -257,8 +258,14 @@ namespace jcr6 {
      return EntryMap;
    }
 
+
+   void JT_Dir::PatchDir(JT_Dir dir){
+     // code comes later
+   }
+
    void JT_Dir::PatchFile(std::string file){
-     // code comes later!
+     JT_Dir need = Dir(file);
+     PatchDir(need);
    }
 
    JT_Entry &JT_Dir::Entry(std::string entry){
