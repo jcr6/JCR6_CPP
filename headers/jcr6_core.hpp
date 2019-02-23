@@ -122,7 +122,7 @@ namespace jcr6{
        int ( * Compress ) (char *Uncompressed,char *Compressed, int size_uncompressed); // This function will need to do the compression and return the size of the compressed data, or -1 if something went wrong.
        bool ( * Expand )(char *Compressed, char *UnCompressed, int size_compressed, int size_uncompressed); // This function will expand. The size_compressed parameter will check if the expanded data is indeed as long as we wanted. Will return 'true' if succesful, and 'false' if failed.
      } JC_CompressDriver;
-     void RegisterCompressDriver(JC_CompressDriver);
+     void RegisterCompressDriver(JC_CompressDriver Driver);
 
      std::string Recognize(std::string file);
 
