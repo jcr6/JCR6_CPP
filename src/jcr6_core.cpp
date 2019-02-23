@@ -458,7 +458,7 @@ namespace jcr6 {
        JamError(e);
        return ret;
      }
-     CompDrivers[ret.FT_storage].Expand(cmpbuf,dirbuf,ret.FT_csize,ret.FT_size);
+     if (!CompDrivers[ret.FT_storage].Expand(cmpbuf,dirbuf,ret.FT_csize,ret.FT_size)){ return ret; };
      // Time to actually READ everything
      // This code too was originally written in C# and manually converted to C++
      while ((!dirbank.eof()) && (!theend)) {
@@ -505,7 +505,7 @@ namespace jcr6 {
                  break;
 
                  default: {// error
-                   std::string er = "Illegal tag in FILE part "; er += std::to_string(ftag); er += "on fatpos "; er += std::to_string(dirbank.Position);
+                   std::string er = "Illegal tag in FILE part "; er += std::to_string(ftag); er += " on fatpos "; er += std::to_string(dirbank.Position);
                    JamError (er);
                    return ret;
                  }
