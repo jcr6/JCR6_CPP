@@ -18,3 +18,4 @@ This is still a work in progress! It will not be fully functional what you find 
 - And I also did a function which will put all lines of a text file into a vector<string>. Similar functions have also been used in other languages by me. Some of my GINI parsers have also been based on this.
 - Patching implemented although not fully tested yet. This should cover all the reading stuff, as far as non-packed files are concerned. What the best way is to do packed files is another chapter in this story.
 - zlib support.... I will investigate if I can include lzma as well.
+- Support for the "Where is All the Data?" (aka WAD) format. I often do this in order to make sure the extension with Dir Drivers works.
