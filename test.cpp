@@ -20,10 +20,15 @@
 #include <iostream>
 #include <string>
 #include "JCR6.hpp"
+#include "headers/jcr6_wad.hpp"
+
 
 // #define testjcr "packdatastorefat.jcr"
-#define testjcr "testbin/fullzlib.jcr"
-#define testentry "jcr6_zlib.hpp"
+// #define testjcr "testbin/fullzlib.jcr"
+// #define testentry "jcr6_zlib.hpp"
+
+// Only for testing the WAD Driver
+#define testjcr "/Volumes/Scyndi/Games4Emulators/Doomsday/Doom/DOOM.WAD"
 
 int main(){
 	std::cout << "Testing utility for JCR6 in C++\nCreated by Jeroen P. Broks\nPlease use as you see fit!\n\n";
@@ -33,6 +38,7 @@ int main(){
 
 	jcr6::init_JCR6();
 	JCR_InitZlib();
+	jcr6::InitWAD();
 
 	std::cout << testjcr << " recognized as " << jcr6::Recognize(testjcr) << "; " << JCR_Error << "\n";
 	auto jcr = jcr6::Dir(testjcr);
