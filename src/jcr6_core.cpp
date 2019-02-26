@@ -744,9 +744,9 @@ namespace jcr6 {
    }
 
    #define loc_configout JAMJCR_Error = "Ok"; if (entryadded) { JamError("You cannot change the global function once an entry has been added!"); return; }
-   void AddConfig(std::string key,std::string value){ loc_configout ConfigString[key]=value; }
-   void AddConfig(std::string key,int value){ loc_configout ConfigInt[key]=value; }
-   void AddConfig(std::string key,bool value){ loc_configout ConfigBool[key]=value; }
+   void JT_Create::AddConfig(std::string key,std::string value){ loc_configout ConfigString[key]=value; }
+   void JT_Create::AddConfig(std::string key,int value){ loc_configout ConfigInt[key]=value; }
+   void JT_Create::AddConfig(std::string key,bool value){ loc_configout ConfigBool[key]=value; }
    #undef loc_configout
 
    JT_Entry JT_Create::AddBuff(std::string entryname,std::string storage,char * buffer,int size, bool dataclearnext=true){
