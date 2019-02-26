@@ -120,8 +120,8 @@ namespace jcr6{
        std::string FT_storage;
        std::string MainFile;
        std::map<std::string,std::string> ConfigString;
-       std::map<std::string,int>         ConfigDataInt;
-       std::map<std::string,bool>        ConfigDataBool;
+       std::map<std::string,int>         ConfigInt;
+       std::map<std::string,bool>        ConfigBool;
        int offsetoffset; // Sounds silly, but it's just a precaution to make sure the offset integer is written on the right spot.
        bool closed{false};
        bool entryadded{false}; // Once true the config add routines should no longer work!
