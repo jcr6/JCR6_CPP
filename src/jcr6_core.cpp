@@ -136,6 +136,27 @@ namespace jcr6is{ // JCR6 internal stream routines.
     return ret;
   }
 
+  void WriteInt(std::ofstream &bt,int i){
+    uEndianCheckUp e;
+    e.ec_int = EndianConvert(i);
+    for (int i=0; i<4;++i) bt.write(e.ec_reverse[i],1);
+  }
+
+  void WriteLong(std::ofstream &bt,long i){
+    uEndianCheckUp e;
+    e.ec_long = EndianConvert(i);
+    for (int i=0; i<8;++i) bt.write(e.ec_reverse[i],1);
+  }
+
+  void WriteRawString(std::ofstream &bt,std::string str){
+    for (int i=0; i<str.size();i++) bt.write(str[i],1);
+  }
+
+  void WriteString(std::ofstream &bt,std string str){
+    WriteInt(bt,str.size());
+    WriteRawString(bt,str);
+  }
+
 }
 
 
@@ -627,7 +648,15 @@ namespace jcr6 {
 
 
    // Chapter 2: Writing
-   JT_Create(std::string file,std::string storage="Store"){}
+   JT_Create(std::string file,std::string storage="Store"){
+     bt = std::open(file,std::ios::binary|std::ios::trunc);
+     if (!bt.is_open()){
+       closed=true;
+       JamError("File could not be written");
+       return;
+     }
+
+   }
    ~JC_Create(){}
    void JT_Create::Close(){}
    void JT_Create::AddBuff(std::string entryname,std::string storage,char * buffer,bool dataclearnext=true){}
