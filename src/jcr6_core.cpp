@@ -800,9 +800,9 @@ namespace jcr6 {
      char * buf1;
      ifstream ib; ib.open(filename,std::ios::binary);
      if (!ib.is_open()) { JamError("Input file could not be read!"); return;}
-     ib.seekg(0,std::ios::end);
+     ib.seekp(0,std::ios::end);
      int size = ib:tellg();
-     ib seekg(0,std::ios::beg);
+     ib.seekp(0,std::ios::beg);
      buf1 = new char[size];
      ib.read(buf1,size);
      ib.close();
