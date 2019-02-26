@@ -135,7 +135,7 @@ namespace jcr6{
        void AddConfig(std::string key,int value);
        void AddConfig(std::string key,bool value);
        JT_Entry AddBuff(std::string entryname,std::string storage,char * buffer,int size, bool dataclearnext=true){
-       JT_Entry AddFile(std::string filename, std::string entryname, std::string storage='Store',bool dataclearnext=true);
+       JT_Entry AddFile(std::string filename, std::string entryname, std::string storage="Store",bool dataclearnext=true);
        void Import(std::string dependency);
        void Require(std::string dependency);
        void AddComment(std::string namecomment,std::string contentcomment);
