@@ -694,7 +694,7 @@ namespace jcr6 {
        WriteByte(ft,1);
        WriteString(ft,"COMMENT");
        WriteString(ft,comment.first);
-       WriteString(ft,comment.secord);
+       WriteString(ft,comment.second);
      }
      for (auto ent : Entries){
        WriteByte(ft,1);
