@@ -658,7 +658,7 @@ namespace jcr6 {
 
 
    // Chapter 2: Writing
-   JT_Create(std::string file,std::string storage="Store"){
+   JT_Create(std::string file,std::string storage){
      bt = std::open(file,std::ios::binary|std::ios::trunc);
      if (!bt.is_open()){
        closed=true;
