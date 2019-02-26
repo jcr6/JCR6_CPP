@@ -774,7 +774,7 @@ namespace jcr6 {
        return entry;
      }
      bt.write(compressed,csize);
-     delete compressed;
+     delete[] compressed;
 
      for(auto kv:nDataString) entry.dataString[kv.first]=kv.second;
      for(auto kv:nDataInt)    entry.dataInt   [kv.first]=kv.second;
