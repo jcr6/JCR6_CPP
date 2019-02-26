@@ -764,14 +764,14 @@ namespace jcr6 {
      // add entry itself
      if (!CompDrivers.count(storage)){
        JamError("Unknown compression method");
-       return ret;
+       return entry;
      }
      char * compressed = new char[size+((size/4)*3)];
      int csize = CompDrivers[storage].Compress(buffer,compressed,size);
      int offset = bt.tellp();
      if (csize<0) {
        if (JAMJCR_Error=="Ok" || JAMJCR_Error=="") JamError("Compression failure");
-       return;
+       return entry;
      }
      bt:write(compressed,csize);
      delete compressed;
