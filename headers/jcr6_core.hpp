@@ -124,7 +124,7 @@ namespace jcr6{
        int offsetoffset; // Sounds silly, but it's just a precaution to make sure the offset integer is written on the right spot.
        bool closed{false};
        bool entryadded{false}; // Once true the config add routines should no longer work!
-       ofstream bt;
+       std::ofstream bt;
 
      public:
        std::map <std::string,std::string> LastResult;
