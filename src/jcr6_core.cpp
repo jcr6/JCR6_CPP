@@ -688,7 +688,7 @@ namespace jcr6 {
      int csize{0};
      char * buf;
      char * cbuf;
-     std::string FTFile = Mainfile ; FTFile += ".$$DIRTEMP$$" ;
+     std::string FTFile = MainFile ; FTFile += ".$$DIRTEMP$$" ;
      ft = open(FTFile,std::ios::binary|std::ios::trunc);
      for (auto comment : Comments){
        WriteByte(ft,1);
