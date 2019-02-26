@@ -164,7 +164,7 @@ namespace jcr6is{ // JCR6 internal stream routines.
   }
 
   void WriteBool(std::ofstream &bt,bool b){
-    if (b) WriteByte(1); else WriteByte(0);
+    if (b) WriteByte(bt,1); else WriteByte(bt,0);
   }
 
 }
