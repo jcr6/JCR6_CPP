@@ -26,7 +26,7 @@
 
 
 #undef DEBUGCHAT
-static void chat(std::vector<std::string> args){
+static inline void chat(std::vector<std::string> args){
   #ifdef DEBUGCHAT
   std::cout << "DEBUG: ";
   for (std::string a:args) std::cout << a;
@@ -152,9 +152,17 @@ namespace jcr6is{ // JCR6 internal stream routines.
     for (int i=0; i<str.size();i++) bt.write(str[i],1);
   }
 
-  void WriteString(std::ofstream &bt,std string str){
+  void WriteString(std::ofstream &bt,std::string str){
     WriteInt(bt,str.size());
     WriteRawString(bt,str);
+  }
+
+  void WriteByte(std::ofstream &bt, unsigned char c){
+    bt.write(&c,1);
+  }
+
+  void WriteBool(std::ofstream &bt,bool b){
+    if (b) WriteByte(1); else WriteByte(0);
   }
 
 }
@@ -667,12 +675,24 @@ namespace jcr6 {
      bt.close();
      closed=true;
    }
+   #define loc_configout JAMJCR_Error = "Ok"; if (entryadded) { JamError("You cannot change the global function once an entry has been added!"); return; }
+   void AddConfig(std::string key,std::string value){ loc_configout ConfigString[key]=value; }
+   void AddConfig(std::string key,int value){ loc_configout ConfigInt[key]=value; }
+   void AddConfig(std::string key,bool value){ loc_configout ConfigBool[key]=value; }
+   #undef loc_configout
 
-   void AddConfig(std::string key,std::string value){}
-   void AddConfig(std::string key,int value){}
-   void AddConfig(std::string key,bool value){}
-
-   void JT_Create::AddBuff(std::string entryname,std::string storage,char * buffer,bool dataclearnext=true){}
+   void JT_Create::AddBuff(std::string entryname,std::string storage,char * buffer,bool dataclearnext=true){
+     JAMJCR_Error = "Ok";
+     if (!entryadded) {
+       chat("First entry is now being added, let's safe the global config first!");
+       for (auto kv : ConfigString ) { WriteString(bt,kv.first); WriteString(bt,kv.second); }
+       for (auto kv : ConfigInt )    { WriteString(bt,kv.first); WriteInt   (bt,kv.second); }
+       for (auto kv : ConfigBool)    { WriteString(bt,kv.first); WriteBool  (bt,kv.second); }
+     }
+     entryadded=true;
+     // add entry itself
+     // clear the next data if needed
+   }
    void JT_Create::AddFile(std::string filename, std::string entryname, std::string storage='Store',bool dataclearnext=true){}
    void JT_Create::Import(std::string dependency){}
    void JT_Create::Require(std::string dependency){}
