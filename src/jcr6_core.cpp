@@ -707,7 +707,7 @@ namespace jcr6 {
      eind=ft.tellg();
      ft.close();
 
-     it=open(FTFile,std::ios::binary);
+     it.open(FTFile,std::ios::binary);
      buf = new char[eind];
      cbuf = new char[eind + ((eind*4)/3)];
      it.read(buf,eind);
