@@ -802,7 +802,7 @@ namespace jcr6 {
      std::ifstream ib; ib.open(filename,std::ios::binary);
      if (!ib.is_open()) { JamError("Input file could not be read!"); return e;}
      ib.seekg(0,std::ios::end);
-     int size = ib:tellg();
+     int size = ib.tellg();
      ib.seekg(0,std::ios::beg);
      buf1 = new char[size];
      ib.read(buf1,size);
