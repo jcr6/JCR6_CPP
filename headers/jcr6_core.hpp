@@ -129,7 +129,7 @@ namespace jcr6{
      public:
        std::map <std::string,std::string> LastResult;
        JT_Create(std::string file,std::string storage="Store");
-       ~JC_Create();
+       ~JT_Create();
        void Close();
        void AddConfig(std::string key,std::string value);
        void AddConfig(std::string key,int value);
