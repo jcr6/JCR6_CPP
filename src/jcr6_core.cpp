@@ -736,7 +736,7 @@ namespace jcr6 {
 
      // Put the fat offset on the offset spot
      bt.seekp(offsetoffset);
-     WriteInt(bt,FT_offset);
+     WriteInt(bt,start);
 
      // closure
      bt.close();
