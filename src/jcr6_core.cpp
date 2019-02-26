@@ -798,7 +798,7 @@ namespace jcr6 {
    JT_Entry JT_Create::AddFile(std::string filename, std::string entryname, std::string storage='Store',bool dataclearnext=true){
      JAMJCR_Error = "Ok";
      char * buf1;
-     ifstream ib = std::open(filename,std::ios::binary);
+     ifstream ib; ib.open(filename,std::ios::binary);
      if (!ib.is_open()) { JamError("Input file could not be read!"); return;}
      ib.seekg(0,std::ios::end);
      int size = ib:tellg();
