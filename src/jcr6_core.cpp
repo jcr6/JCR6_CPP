@@ -749,7 +749,7 @@ namespace jcr6 {
    void JT_Create::AddConfig(std::string key,bool value)        { loc_configout ConfigBool  [key]=value; }
    #undef loc_configout
 
-   JT_Entry JT_Create::AddBuff(std::string entryname,std::string storage,char * buffer,int size, bool dataclearnext=true){
+   JT_Entry JT_Create::AddBuff(std::string entryname,std::string storage,char * buffer,int size, bool dataclearnext){
      JAMJCR_Error = "Ok";
      if (!entryadded) {
        chat("First entry is now being added, let's safe the global config first!");
