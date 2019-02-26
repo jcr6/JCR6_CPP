@@ -117,8 +117,12 @@ namespace jcr6{
        std::map<std::string,int>         nDataInt;
        std::map<std::string,bool>        nDataBool;
        std::string FT_storage;
+       std::map<std::string,std::string> ConfigString;
+       std::map<std::string,int>         ConfigDataInt;
+       std::map<std::string,bool>        ConfigDataBool;
        int offsetoffset; // Sounds silly, but it's just a precaution to make sure the offset integer is written on the right spot.
        bool closed{false};
+       bool entryadded{false}; // Once true the config add routines should no longer work!
        ofstream bt;
 
      public:
@@ -126,6 +130,9 @@ namespace jcr6{
        JT_Create(std::string file,std::string storage="Store");
        ~JC_Create();
        void Close();
+       void AddConfig(std::string key,std::string value);
+       void AddConfig(std::string key,int value);
+       void AddConfig(std::string key,bool value);
        void AddBuff(std::string entryname,std::string storage,char * buffer,bool dataclearnext=true);
        void AddFile(std::string filename, std::string entryname, std::string storage='Store',bool dataclearnext=true);
        void Import(std::string dependency);

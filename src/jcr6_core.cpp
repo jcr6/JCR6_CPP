@@ -667,6 +667,11 @@ namespace jcr6 {
      bt.close();
      closed=true;
    }
+
+   void AddConfig(std::string key,std::string value){}
+   void AddConfig(std::string key,int value){}
+   void AddConfig(std::string key,bool value){}
+
    void JT_Create::AddBuff(std::string entryname,std::string storage,char * buffer,bool dataclearnext=true){}
    void JT_Create::AddFile(std::string filename, std::string entryname, std::string storage='Store',bool dataclearnext=true){}
    void JT_Create::Import(std::string dependency){}
