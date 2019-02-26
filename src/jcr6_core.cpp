@@ -672,7 +672,7 @@ namespace jcr6 {
      if (offsetoffset!=5) std::cout << "WARNING! Offset was not 5 ("<<offsetoffset<<")\n";
      WriteInt(bt,0);
    }
-   JT_Create::~JC_Create(){ Close(); }
+   JT_Create::~JT_Create(){ Close(); }
    void JT_Create::Close(){
      using namespace jcr6is;
      if (closed) return;
