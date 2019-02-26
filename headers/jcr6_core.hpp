@@ -112,13 +112,14 @@ namespace jcr6{
 
      class JT_Create{
      private:
-       std::map<std::string,JT_Entry> Entries;
+       std::map<std::string,JT_Entry>    Entries;
        std::map<std::string,std::string> nDataString;
        std::map<std::string,int>         nDataInt;
        std::map<std::string,bool>        nDataBool;
        std::string FT_storage;
        int offsetoffset; // Sounds silly, but it's just a precaution to make sure the offset integer is written on the right spot.
        bool closed{false};
+       ofstream bt;
 
      public:
        std::map <std::string,std::string> LastResult;
