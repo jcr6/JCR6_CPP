@@ -730,7 +730,7 @@ namespace jcr6 {
      // This footer is new in JCR6, and this C++ library is the first to
      // include it. All still functional JCR6 libraries will get this footer
      // and it's meant for a future feature of JCR6.
-     int footer = bt.tellp() + 8;
+     int footer = (int)(bt.tellp()) + 8;
      WriteRawString(bt,"JCR6");
      WriteInt(bt,footer);
 
