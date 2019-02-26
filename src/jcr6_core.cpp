@@ -681,7 +681,7 @@ namespace jcr6 {
    void AddConfig(std::string key,bool value){ loc_configout ConfigBool[key]=value; }
    #undef loc_configout
 
-   void JT_Create::AddBuff(std::string entryname,std::string storage,char * buffer,bool dataclearnext=true){
+   JT_Entry JT_Create::AddBuff(std::string entryname,std::string storage,char * buffer,int size, bool dataclearnext=true){
      JAMJCR_Error = "Ok";
      if (!entryadded) {
        chat("First entry is now being added, let's safe the global config first!");
@@ -691,20 +691,54 @@ namespace jcr6 {
      }
      entryadded=true;
      // add entry itself
+     if (!CompDrivers.count(storage)){
+       JamError("Unknown compression method");
+       return;
+     }
+     JT_Entry entry;
+     char * compressed = new char[size+((size/4)*3)];
+     int csize = CompDrivers[storage].Compress(buffer,compressed,size);
+     int offset = bt:tellg();
+     if (csize<0) {
+       if (JAMJCR_Error=="Ok" || JAMJCR_Error=="") JamError("Compression failure");
+       return;
+     }
+     bt:write(compressed,csize);
+     delete compressed;
+
+     for(auto kv:nDataString) entry.dataString[kv.first]=kv.second;
+     for(auto kv:nDataInt)    entry.dataInt   [kv.first]=kv.second;
+     for(auto kv:nDataBool)   entry.dataBool  [kv.first]=kv.second;
+     entry.dataString["__Entry"]    = entryname;
+     entry.dataInt   ["__Offset"]   = offset;
+     entry.dataInt   ["__Size"]     = size;
+     entry.dataInt   ["__CSize"]    = csize;
+     entry.dataString["__Storage"]  = storage;
+     Entries[Upper(entryname)]=entry;
+
      // clear the next data if needed
+     if (dataclearnext) {
+       nDataString.clear();
+       nDataBool.clear();
+       nDataInt.clear();
+     }
+     return entry;
    }
 
-   void JT_Create::AddFile(std::string filename, std::string entryname, std::string storage='Store',bool dataclearnext=true){
+   JT_Entry JT_Create::AddFile(std::string filename, std::string entryname, std::string storage='Store',bool dataclearnext=true){
      JAMJCR_Error = "Ok";
      char * buf1;
      ifstream ib = std::open(filename,std::ios::binary);
      if (!ib.is_open()) { JamError("Input file could not be read!"); return;}
-     ib:seekg(0,std::ios::end);
+     ib.seekg(0,std::ios::end);
      int size = ib:tellg();
      ib seekg(0,std::ios::beg);
      buf1 = new char[size];
-     AddBuff(entryname,storage,buf1,dataclearnext);
+     ib.read(buf1,size);
+     ib.close();
+     auto e = AddBuff(entryname,storage,buf1,size,dataclearnext);
      delete buf1;
+     return e;
    }
 
    void JT_Create::Import(std::string dependency){}
