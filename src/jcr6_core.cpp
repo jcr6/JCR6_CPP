@@ -699,9 +699,9 @@ namespace jcr6 {
      for (auto ent : Entries){
        WriteByte(ft,1);
        WriteString(ft,"ENTRY");
-       for (auto data : dataString ){ WriteByte(ft,1); WriteString(ft,data.first); WriteString(ft,data.second); }
-       for (auto data : dataBool   ){ WriteByte(ft,2); WriteString(ft,data.first); WriteBool  (ft,data.second); }
-       for (auto data : dataInt    ){ WriteByte(ft,3); WriteString(ft,data.first); WriteInt   (ft,data.second); }
+       for (auto data : nDataString ){ WriteByte(ft,1); WriteString(ft,data.first); WriteString(ft,data.second); }
+       for (auto data : nDataBool   ){ WriteByte(ft,2); WriteString(ft,data.first); WriteBool  (ft,data.second); }
+       for (auto data : nDataInt    ){ WriteByte(ft,3); WriteString(ft,data.first); WriteInt   (ft,data.second); }
        WriteByte(ft,255);
      }
      eind=ft.tellg();
