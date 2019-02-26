@@ -658,8 +658,8 @@ namespace jcr6 {
 
 
    // Chapter 2: Writing
-   JT_Create(std::string file, std::string storage){
-     bt = std::open(file,std::ios::binary|std::ios::trunc);
+   JT_Create::JT_Create(std::string file, std::string storage){
+     bt.open(file,std::ios::binary|std::ios::trunc);
      if (!bt.is_open()){
        closed=true;
        JamError("File could not be written");
