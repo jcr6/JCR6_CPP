@@ -757,7 +757,7 @@ namespace jcr6 {
        for (auto kv : ConfigString ) { WriteByte(bt,1); WriteString(bt,kv.first); WriteString(bt,kv.second); }
        for (auto kv : ConfigBool)    { WriteByte(bt,2); WriteString(bt,kv.first); WriteBool  (bt,kv.second); }
        for (auto kv : ConfigInt )    { WriteByte(bt,3); WriteString(bt,kv.first); WriteInt   (bt,kv.second); }
-       WriteByte(255);
+       WriteByte(bt,255);
      }
      entryadded=true;
      // add entry itself
