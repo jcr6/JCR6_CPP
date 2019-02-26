@@ -689,7 +689,7 @@ namespace jcr6 {
      char * buf;
      char * cbuf;
      std::string FTFile = MainFile ; FTFile += ".$$DIRTEMP$$" ;
-     ft = open(FTFile,std::ios::binary|std::ios::trunc);
+     ft.open(FTFile,std::ios::binary|std::ios::trunc);
      for (auto comment : Comments){
        WriteByte(ft,1);
        WriteString(ft,"COMMENT");
