@@ -681,8 +681,8 @@ namespace jcr6 {
        JamError("Unknown compression method for File Table storage");
        return;
      }
-     ofstream ft;
-     ifstream it;
+     std::ofstream ft;
+     std::ifstream it;
      int start{bt.tellp()};
      int eind{0};
      int csize{0};
