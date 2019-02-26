@@ -704,7 +704,7 @@ namespace jcr6 {
        for (auto data : nDataInt    ){ jcr6is::WriteByte(ft,3); jcr6is::WriteString(ft,data.first); jcr6is::WriteInt   (ft,data.second); }
        WriteByte(ft,255);
      }
-     eind=ft.tellg();
+     eind=ft.tellp();
      ft.close();
 
      it.open(FTFile,std::ios::binary);
