@@ -773,7 +773,7 @@ namespace jcr6 {
        if (JAMJCR_Error=="Ok" || JAMJCR_Error=="") JamError("Compression failure");
        return entry;
      }
-     bt:write(compressed,csize);
+     bt.write(compressed,csize);
      delete compressed;
 
      for(auto kv:nDataString) entry.dataString[kv.first]=kv.second;
