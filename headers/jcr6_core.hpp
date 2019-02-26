@@ -112,6 +112,7 @@ namespace jcr6{
 
      class JT_Create{
      private:
+       std::map<std::string,std::string> Comments;
        std::map<std::string,JT_Entry>    Entries;
        std::map<std::string,std::string> nDataString;
        std::map<std::string,int>         nDataInt;
