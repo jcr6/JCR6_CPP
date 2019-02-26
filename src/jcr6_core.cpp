@@ -693,10 +693,26 @@ namespace jcr6 {
      // add entry itself
      // clear the next data if needed
    }
-   void JT_Create::AddFile(std::string filename, std::string entryname, std::string storage='Store',bool dataclearnext=true){}
+
+   void JT_Create::AddFile(std::string filename, std::string entryname, std::string storage='Store',bool dataclearnext=true){
+     JAMJCR_Error = "Ok";
+     char * buf1;
+     ifstream ib = std::open(filename,std::ios::binary);
+     if (!ib.is_open()) { JamError("Input file could not be read!"); return;}
+     ib:seekg(0,std::ios::end);
+     int size = ib:tellg();
+     ib seekg(0,std::ios::beg);
+     buf1 = new char[size];
+     AddBuff(entryname,storage,buf1,dataclearnext);
+     delete buf1;
+   }
+
    void JT_Create::Import(std::string dependency){}
    void JT_Create::Require(std::string dependency){}
-   void JT_Create::AddComment(std::string namecomment,std::string contentcomment){}
+   void JT_Create::AddComment(std::string namecomment,std::string contentcomment){
+     JAMJCR_Error = "Ok";
+     Comments[namecomment] = contentcomment;
+   }
 
 
    // Epilogue: InitJCR6
