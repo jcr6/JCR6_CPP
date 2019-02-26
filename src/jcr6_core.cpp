@@ -158,7 +158,9 @@ namespace jcr6is{ // JCR6 internal stream routines.
   }
 
   void WriteByte(std::ofstream &bt, unsigned char c){
-    bt.write(&c,1);
+    uEndianCheckUp e;
+    e.ec_byte=c;
+    bt.write(&(e.ec_char),1);
   }
 
   void WriteBool(std::ofstream &bt,bool b){
