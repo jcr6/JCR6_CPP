@@ -117,6 +117,7 @@ namespace jcr6{
        std::map<std::string,int>         nDataInt;
        std::map<std::string,bool>        nDataBool;
        std::string FT_storage;
+       std::string MainFile;
        std::map<std::string,std::string> ConfigString;
        std::map<std::string,int>         ConfigDataInt;
        std::map<std::string,bool>        ConfigDataBool;

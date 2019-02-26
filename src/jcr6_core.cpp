@@ -672,9 +672,66 @@ namespace jcr6 {
    void JT_Create::Close(){
      if (closed) return;
      // write out (and compress) file table
+     if (!CompDrivers.count(FT_storage)) {
+       JamError("Unknown compression method for File Table storage");
+       return;
+     }
+     ofstream ft;
+     ifstream it;
+     int start{bt.tellg};
+     int eind{0};
+     int csize{0};
+     char * buf;
+     char * cbuf;
+     std::string FTFile{Mainfile}; FTFile += ".$$DIRTEMP$$"
+     ft = open(FTFile,std::ios::binary|std::ios::trunc);
+     for (auto comment : Comments){
+       WriteByte(ft,1);
+       WriteString(ft,"COMMENT");
+       WriteString(ft,comment.first);
+       WriteString(ft,comment.secord);
+     }
+     for (auto ent : Entries){
+       WriteByte(ft,1);
+       WriteString(ft,"ENTRY");
+       for (auto data : dataString ){ WriteByte(ft,1); WriteString(ft,data.first); WriteString(ft,data.second); }
+       for (auto data : dataBool   ){ WriteByte(ft,2); WriteString(ft,data.first); WriteBool  (ft,data.second); }
+       for (auto data : dataInt    ){ WriteByte(ft,3); WriteString(ft,data.first); WriteInt   (ft,data.second); }
+       WriteByte(ft,255);
+     }
+     eind=ft.tellg();
+     ft.close();
+
+     it=open(FTFile,std::ios::binary);
+     buf = new char[eind];
+     cbuf = new char[eind + ((eind*4)/3)];
+     it.read(buf,eind);
+     it.close();
+     csize = CompDrivers[FT_storage].Compress(buf,cbuf,eind);
+     if (csize>=0 && csize<eind){
+       WriteInt(bt,eind);
+       WriteInt(bt,csize);
+       WriteString(bt,FT_storage);
+       bt.write(cbuf,csize);
+     } else {
+       WriteInt(bt,eind);
+       WriteInt(bt,eind);
+       WriteString(bt,"Store");
+       bt.write(buf,eind);
+     }
+     delete buf;
+     delete cbuf;
+
+     // This footer is new in JCR6, and this C++ library is the first to
+     // include it. All still functional JCR6 libraries will get this footer
+     // and it's meant for a future feature of JCR6.
+     int footer = bt.tellg() + 8;
+     WriteRawString(bt,"JCR6");
+     WriteInt(bt,footer);
      bt.close();
      closed=true;
    }
+
    #define loc_configout JAMJCR_Error = "Ok"; if (entryadded) { JamError("You cannot change the global function once an entry has been added!"); return; }
    void AddConfig(std::string key,std::string value){ loc_configout ConfigString[key]=value; }
    void AddConfig(std::string key,int value){ loc_configout ConfigInt[key]=value; }
@@ -685,9 +742,10 @@ namespace jcr6 {
      JAMJCR_Error = "Ok";
      if (!entryadded) {
        chat("First entry is now being added, let's safe the global config first!");
-       for (auto kv : ConfigString ) { WriteString(bt,kv.first); WriteString(bt,kv.second); }
-       for (auto kv : ConfigInt )    { WriteString(bt,kv.first); WriteInt   (bt,kv.second); }
-       for (auto kv : ConfigBool)    { WriteString(bt,kv.first); WriteBool  (bt,kv.second); }
+       for (auto kv : ConfigString ) { WriteByte(bt,1); WriteString(bt,kv.first); WriteString(bt,kv.second); }
+       for (auto kv : ConfigBool)    { WriteByte(bt,2); WriteString(bt,kv.first); WriteBool  (bt,kv.second); }
+       for (auto kv : ConfigInt )    { WriteByte(bt,3); WriteString(bt,kv.first); WriteInt   (bt,kv.second); }
+       WriteByte(255);
      }
      entryadded=true;
      // add entry itself
