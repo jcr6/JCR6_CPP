@@ -768,7 +768,7 @@ namespace jcr6 {
      }
      char * compressed = new char[size+((size/4)*3)];
      int csize = CompDrivers[storage].Compress(buffer,compressed,size);
-     int offset = bt:tellg();
+     int offset = bt.tellp();
      if (csize<0) {
        if (JAMJCR_Error=="Ok" || JAMJCR_Error=="") JamError("Compression failure");
        return;
