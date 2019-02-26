@@ -655,7 +655,10 @@ namespace jcr6 {
        JamError("File could not be written");
        return;
      }
-
+     WriteRawString("JCR6\032");;
+     offsetoffset=bt.tellg();
+     if (offsetoffset!=5) std::cout << "WARNING! Offset was not 5 ("<<offsetoffset<<")\n";
+     WriteInt(0);
    }
    ~JC_Create(){}
    void JT_Create::Close(){}
