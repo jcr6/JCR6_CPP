@@ -796,17 +796,18 @@ namespace jcr6 {
    }
 
    JT_Entry JT_Create::AddFile(std::string filename, std::string entryname, std::string storage,bool dataclearnext){
+     JT_Entry e;
      JAMJCR_Error = "Ok";
      char * buf1;
      std::ifstream ib; ib.open(filename,std::ios::binary);
-     if (!ib.is_open()) { JamError("Input file could not be read!"); return;}
+     if (!ib.is_open()) { JamError("Input file could not be read!"); return e;}
      ib.seekg(0,std::ios::end);
      int size = ib:tellg();
      ib.seekg(0,std::ios::beg);
      buf1 = new char[size];
      ib.read(buf1,size);
      ib.close();
-     auto e = AddBuff(entryname,storage,buf1,size,dataclearnext);
+     e = AddBuff(entryname,storage,buf1,size,dataclearnext);
      delete[] buf1;
      return e;
    }
