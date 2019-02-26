@@ -110,6 +110,31 @@ namespace jcr6{
        std::string String(std::string entry);
      };
 
+     class JT_Create{
+     private:
+       std::map<std::string,JT_Entry> Entries;
+       std::map<std::string,std::string> nDataString;
+       std::map<std::string,int>         nDataInt;
+       std::map<std::string,bool>        nDataBool;
+       std::string FT_storage;
+       int offsetoffset; // Sounds silly, but it's just a precaution to make sure the offset integer is written on the right spot.
+       bool closed{false};
+
+     public:
+       std::map <std::string,std::string> LastResult;
+       JT_Create(std::string file,std::string storage="Store");
+       ~JC_Create();
+       void Close();
+       void AddBuff(std::string entryname,std::string storage,char * buffer,bool dataclearnext=true);
+       void AddFile(std::string filename, std::string entryname, std::string storage='Store',bool dataclearnext=true);
+       void Import(std::string dependency);
+       void Require(std::string dependency);
+       void AddComment(std::string namecomment,std::string contentcomment);
+     };
+
+
+
+
      typedef struct {
        std::string Name;
        bool (* Recognize)(std::string File);

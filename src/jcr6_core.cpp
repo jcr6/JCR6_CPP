@@ -627,6 +627,15 @@ namespace jcr6 {
 
 
    // Chapter 2: Writing
+   JT_Create(std::string file,std::string storage="Store"){}
+   ~JC_Create(){}
+   void JT_Create::Close(){}
+   void JT_Create::AddBuff(std::string entryname,std::string storage,char * buffer,bool dataclearnext=true){}
+   void JT_Create::AddFile(std::string filename, std::string entryname, std::string storage='Store',bool dataclearnext=true){}
+   void JT_Create::Import(std::string dependency){}
+   void JT_Create::Require(std::string dependency){}
+   void JT_Create::AddComment(std::string namecomment,std::string contentcomment){}
+
 
    // Epilogue: InitJCR6
    void init_JCR6(){
