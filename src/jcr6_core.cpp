@@ -659,6 +659,7 @@ namespace jcr6 {
 
    // Chapter 2: Writing
    JT_Create::JT_Create(std::string file, std::string storage){
+     using namespace jcr6is;
      bt.open(file,std::ios::binary|std::ios::trunc);
      if (!bt.is_open()){
        closed=true;
@@ -667,12 +668,13 @@ namespace jcr6 {
      }
      FT_storage=storage;
      WriteRawString(bt,"JCR6\032");;
-     offsetoffset=bt.tellg();
+     offsetoffset=bt.tellp();
      if (offsetoffset!=5) std::cout << "WARNING! Offset was not 5 ("<<offsetoffset<<")\n";
      WriteInt(bt,0);
    }
-   ~JC_Create(){ Close(); }
+   JT_Create::~JC_Create(){ Close(); }
    void JT_Create::Close(){
+     using namespace jcr6is;
      if (closed) return;
      // write out (and compress) file table
      if (!CompDrivers.count(FT_storage)) {
@@ -681,7 +683,7 @@ namespace jcr6 {
      }
      ofstream ft;
      ifstream it;
-     int start{bt.tellg};
+     int start{bt.tellp()};
      int eind{0};
      int csize{0};
      char * buf;
@@ -731,6 +733,12 @@ namespace jcr6 {
      int footer = bt.tellg() + 8;
      WriteRawString(bt,"JCR6");
      WriteInt(bt,footer);
+
+     // Put the fat offset on the offset spot
+     bt.seekp(offsetoffset);
+     WriteInt(bt,FT_offset);
+
+     // closure
      bt.close();
      closed=true;
    }
