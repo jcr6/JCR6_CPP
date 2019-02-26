@@ -683,7 +683,7 @@ namespace jcr6 {
      }
      std::ofstream ft;
      std::ifstream it;
-     int start{bt.tellp()};
+     int start = bt.tellp();
      int eind{0};
      int csize{0};
      char * buf;
