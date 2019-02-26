@@ -658,17 +658,18 @@ namespace jcr6 {
 
 
    // Chapter 2: Writing
-   JT_Create(std::string file,std::string storage){
+   JT_Create(std::string file, std::string storage){
      bt = std::open(file,std::ios::binary|std::ios::trunc);
      if (!bt.is_open()){
        closed=true;
        JamError("File could not be written");
        return;
      }
-     WriteRawString("JCR6\032");;
+     FT_storage=storage;
+     WriteRawString(bt,"JCR6\032");;
      offsetoffset=bt.tellg();
      if (offsetoffset!=5) std::cout << "WARNING! Offset was not 5 ("<<offsetoffset<<")\n";
-     WriteInt(0);
+     WriteInt(bt,0);
    }
    ~JC_Create(){ Close(); }
    void JT_Create::Close(){
