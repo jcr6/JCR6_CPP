@@ -660,8 +660,13 @@ namespace jcr6 {
      if (offsetoffset!=5) std::cout << "WARNING! Offset was not 5 ("<<offsetoffset<<")\n";
      WriteInt(0);
    }
-   ~JC_Create(){}
-   void JT_Create::Close(){}
+   ~JC_Create(){ Close(); }
+   void JT_Create::Close(){
+     if (closed) return;
+     // write out (and compress) file table
+     bt.close();
+     closed=true;
+   }
    void JT_Create::AddBuff(std::string entryname,std::string storage,char * buffer,bool dataclearnext=true){}
    void JT_Create::AddFile(std::string filename, std::string entryname, std::string storage='Store',bool dataclearnext=true){}
    void JT_Create::Import(std::string dependency){}
