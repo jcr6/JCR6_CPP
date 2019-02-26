@@ -752,7 +752,7 @@ namespace jcr6 {
    JT_Entry JT_Create::AddBuff(std::string entryname,std::string storage,char * buffer,int size, bool dataclearnext){
      JAMJCR_Error = "Ok";
      if (!entryadded) {
-       chat("First entry is now being added, let's safe the global config first!");
+       chat({"First entry is now being added, let's safe the global config first!"});
        for (auto kv : ConfigString ) { WriteByte(bt,1); WriteString(bt,kv.first); WriteString(bt,kv.second); }
        for (auto kv : ConfigBool)    { WriteByte(bt,2); WriteString(bt,kv.first); WriteBool  (bt,kv.second); }
        for (auto kv : ConfigInt )    { WriteByte(bt,3); WriteString(bt,kv.first); WriteInt   (bt,kv.second); }
