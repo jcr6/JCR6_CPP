@@ -149,7 +149,7 @@ namespace jcr6is{ // JCR6 internal stream routines.
   }
 
   void WriteRawString(std::ofstream &bt,std::string str){
-    for (int i=0; i<str.size();i++) bt.write(str[i],1);
+    for (int i=0; i<str.size();i++) bt.write(&(str[i]),1);
   }
 
   void WriteString(std::ofstream &bt,std::string str){
