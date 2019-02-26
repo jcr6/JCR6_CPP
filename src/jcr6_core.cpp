@@ -750,6 +750,7 @@ namespace jcr6 {
    #undef loc_configout
 
    JT_Entry JT_Create::AddBuff(std::string entryname,std::string storage,char * buffer,int size, bool dataclearnext){
+     using namespace jcr6is;
      JAMJCR_Error = "Ok";
      if (!entryadded) {
        chat({"First entry is now being added, let's safe the global config first!"});
