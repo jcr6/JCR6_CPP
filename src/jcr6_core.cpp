@@ -139,13 +139,13 @@ namespace jcr6is{ // JCR6 internal stream routines.
   void WriteInt(std::ofstream &bt,int i){
     uEndianCheckUp e;
     e.ec_int = EndianConvert(i);
-    for (int i=0; i<4;++i) bt.write(e.ec_reverse[i],1);
+    for (int i=0; i<4;++i) bt.write(&(e.ec_reverse[i]),1);
   }
 
   void WriteLong(std::ofstream &bt,long i){
     uEndianCheckUp e;
     e.ec_long = EndianConvert(i);
-    for (int i=0; i<8;++i) bt.write(e.ec_reverse[i],1);
+    for (int i=0; i<8;++i) bt.write(&(e.ec_reverse[i]),1);
   }
 
   void WriteRawString(std::ofstream &bt,std::string str){
