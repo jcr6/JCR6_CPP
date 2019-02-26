@@ -751,6 +751,7 @@ namespace jcr6 {
 
    JT_Entry JT_Create::AddBuff(std::string entryname,std::string storage,char * buffer,int size, bool dataclearnext){
      using namespace jcr6is;
+     JT_Entry entry;
      JAMJCR_Error = "Ok";
      if (!entryadded) {
        chat({"First entry is now being added, let's safe the global config first!"});
@@ -763,9 +764,8 @@ namespace jcr6 {
      // add entry itself
      if (!CompDrivers.count(storage)){
        JamError("Unknown compression method");
-       return;
+       return ret;
      }
-     JT_Entry entry;
      char * compressed = new char[size+((size/4)*3)];
      int csize = CompDrivers[storage].Compress(buffer,compressed,size);
      int offset = bt:tellg();
