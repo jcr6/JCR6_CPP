@@ -795,7 +795,7 @@ namespace jcr6 {
      return entry;
    }
 
-   JT_Entry JT_Create::AddFile(std::string filename, std::string entryname, std::string storage='Store',bool dataclearnext=true){
+   JT_Entry JT_Create::AddFile(std::string filename, std::string entryname, std::string storage,bool dataclearnext){
      JAMJCR_Error = "Ok";
      char * buf1;
      ifstream ib; ib.open(filename,std::ios::binary);
