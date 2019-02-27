@@ -27,7 +27,7 @@ mkobjects/testcr.$(PLATFORM).o:testcr.cpp mkobjects/jcr6_core.$(PLATFORM).o mkob
 test$(PLATFORM):mkobjects/jcr6_core.$(PLATFORM).o mkobjects/jcr6_zlib.$(PLATFORM).o mkobjects/testme.$(PLATFORM).o mkobjects/jcr6_wad.$(PLATFORM).o
 	@echo Creating Test utility
 	@g++ -std=c++11 -o test$(PLATFORM) mkobjects/jcr6*.$(PLATFORM).o /Volumes/Scyndi/C-Libs/zlib/libz.a mkobjects/testme.$(PLATFORM).o
-testcr$(PLATFORM):mkobjects/jcr6_core.$(PLATFORM).o mkobjects/jcr6_zlib.$(PLATFORM).o mkobjects/testme.$(PLATFORM).o mkobjects/jcr6_wad.$(PLATFORM).o
+testcr$(PLATFORM):mkobjects/jcr6_core.$(PLATFORM).o mkobjects/jcr6_zlib.$(PLATFORM).o mkobjects/testcr.$(PLATFORM).o 
 	@echo Creating Test Creation utility
 	@g++ -std=c++11 -o testcr$(PLATFORM) mkobjects/jcr6*.$(PLATFORM).o /Volumes/Scyndi/C-Libs/zlib/libz.a mkobjects/testcr.$(PLATFORM).o
 	@echo Done
