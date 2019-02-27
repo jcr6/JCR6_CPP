@@ -48,4 +48,6 @@ testmac
 testwindows.exe
 testwindows
 testlinux
-
+testcrmac
+testcrwindows*
+testcrlinux
