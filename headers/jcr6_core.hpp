@@ -65,7 +65,7 @@ namespace jcr6{
        int Offset();
      };
 
-     class mybankstream {
+     class JT_EntryReader {
      private:
        char *buf;
        int bufsize;
@@ -82,8 +82,8 @@ namespace jcr6{
        std::string ReadString(int l=0);
        bool eof();
        void newbuf(int size);
-       mybankstream(int size=1);
-       ~mybankstream();
+       JT_EntryReader(int size=1);
+       ~JT_EntryReader();
      };
 
 
@@ -106,7 +106,7 @@ namespace jcr6{
        void PatchDir(JT_Dir &dir);
        void AddEntry(std::string name,JT_Entry Entry);
        JT_Entry &Entry(std::string entry);
-       void B(std::string entry,mybankstream &data); // Reads an entry from a JCR file and returns it as a bankstream.
+       void B(std::string entry,JT_EntryReader &data); // Reads an entry from a JCR file and returns it as a bankstream.
        std::vector<std::string> Lines(std::string entry);
        std::string String(std::string entry);
      };

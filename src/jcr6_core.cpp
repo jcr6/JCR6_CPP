@@ -195,11 +195,11 @@ namespace jcr6 {
   static std::map<std::string,JC_CompressDriver> CompDrivers;
 
 // I know there might be better routines for this out there, but I wanted JCR6 to be as "self-reliant" as possible.
-  char *mybankstream::pointme() { return buf; }
-  int mybankstream::getsize() { return bufsize; }
-  bool mybankstream::eof() { return Position >= bufsize; }
+  char *JT_EntryReader::pointme() { return buf; }
+  int JT_EntryReader::getsize() { return bufsize; }
+  bool JT_EntryReader::eof() { return Position >= bufsize; }
 
-  void mybankstream::newbuf(int size){
+  void JT_EntryReader::newbuf(int size){
     delete buf;
     buf = new char[size];
     bufsize = size;
@@ -207,7 +207,7 @@ namespace jcr6 {
     chat({"Buffer in bankstream recreated: ",std::to_string(bufsize)," bytes"});
   }
 
-  unsigned char mybankstream::ReadByte() {
+  unsigned char JT_EntryReader::ReadByte() {
     assert((!eof() && "End of buffer reached!"));
     uEndianCheckUp c;
     c.ec_char = buf[Position];
@@ -218,7 +218,7 @@ namespace jcr6 {
     return c.ec_byte;
   }
 
-  char mybankstream::ReadChar() {
+  char JT_EntryReader::ReadChar() {
     assert((!eof() && "End of buffer reached!"));
     char c = buf[Position];
     #ifdef DEBUGCHAT
@@ -229,9 +229,9 @@ namespace jcr6 {
 
   }
 
-  bool mybankstream::ReadBool() { return ReadByte()!=0; }
+  bool JT_EntryReader::ReadBool() { return ReadByte()!=0; }
 
-  int mybankstream::ReadInt() {
+  int JT_EntryReader::ReadInt() {
     uEndianCheckUp ret;
     for (int i=0; i<4; i++) ret.ec_reverse[i] = ReadByte();
     #ifdef DEBUGCHAT
@@ -240,13 +240,13 @@ namespace jcr6 {
     return EndianConvert(ret.ec_int);
   }
 
-  long mybankstream::ReadLong() {
+  long JT_EntryReader::ReadLong() {
     uEndianCheckUp ret;
     for (int i=0; i<8; i++) ret.ec_reverse[i] = ReadByte();
     return EndianConvert(ret.ec_long);
   }
 
-  std::string mybankstream::ReadString(int l){
+  std::string JT_EntryReader::ReadString(int l){
     int l2{l};
     std::string ret = "";
     if (!l2) l2 = ReadInt();
@@ -259,7 +259,7 @@ namespace jcr6 {
     return ret;
   }
 
-  std::string mybankstream::ReadLine(){
+  std::string JT_EntryReader::ReadLine(){
     std::string ret{""};
     do{
       char c = ReadChar();
@@ -271,8 +271,8 @@ namespace jcr6 {
   }
 
 
-  mybankstream::mybankstream(int size){ buf = new char[size]; bufsize=size; }
-  mybankstream::~mybankstream() { delete buf;}
+  JT_EntryReader::JT_EntryReader(int size){ buf = new char[size]; bufsize=size; }
+  JT_EntryReader::~JT_EntryReader() { delete buf;}
 
 
 
@@ -327,9 +327,9 @@ namespace jcr6 {
      return (EntryMap[capentry]);
    }
 
-   void JT_Dir::B(std::string entry,mybankstream & data){
+   void JT_Dir::B(std::string entry,JT_EntryReader & data){
      chat({"B: Requested: ",entry});
-     static mybankstream nothing(1);
+     static JT_EntryReader nothing(1);
      JAMJCR_Error = "Ok";
      JT_Entry &E = Entry(entry);
      if (JAMJCR_Error != "" && JAMJCR_Error != "Ok") return ;
@@ -342,7 +342,7 @@ namespace jcr6 {
      std::ifstream bt ;
      bt.open (E.MainFile, std::ios::binary);
      bt.seekg(E.Offset(),std::ios::beg);
-     mybankstream comp(E.CompressedSize());
+     JT_EntryReader comp(E.CompressedSize());
      data.newbuf(E.RealSize());
      bt.read(comp.pointme(),E.CompressedSize());
      CompDrivers[storage].Expand(comp.pointme(),data.pointme(),comp.getsize(),data.getsize());
@@ -351,7 +351,7 @@ namespace jcr6 {
 
    std::vector<std::string> JT_Dir::Lines(std::string entry) {
      std::vector<std::string> ret;
-     mybankstream bt;
+     JT_EntryReader bt;
      B(entry,bt);
      if (JAMJCR_Error!="" && JAMJCR_Error!="Ok") return ret;
      while(!bt.eof()) ret.push_back(bt.ReadLine());
@@ -359,7 +359,7 @@ namespace jcr6 {
    }
    std::string JT_Dir::String(std::string entry) {
      std::string ret;
-     mybankstream bt;
+     JT_EntryReader bt;
      B(entry,bt);
      if (JAMJCR_Error!="" && JAMJCR_Error!="Ok") return "";
      return bt.pointme();
@@ -493,8 +493,8 @@ namespace jcr6 {
      ret.FT_size    = jcr6is::ReadInt(bt);
      ret.FT_csize   = jcr6is::ReadInt(bt);
      ret.FT_storage = jcr6is::ReadString(bt);
-     mybankstream dirbank(ret.FT_size);
-     mybankstream cmpbank(ret.FT_csize);
+     JT_EntryReader dirbank(ret.FT_size);
+     JT_EntryReader cmpbank(ret.FT_csize);
      char *cmpbuf   = cmpbank.pointme();
      char *dirbuf   = dirbank.pointme();
      bt.read(cmpbuf,ret.FT_csize);
