@@ -4,7 +4,7 @@
 
 ## NOTICE!
 
-This is still a work in progress! It will not be fully functional what you find here (if in fact you find anything functional at all), and although I will not stop you from cloning this repository already. The zlib license this project will have will ONLY count once this notice has been removed! Until that time, you may only clone/download/view this code for evaluation/testing/studying purposes.
+This is still a work in progress! It will not be fully functional, yet! But most of the library's functionality should operate normally. You can use the files in this repository under the terms of the [zlib license](https://github.com/jcr6/JCR6_CPP/blob/master/license.txt), unless explicity stated otherwise inside the source file.
 
 
 ## STATUS
