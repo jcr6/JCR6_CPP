@@ -6,16 +6,18 @@
 int main(){
   using namespace std;
   using namespace jcr6;
+  init_JCR6();
   std::string myhead = MY_HEAD;
   const char * chead; chead = myhead.c_str();
   char mhead[255]; strcpy(mhead,chead);
   cout << MY_HEAD;
   cout << "Creating JCR\n";
-  JT_Create j{"testcr.jcr","zlib"};
+  JT_Create j{"testcr.jcr","Store"};
+  j.AddComment("Test","This is just a test JCR file! Does it work?");
   cout << "Storing HEADER\n";
   j.AddBuff("HEAD","zlib",mhead,myhead.size());
   cout << "Storing source\n";
-  j.AddFile("testcr.cpp","testcr.cpp","zlib");
+  j.AddFile("testcr.cpp","testcr.cpp","Store");
   cout << "Finalizing\n";
   j.Close();
 }

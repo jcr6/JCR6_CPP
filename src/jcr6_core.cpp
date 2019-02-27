@@ -25,7 +25,7 @@
 #include "../headers/jcr6_core.hpp"
 
 
-#undef DEBUGCHAT
+#define DEBUGCHAT
 static inline void chat(std::vector<std::string> args){
   #ifdef DEBUGCHAT
   std::cout << "DEBUG: ";
@@ -287,9 +287,13 @@ namespace jcr6 {
    std::string Get_JCR_Error_Message() { return JAMJCR_Error; }
 
    void JamError(std::string errormessage){
+     #ifdef DEBUGCHAT
+     std::cout << "JCR6 ERROR: " << errormessage <<"\n";
+     #endif
+
      JAMJCR_Error = errormessage;
      if (JCR_ErrorCrash) {
-       std::cout << "JCR6 ERROR: " << errormessage;
+       std::cout << "JCR6 ERROR: " << errormessage<<"\n";
        exit(1);
      }
    }
@@ -672,13 +676,16 @@ namespace jcr6 {
    JT_Create::JT_Create(std::string file, std::string storage){
      using namespace jcr6is;
      //bt.open(file,std::ios::binary|std::ios::trunc);
+     chat({"Creating:",file});
+     MainFile=file;
      bt = fopen(file.c_str(),"wb");
      //if (!bt.is_open()){
-     if (bt!=nullptr){
+     if (bt==nullptr){
        closed=true;
        JamError("File could not be written");
        return;
      }
+     chat({"Success"});
      FT_storage=storage;
      WriteRawString(bt,"JCR6\032");;
      offsetoffset=ftell(bt); //bt.tellp();
@@ -686,6 +693,7 @@ namespace jcr6 {
      WriteInt(bt,0);
    }
    JT_Create::~JT_Create(){ Close(); }
+
    void JT_Create::Close(){
      using namespace jcr6is;
      if (closed) return;
@@ -702,6 +710,7 @@ namespace jcr6 {
      int csize{0};
      char * buf;
      char * cbuf;
+     chat({"File Table at:",std::to_string(start)});
      std::string FTFile = MainFile ; FTFile += ".$$DIRTEMP$$" ;
      //ft.open(FTFile,std::ios::binary|std::ios::trunc);
      ft = fopen(FTFile.c_str(),"wb");
@@ -713,10 +722,10 @@ namespace jcr6 {
      }
      for (auto ent : Entries){
        WriteByte(ft,1);
-       WriteString(ft,"ENTRY");
-       for (auto data : nDataString ){ jcr6is::WriteByte(ft,1); jcr6is::WriteString(ft,data.first); jcr6is::WriteString(ft,data.second); }
-       for (auto data : nDataBool   ){ jcr6is::WriteByte(ft,2); jcr6is::WriteString(ft,data.first); jcr6is::WriteBool  (ft,data.second); }
-       for (auto data : nDataInt    ){ jcr6is::WriteByte(ft,3); jcr6is::WriteString(ft,data.first); jcr6is::WriteInt   (ft,data.second); }
+       WriteString(ft,"FILE");
+       for (auto data : ent.second.dataString ){ jcr6is::WriteByte(ft,1); jcr6is::WriteString(ft,data.first); jcr6is::WriteString(ft,data.second); }
+       for (auto data : ent.second.dataBool   ){ jcr6is::WriteByte(ft,2); jcr6is::WriteString(ft,data.first); jcr6is::WriteBool  (ft,data.second); }
+       for (auto data : ent.second.dataInt    ){ jcr6is::WriteByte(ft,3); jcr6is::WriteString(ft,data.first); jcr6is::WriteInt   (ft,data.second); }
        WriteByte(ft,255);
      }
      eind=ftell(ft); //ft.tellp();
@@ -780,7 +789,11 @@ namespace jcr6 {
      }
      entryadded=true;
      // add entry itself
+     chat({"Compressing with:",storage});
      if (!CompDrivers.count(storage)){
+       #ifdef DEBUGCHAT
+       for (auto&k:CompDrivers) std::cout << "DEBUG: " << "Compression driver found: " << k.first << "\n";
+       #endif
        JamError("Unknown compression method");
        return entry;
      }
