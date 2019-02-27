@@ -24,3 +24,5 @@ This is still a work in progress! It will not be fully functional, yet! But most
 - Writing works now. We're almost there, to give this library its true 'zlib' license at last ;)
 - Alias support
 - Now the dependency calls in writing are needed, but they come later, what I wanna make sure of before I can consider this a 'release' in the zlib license, is that the zlib driver also works when writing data.
+- 'zlib' now also supported when writing JCR6 files
+- And the 'zlib' license has been put into motion now. From now on that is the official license.
