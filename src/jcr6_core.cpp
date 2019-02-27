@@ -768,6 +768,7 @@ namespace jcr6 {
      // closure
      //bt.close();
      fclose(bt);
+     remove(FTFile.c_str());
      closed=true;
    }
 
