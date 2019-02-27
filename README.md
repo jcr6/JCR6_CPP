@@ -22,3 +22,5 @@ This is still a work in progress! It will not be fully functional what you find 
 - JCR6 writing routines have been added. I am not fully sure if they work yet (I doubt it) as they are not yet tested at all.
 - All parse errors have been fixed. This doesn't mean it all works, but at least the compiler doesn't moan :)
 - Writing works now. We're almost there, to give this library its true 'zlib' license at last ;)
+- Alias support
+- Now the dependency calls in writing are needed, but they come later, what I wanna make sure of before I can consider this a 'release' in the zlib license, is that the zlib driver also works when writing data.
