@@ -828,6 +828,16 @@ namespace jcr6 {
      return entry;
    }
 
+   JT_Entry JT_Create::AddString(std::string entryname,std::string str,std::string storage,bool dataclearnext){
+     JT_Entry e;
+     const char * cb = str.c_str();
+     char * b = new char[str.size()+1];
+     strcpy(b,cb);
+     e = AddBuff(entryname,storage,b,str.size(),dataclearnext);
+     delete[] b;
+     return e;
+   }
+
    JT_Entry JT_Create::AddFile(std::string filename, std::string entryname, std::string storage,bool dataclearnext){
      JT_Entry e;
      JAMJCR_Error = "Ok";
