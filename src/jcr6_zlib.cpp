@@ -28,7 +28,18 @@
 
 int JZL_Compress(char *Uncompressed,char *Compressed, int size_uncompressed){
     // code comes later
-    return size_uncompressed*2; // Force store as long as this is not fully set up!
+    uLongf size_compressed=(size_uncompressed * 4) / 3;
+    int err = compress((Bytef*)Compressed,   &size_compressed, (Bytef*)Uncompressed, (uLong)size_uncompressed);
+    if (err!=Z_OK) {
+      std::string e{"Error by zlib! "}; e+=std::to_string(err);
+      #ifdef JCR6ZLIBWARN
+      std::cout << "DEBUG: size_compressed = " << size_compressed << "; size_uncompressed = " << size_uncompressed << "\n";
+      std::cout << "ERROR!\t" << e << "\n";
+      #endif
+      jcr6::JamError(e);
+      return -1;
+    }
+    return (int)size_compressed; // Force store as long as this is not fully set up!
 }
 
 bool JZL_Expand(char *Compressed, char *UnCompressed, int size_compressed, int size_uncompressed){
@@ -45,12 +56,18 @@ bool JZL_Expand(char *Compressed, char *UnCompressed, int size_compressed, int s
   return err==Z_OK;
 }
 
+namespace jcr6{
+  void init_zlib(){
+    using namespace jcr6;
+    JC_CompressDriver Driver;
+    Driver.Compress = JZL_Compress;
+    Driver.Expand   = JZL_Expand;
+    Driver.Name     = "zlib";
+    RegisterCompressDriver(Driver);
+  }
+}
 
 void JCR_InitZlib(){
-  using namespace jcr6;
-  JC_CompressDriver Driver;
-  Driver.Compress = JZL_Compress;
-  Driver.Expand   = JZL_Expand;
-  Driver.Name     = "zlib";
-  RegisterCompressDriver(Driver);
+  jcr6::init_zlib();
+  std::cout << "WARNING: JCR_InitZLib() has been deprecated. Please use jcr6::init_zlib() in stead!";
 }

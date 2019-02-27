@@ -108,7 +108,7 @@ namespace jcr6{
        JT_Entry &Entry(std::string entry);
        void B(std::string entry,JT_EntryReader &data); // Reads an entry from a JCR file and returns it as a bankstream.
        std::vector<std::string> Lines(std::string entry);
-       std::string String(std::string entry);
+       std::string String(std::string entry);       
      };
 
      class JT_Create{

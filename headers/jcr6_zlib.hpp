@@ -23,6 +23,7 @@
 #include "jcr6_core.hpp"
 #include "zlib.h"
 
+namespace jcr6{ void init_zlib();}
 void JCR_InitZlib();
 
 #endif

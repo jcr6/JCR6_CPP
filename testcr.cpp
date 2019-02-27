@@ -26,6 +26,7 @@ int main(){
   using namespace std;
   using namespace jcr6;
   init_JCR6();
+  init_zlib();
   std::string myhead = MY_HEAD;
   const char * chead; chead = myhead.c_str();
   char mhead[255]; strcpy(mhead,chead);
@@ -36,7 +37,7 @@ int main(){
   cout << "Storing HEADER\n";
   j.AddBuff("HEAD","Store",mhead,myhead.size());
   cout << "Storing source\n";
-  j.AddFile("testcr.cpp","testcr.cpp","Store");
+  j.AddFile("testcr.cpp","testcr.cpp","zlib");
   cout << "Storing random string\n";
   j.AddString("String.txt","The quick brown fox jumps over the lazy dog!");
   cout << "Alias testing\n";
