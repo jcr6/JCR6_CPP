@@ -40,6 +40,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <stdio.h>
 
 
 
@@ -125,7 +126,9 @@ namespace jcr6{
        int offsetoffset; // Sounds silly, but it's just a precaution to make sure the offset integer is written on the right spot.
        bool closed{false};
        bool entryadded{false}; // Once true the config add routines should no longer work!
-       std::ofstream bt;
+       // std::ofstream bt;
+       FILE * bt; // Otherwise the compiler bugs me!
+                  // As the C++ devs why, as it doesn't make sense to me either!
 
      public:
        std::map <std::string,std::string> LastResult;

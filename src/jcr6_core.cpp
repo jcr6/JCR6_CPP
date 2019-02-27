@@ -136,34 +136,45 @@ namespace jcr6is{ // JCR6 internal stream routines.
     return ret;
   }
 
-  void WriteInt(std::ofstream &bt,int i){
+//  void WriteInt(std::ofstream &bt,int i){
+void WriteInt(FILE * bt,int i){
     uEndianCheckUp e;
     e.ec_int = EndianConvert(i);
-    for (int i=0; i<4;++i) bt.write(&(e.ec_reverse[i]),1);
+    for (int i=0; i<4;++i) fputc(e.ec_reverse[i],bt);//bt.write(&(e.ec_reverse[i]),1);
   }
 
-  void WriteLong(std::ofstream &bt,long i){
+//  void WriteLong(std::ofstream &bt,long i){
+  void WriteLong(FILE*bt,long i){
     uEndianCheckUp e;
     e.ec_long = EndianConvert(i);
-    for (int i=0; i<8;++i) bt.write(&(e.ec_reverse[i]),1);
+    for (int i=0; i<8;++i) fputc(e.ec_reverse[i],bt); //bt.write(&(e.ec_reverse[i]),1);
   }
 
+/*
   void WriteRawString(std::ofstream &bt,std::string str){
     for (int i=0; i<str.size();i++) bt.write(&(str[i]),1);
   }
+*/
+  void WriteRawString(FILE * bt, std::string str){
+    for (int i=0; i<str.size();i++) fputc(str[i],bt);
+  }
 
-  void WriteString(std::ofstream &bt,std::string str){
+  //void WriteString(std::ofstream &bt,std::string str){
+  void WriteString(FILE *bt,std::string str){
     WriteInt(bt,str.size());
     WriteRawString(bt,str);
   }
 
-  void WriteByte(std::ofstream &bt, unsigned char c){
+  //void WriteByte(std::ofstream &bt, unsigned char c){
+  void WriteByte(FILE * bt, unsigned char c){
     uEndianCheckUp e;
     e.ec_byte=c;
-    bt.write(&(e.ec_char),1);
+    //bt.write(&(e.ec_char),1);
+    fputc(e.ec_char,bt);
   }
 
-  void WriteBool(std::ofstream &bt,bool b){
+  //void WriteBool(std::ofstream &bt,bool b){
+  void WriteBool(FILE * bt,bool b){
     if (b) WriteByte(bt,1); else WriteByte(bt,0);
   }
 
@@ -660,15 +671,17 @@ namespace jcr6 {
    // Chapter 2: Writing
    JT_Create::JT_Create(std::string file, std::string storage){
      using namespace jcr6is;
-     bt.open(file,std::ios::binary|std::ios::trunc);
-     if (!bt.is_open()){
+     //bt.open(file,std::ios::binary|std::ios::trunc);
+     bt = fopen(file.c_str(),"wb");
+     //if (!bt.is_open()){
+     if (bt!=nullptr){
        closed=true;
        JamError("File could not be written");
        return;
      }
      FT_storage=storage;
      WriteRawString(bt,"JCR6\032");;
-     offsetoffset=bt.tellp();
+     offsetoffset=ftell(bt); //bt.tellp();
      if (offsetoffset!=5) std::cout << "WARNING! Offset was not 5 ("<<offsetoffset<<")\n";
      WriteInt(bt,0);
    }
@@ -681,15 +694,17 @@ namespace jcr6 {
        JamError("Unknown compression method for File Table storage");
        return;
      }
-     std::ofstream ft;
+     //std::ofstream ft;
+     FILE * ft;
      std::ifstream it;
-     int start = bt.tellp();
+     int start = ftell(bt); //bt.tellp();
      int eind{0};
      int csize{0};
      char * buf;
      char * cbuf;
      std::string FTFile = MainFile ; FTFile += ".$$DIRTEMP$$" ;
-     ft.open(FTFile,std::ios::binary|std::ios::trunc);
+     //ft.open(FTFile,std::ios::binary|std::ios::trunc);
+     ft = fopen(FTFile.c_str(),"wb");
      for (auto comment : Comments){
        WriteByte(ft,1);
        WriteString(ft,"COMMENT");
@@ -704,8 +719,8 @@ namespace jcr6 {
        for (auto data : nDataInt    ){ jcr6is::WriteByte(ft,3); jcr6is::WriteString(ft,data.first); jcr6is::WriteInt   (ft,data.second); }
        WriteByte(ft,255);
      }
-     eind=ft.tellp();
-     ft.close();
+     eind=ftell(ft); //ft.tellp();
+     fclose(ft); //ft.close();
 
      it.open(FTFile,std::ios::binary);
      buf = new char[eind];
@@ -717,12 +732,14 @@ namespace jcr6 {
        WriteInt(bt,eind);
        WriteInt(bt,csize);
        WriteString(bt,FT_storage);
-       bt.write(cbuf,csize);
+       //bt.write(cbuf,csize);
+       fwrite(cbuf,1,csize,bt);
      } else {
        WriteInt(bt,eind);
        WriteInt(bt,eind);
        WriteString(bt,"Store");
-       bt.write(buf,eind);
+       //bt.write(buf,eind);
+       fwrite(buf,1,eind,bt);
      }
      delete buf;
      delete cbuf;
@@ -730,16 +747,17 @@ namespace jcr6 {
      // This footer is new in JCR6, and this C++ library is the first to
      // include it. All still functional JCR6 libraries will get this footer
      // and it's meant for a future feature of JCR6.
-     int footer = (int)(bt.tellp()) + 8;
+     int footer = ftell(bt)+8; //(int)(bt.tellp()) + 8;
      WriteRawString(bt,"JCR6");
      WriteInt(bt,footer);
 
      // Put the fat offset on the offset spot
-     bt.seekp(offsetoffset);
+     fseek(bt,offsetoffset,SEEK_SET); //bt.seekp(offsetoffset);
      WriteInt(bt,start);
 
      // closure
-     bt.close();
+     //bt.close();
+     fclose(bt);
      closed=true;
    }
 
@@ -768,12 +786,12 @@ namespace jcr6 {
      }
      char * compressed = new char[size+((size/4)*3)];
      int csize = CompDrivers[storage].Compress(buffer,compressed,size);
-     int offset = bt.tellp();
+     int offset = ftell(bt); //bt.tellp();
      if (csize<0) {
        if (JAMJCR_Error=="Ok" || JAMJCR_Error=="") JamError("Compression failure");
        return entry;
      }
-     bt.write(compressed,csize);
+     fwrite(compressed,1,csize,bt); //bt.write(compressed,csize);
      delete[] compressed;
 
      for(auto kv:nDataString) entry.dataString[kv.first]=kv.second;
