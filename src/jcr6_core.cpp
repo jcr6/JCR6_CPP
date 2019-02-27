@@ -728,6 +728,7 @@ namespace jcr6 {
        for (auto data : ent.second.dataInt    ){ jcr6is::WriteByte(ft,3); jcr6is::WriteString(ft,data.first); jcr6is::WriteInt   (ft,data.second); }
        WriteByte(ft,255);
      }
+     WriteByte(ft,255);
      eind=ftell(ft); //ft.tellp();
      fclose(ft); //ft.close();
 

@@ -15,7 +15,7 @@ int main(){
   JT_Create j{"testcr.jcr","Store"};
   j.AddComment("Test","This is just a test JCR file! Does it work?");
   cout << "Storing HEADER\n";
-  j.AddBuff("HEAD","zlib",mhead,myhead.size());
+  j.AddBuff("HEAD","Store",mhead,myhead.size());
   cout << "Storing source\n";
   j.AddFile("testcr.cpp","testcr.cpp","Store");
   cout << "Finalizing\n";
