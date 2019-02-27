@@ -37,8 +37,11 @@ int main(){
   j.AddBuff("HEAD","Store",mhead,myhead.size());
   cout << "Storing source\n";
   j.AddFile("testcr.cpp","testcr.cpp","Store");
-  cout << "Storing random string";
+  cout << "Storing random string\n";
   j.AddString("String.txt","The quick brown fox jumps over the lazy dog!");
+  cout << "Alias testing\n";
+  j.Alias("testcr.cpp","Alias.cpp");
+  j.Alias("String.txt","LazyDog.txt");
   cout << "Finalizing\n";
   j.Close();
 }

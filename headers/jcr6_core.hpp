@@ -144,6 +144,7 @@ namespace jcr6{
        void Import(std::string dependency);
        void Require(std::string dependency);
        void AddComment(std::string namecomment,std::string contentcomment);
+       void Alias(std::string original,std::string target);
      };
 
 

@@ -862,6 +862,21 @@ namespace jcr6 {
      Comments[namecomment] = contentcomment;
    }
 
+   void JT_Create::Alias(std::string original,std::string target){
+     JT_Entry eo;
+     JT_Entry et;
+     JAMJCR_Error = "Ok";
+     if (!Entries.count(Upper(original))){
+       JamError("Alias: original not found!");
+       return;
+     }
+     eo = Entries[Upper(original)];
+     et = eo;
+     et.dataString["__Entry"] = target;
+     et.dataBool["__Alias"] = true;
+     Entries[Upper(target)] = et;
+   }
+
 
    // Epilogue: InitJCR6
    void init_JCR6(){
