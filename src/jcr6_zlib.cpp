@@ -69,5 +69,5 @@ namespace jcr6{
 
 void JCR_InitZlib(){
   jcr6::init_zlib();
-  std::cout << "WARNING: JCR_InitZLib() has been deprecated. Please use jcr6::init_zlib() in stead!";
+  std::cout << "\n\nWARNING: JCR_InitZLib() has been deprecated. Please use jcr6::init_zlib() in stead!\n\n";
 }
