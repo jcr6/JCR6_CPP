@@ -18,6 +18,12 @@
 //   3. This notice may not be removed or altered from any source distribution.
 // EndLic
 
+#define _CRT_SECURE_NO_WARNINGS
+
+
+
+#include <string>
+#include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <vector>

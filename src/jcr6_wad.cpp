@@ -22,6 +22,7 @@
 #include <fstream>
 #include <map>
 #include <iostream>
+#include <algorithm>
 #include "../headers/jcr6_wad.hpp"
 
 #define WAD_DEBUGCHAT

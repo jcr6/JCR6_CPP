@@ -30,8 +30,11 @@
 // Only for testing the WAD Driver
 //#define testjcr "/Volumes/Scyndi/Games4Emulators/Doomsday/Doom/DOOM.WAD"
 
-// Testing Quake
-#define testjcr "/Volumes/Scyndi/DOS/QUAKE_SW/ID1/PAK0.PAK"
+// Testing Quake (Mac)
+// #define testjcr "/Volumes/Scyndi/DOS/QUAKE_SW/ID1/PAK0.PAK"
+// Testing Quake (Windows)
+#define testjcr "E:/DOS/QUAKE_SW/ID1/PAK0.PAK"
+
 
 int main(){
 	std::cout << "Testing utility for JCR6 in C++\nCreated by Jeroen P. Broks\nPlease use as you see fit!\n\n";
@@ -40,7 +43,7 @@ int main(){
 	// before you make any modifications, in order to keep git happy :-P
 
 	jcr6::init_JCR6();
-	JCR_InitZlib();
+	// JCR_InitZlib();
 	jcr6::InitWAD();
 	jcr6::init_quakepak();
 
