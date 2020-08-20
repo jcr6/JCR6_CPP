@@ -52,3 +52,6 @@ testcrmac
 testcrwindows*
 testcrlinux
 testcr.jcr
+
+# I don't need my VS2019 test work to be all out in the open
+TESTVS2019_JCR6
