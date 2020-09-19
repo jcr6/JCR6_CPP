@@ -17,6 +17,7 @@
 // misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 // EndLic
+
 /*
 
      This file contains all the basic functions and classes and structs and
@@ -51,6 +52,7 @@ namespace jcr6{
      std::string Get_JCR_Error_Message();
      void JamError(std::string errormessage);
      void SetErrorCrash(bool value);
+     extern void (*JCRPanic)(std::string errormessage);
 
      class JT_Entry {
      private:
@@ -108,9 +110,30 @@ namespace jcr6{
        JT_Entry &Entry(std::string entry);
        void B(std::string entry,JT_EntryReader &data); // Reads an entry from a JCR file and returns it as a bankstream.
        std::vector<std::string> Lines(std::string entry);
-       std::string String(std::string entry);       
+       std::string String(std::string entry);     
+       std::map<std::string, std::string> StringMap(std::string entry);
        bool EntryExists(std::string name);
        bool DirectoryExists(std::string dir);
+     };
+
+     class JT_Create;
+
+     class JT_CreateBuf {
+     private: 
+         JT_Create* parent;
+         std::vector<char> buf;
+         std::string EntryName;
+         std::string Storage;
+         bool closed = false;
+     public:
+         JT_CreateBuf(JT_Create* parent, std::string Entry,std::string aStorage="Store");
+         void Write(char C);
+         void Write(unsigned C);
+         void Write(int C);
+         void Write(long long C);
+         void Write(std::string S,bool raw=false);
+         void Close(bool autodelete=true);
+         ~JT_CreateBuf();
      };
 
      class JT_Create{
@@ -143,6 +166,9 @@ namespace jcr6{
        JT_Entry AddBuff(std::string entryname,std::string storage,char * buffer,int size, bool dataclearnext=true);
        JT_Entry AddFile(std::string filename, std::string entryname, std::string storage="Store",bool dataclearnext=true);
        JT_Entry AddString(std::string entryname,std::string str,std::string storage="Store",bool dataclearnext=true);
+       JT_Entry AddStringMap(std::string entryname, std::map<std::string, std::string> map, std::string storage = "store", bool dataclearnext = true);
+       JT_CreateBuf* StartEntry(std::string entry, std::string storage = "Store");
+
        void Import(std::string dependency);
        void Require(std::string dependency);
        void AddComment(std::string namecomment,std::string contentcomment);

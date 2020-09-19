@@ -57,6 +57,7 @@ static std::string ExtractDir(const std::string& str)
 
 static inline bool FileExists(std::string fileName) {
     std::ifstream infile(fileName);
+    // std::cout << "Checking existance: " << fileName << " >> " << infile.good()<<"\n";
     return infile.good();
 }
 
@@ -68,8 +69,10 @@ typedef union {
   char ec_char;
   int ec_int;
   long ec_long;
+  long long ec_int64;
   char ec_reverse[10];
 } uEndianCheckUp;
+
 bool LittleEndian(){
   static bool checked{false};
   static bool ret{false};
@@ -199,6 +202,7 @@ static std::string Upper(std::string strToConvert)
 
 namespace jcr6 {
   static std::map<std::string,JC_CompressDriver> CompDrivers;
+  void (*JCRPanic)(std::string errormessage)=NULL;
 
 // I know there might be better routines for this out there, but I wanted JCR6 to be as "self-reliant" as possible.
   char *JT_EntryReader::pointme() { return buf; }
@@ -225,7 +229,11 @@ namespace jcr6 {
   }
 
   char JT_EntryReader::ReadChar() {
-    assert((!eof() && "End of buffer reached!"));
+    //assert((!eof() && "End of buffer reached!"));
+      if (Position >= bufsize) {
+          JamError("Entry reader went past EOF!");
+          return 0;
+      }
     char c = buf[Position];
     #ifdef DEBUGCHAT
     std::cout << "Read char " << (int)c << " from position " << Position << '\n';
@@ -297,6 +305,8 @@ namespace jcr6 {
      std::cout << "JCR6 ERROR: " << errormessage <<"\n";
      #endif
 
+     if (JCRPanic) JCRPanic(errormessage);
+
      JAMJCR_Error = errormessage;
      if (JCR_ErrorCrash) {
        std::cout << "JCR6 ERROR: " << errormessage<<"\n";
@@ -330,9 +340,12 @@ namespace jcr6 {
    }
 
 
-   void JT_Dir::PatchDir(JT_Dir &dir){
+   void JT_Dir::PatchDir(JT_Dir &dir) {       
      auto ent = dir.Entries();
-     for (auto& kv : ent ) AddEntry(kv.first,kv.second);
+     for (auto& kv : ent) {
+         // std::cout << "Patching " << kv.first << " from " << kv.second.MainFile << "\n";
+         AddEntry(kv.first, kv.second);
+     }
      for (auto& kv : dir.Comments ) Comments[kv.first] = kv.second;
    }
 
@@ -387,7 +400,45 @@ namespace jcr6 {
      JT_EntryReader bt;
      B(entry,bt);
      if (JAMJCR_Error!="" && JAMJCR_Error!="Ok") return "";
-     return bt.pointme();
+     auto buf = bt.pointme();
+     auto Ent = Entry(entry);
+     char* tmp = NULL;
+     tmp = new char[Ent.RealSize()+5];
+     for (int i = 0; i < Ent.RealSize(); i++) {
+         tmp[i] = buf[i];
+         tmp[i + 1] = 0;
+     }
+     ret = tmp;
+     delete[] tmp;
+     return ret;
+   }
+
+   std::map<std::string, std::string> JT_Dir::StringMap(std::string entry) {
+       std::map<std::string, std::string> ret;
+       JT_EntryReader bt;
+       B(entry, bt);
+       if (JAMJCR_Error != "" && JAMJCR_Error != "Ok") {
+           ret.clear();  return ret;
+       }
+       bt.Position = 0;
+       while (!bt.eof()) {
+           char ctag = bt.ReadChar();
+           switch (ctag) {
+           case 255:
+               return ret;
+           case 1: {
+               //Console.WriteLine($"LSM: {bt.Position}/{bt.Size}");
+               auto lkey = bt.ReadInt(); //Console.WriteLine(lkey);
+               std::string key{ "" }; if (lkey) key = bt.ReadString(lkey); //Console.WriteLine(key);
+               auto lvalue = bt.ReadInt(); //Console.WriteLine(lvalue);
+               std::string value{ "" }; if (lvalue) value = bt.ReadString(lvalue); //Console.WriteLine(value);
+               //Console.WriteLine($"LSM: {key} = {value}.");
+               //printf("%d>%s; %d>%s\n", lkey, key.c_str(), lvalue, value.c_str());
+               ret[key] = value;
+           }
+           }
+       }
+       return ret;
    }
 
 
@@ -641,10 +692,11 @@ namespace jcr6 {
                  JamError(JERROR);
                  //bt.Close();
                  return ret;
-               } else if (tag == "REQUIRE") {
+               } else if (tag == "REQUIRE" && (!FileExists(depcall))) {
                  std::string JERROR = "Required JCR6 addon file (";
                  JERROR += depcall ;
-                 JERROR += ") could not found!"; //,fil,"N/A","JCR 6 Driver: Dir()")
+                 JERROR += ") could not be found!"; //,fil,"N/A","JCR 6 Driver: Dir()")
+                 JamError(JERROR);
                  // bt.Close();
                  return ret;
                }
@@ -776,8 +828,8 @@ namespace jcr6 {
        //bt.write(buf,eind);
        fwrite(buf,1,eind,bt);
      }
-     delete buf;
-     delete cbuf;
+     delete[] buf;
+     delete[] cbuf;
 
      // This footer is new in JCR6, and this C++ library is the first to
      // include it. All still functional JCR6 libraries will get this footer
@@ -863,6 +915,22 @@ namespace jcr6 {
      return e;
    }
 
+   JT_Entry JT_Create::AddStringMap(std::string entryname, std::map<std::string, std::string> map, std::string storage, bool dataclearnext) {
+       auto bt{ StartEntry(entryname,storage) };
+       for (auto& it : map) {
+           bt->Write((char)1);
+           bt->Write(it.first);
+           bt->Write(it.second);
+       }
+       bt->Write((unsigned char)255);
+       delete bt;
+   }
+
+   JT_CreateBuf* JT_Create::StartEntry(std::string entry, std::string storage) {
+       auto ret = new JT_CreateBuf(this, entry, storage);
+       return ret;
+   }
+
    JT_Entry JT_Create::AddFile(std::string filename, std::string entryname, std::string storage,bool dataclearnext){
      JT_Entry e;
      JAMJCR_Error = "Ok";
@@ -916,5 +984,47 @@ namespace jcr6 {
      dir.Name="JCR6";
      RegisterDirDriver (dir);
      RegisterCompressDriver (comp);
+   }
+   
+   JT_CreateBuf::JT_CreateBuf(JT_Create* _parent, std::string _Entry,std::string _Storage) {
+       parent = _parent;
+       EntryName = _Entry;
+       Storage = _Storage;
+   }
+   void JT_CreateBuf::Write(char C) {
+       buf.push_back(C);
+   }
+   void JT_CreateBuf::Write(unsigned C) {
+       uEndianCheckUp i;
+       i.ec_byte = C;
+       Write(i.ec_char);
+   }
+
+   void JT_CreateBuf::Write(int C) {
+       uEndianCheckUp i;
+       i.ec_int = EndianConvert(C);
+       for (int a = 0; a < sizeof(C); a++) Write(i.ec_reverse[a]);
+   }
+   void JT_CreateBuf::Write(long long C) {
+       uEndianCheckUp i;
+       i.ec_int64 = EndianConvert(C);
+       for (int a = 0; a < sizeof(C); a++) Write(i.ec_reverse[a]);
+   }
+   void JT_CreateBuf::Write(std::string S,bool raw) {
+       int l = S.size();
+       if (!raw) Write(l);
+       for (int p = 0; p < l; p++) Write(S[p]);
+   }
+   void JT_CreateBuf::Close(bool autodelete) {
+       if (closed) return;
+       char* writebuf = new char[buf.size()];
+       for (int i = 0; i < buf.size(); i++) writebuf[i] = buf[i];
+       parent->AddBuff(EntryName, Storage, writebuf,buf.size());
+       delete writebuf;
+       closed = true;
+       if (autodelete) delete this;
+   }
+   JT_CreateBuf::~JT_CreateBuf() {
+       Close(false); // No more need for autodelete. When this is called, it's already happening, after all!
    }
 }
