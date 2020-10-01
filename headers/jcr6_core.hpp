@@ -128,11 +128,11 @@ namespace jcr6{
      public:
          JT_CreateBuf(JT_Create* parent, std::string Entry,std::string aStorage="Store");
          void Write(char C);
-         void Write(unsigned C);
+         void Write(unsigned char C);
          void Write(int C);
          void Write(long long C);
          void Write(std::string S,bool raw=false);
-         void Close(bool autodelete=true);
+         JT_Entry Close(bool autodelete=false);
          ~JT_CreateBuf();
      };
 

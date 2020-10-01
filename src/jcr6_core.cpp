@@ -923,7 +923,9 @@ namespace jcr6 {
            bt->Write(it.second);
        }
        bt->Write((unsigned char)255);
+       auto e = bt->Close();
        delete bt;
+       return e;
    }
 
    JT_CreateBuf* JT_Create::StartEntry(std::string entry, std::string storage) {
@@ -994,7 +996,7 @@ namespace jcr6 {
    void JT_CreateBuf::Write(char C) {
        buf.push_back(C);
    }
-   void JT_CreateBuf::Write(unsigned C) {
+   void JT_CreateBuf::Write(unsigned char C) {
        uEndianCheckUp i;
        i.ec_byte = C;
        Write(i.ec_char);
@@ -1015,15 +1017,18 @@ namespace jcr6 {
        if (!raw) Write(l);
        for (int p = 0; p < l; p++) Write(S[p]);
    }
-   void JT_CreateBuf::Close(bool autodelete) {
-       if (closed) return;
+
+   JT_Entry JT_CreateBuf::Close(bool autodelete) {
+       if (closed) return JT_Entry();
        char* writebuf = new char[buf.size()];
        for (int i = 0; i < buf.size(); i++) writebuf[i] = buf[i];
-       parent->AddBuff(EntryName, Storage, writebuf,buf.size());
-       delete writebuf;
+       auto e = parent->AddBuff(EntryName, Storage, writebuf,buf.size());
+       delete[] writebuf;
        closed = true;
        if (autodelete) delete this;
+       return e;
    }
+
    JT_CreateBuf::~JT_CreateBuf() {
        Close(false); // No more need for autodelete. When this is called, it's already happening, after all!
    }
