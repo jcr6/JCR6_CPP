@@ -180,7 +180,7 @@ namespace jcr6{
 
      typedef struct {
        std::string Name;
-       bool (* Recognize)(std::string File);
+       bool (*Recognize)(std::string File);
        JT_Dir (*Dir)(std::string File);
      } JD_DirDriver;
      void RegisterDirDriver(JD_DirDriver Driver);
