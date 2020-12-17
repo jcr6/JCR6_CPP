@@ -42,7 +42,7 @@
 #include <string>
 #include <vector>
 #include <stdio.h>
-
+#include <memory>
 
 
 namespace jcr6{
@@ -109,6 +109,7 @@ namespace jcr6{
        void AddEntry(std::string name,JT_Entry Entry);
        JT_Entry &Entry(std::string entry);
        void B(std::string entry,JT_EntryReader &data); // Reads an entry from a JCR file and returns it as a bankstream.
+       std::shared_ptr<JT_EntryReader> B(std::string entry);
        std::vector<std::string> Lines(std::string entry);
        std::string String(std::string entry);     
        std::map<std::string, std::string> StringMap(std::string entry);

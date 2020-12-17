@@ -386,6 +386,11 @@ namespace jcr6 {
      CompDrivers[storage].Expand(comp.pointme(),data.pointme(),comp.getsize(),data.getsize());
      return ;
    }
+   std::shared_ptr<JT_EntryReader> JT_Dir::B(std::string entry) {
+       auto r = std::make_shared<JT_EntryReader>();      
+       B(entry, *r.get());
+       return r;
+   }
 
    std::vector<std::string> JT_Dir::Lines(std::string entry) {
      std::vector<std::string> ret;
