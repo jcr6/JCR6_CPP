@@ -748,11 +748,10 @@ namespace jcr6 {
    JT_Dir Dir(std::string file){
      JT_Dir retD; // return Dir
      std::string rec = Recognize(file);
-     if (rec=="") { JamError("File not recognized by any Dir Drivers."); return retD; }
+     if (rec=="") { JamError("File ("+file+") not recognized by any Dir Drivers."); return retD; }
      retD = DirDrivers[rec].Dir(file);
      return retD;
    }
-
 
    // Chapter 2: Writing
    JT_Create::JT_Create(std::string file, std::string storage){
