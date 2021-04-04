@@ -1,8 +1,8 @@
 // Lic:
 // headers/jcr6_zlib.hpp
 // JCR6
-// version: 20.08.22
-// Copyright (C) 2019, 2020 Jeroen P. Broks
+// version: 21.04.04
+// Copyright (C) 2019, 2020, 2021 Jeroen P. Broks
 // This software is provided 'as-is', without any express or implied
 // warranty.  In no event will the authors be held liable for any damages
 // arising from the use of this software.
