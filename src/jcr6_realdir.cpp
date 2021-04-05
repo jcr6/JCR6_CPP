@@ -42,7 +42,7 @@ namespace jcr6 {
 		for (auto file : Lijst) {
             JT_Entry entry;
             //foffset = rint(bt);
-            auto fsize = FileSize(pth);
+            auto fsize = FileSize(pth+"/"+file);
             entry.MainFile = pth + "/" + file;
             entry.dataInt["__Offset"] = 0;
             entry.dataInt["__CSize"] = fsize;
