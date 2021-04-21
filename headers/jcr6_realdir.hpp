@@ -23,5 +23,6 @@
 
 
 namespace jcr6 {
+	extern bool RealDir_AutoMerge;
 	void InitRealDir();
 }

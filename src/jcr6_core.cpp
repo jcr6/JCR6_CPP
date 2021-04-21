@@ -304,10 +304,11 @@ namespace jcr6 {
      #ifdef DEBUGCHAT
      std::cout << "JCR6 ERROR: " << errormessage <<"\n";
      #endif
+     JAMJCR_Error = errormessage;
+     if (errormessage == "Ok") return;
 
      if (JCRPanic) JCRPanic(errormessage);
 
-     JAMJCR_Error = errormessage;
      if (JCR_ErrorCrash) {
        std::cout << "JCR6 ERROR: " << errormessage<<"\n";
        exit(1);
@@ -347,6 +348,15 @@ namespace jcr6 {
          AddEntry(kv.first, kv.second);
      }
      for (auto& kv : dir.Comments ) Comments[kv.first] = kv.second;
+   }
+
+   void JT_Dir::PatchDir(JT_Dir& dir, std::string prefix) {
+       auto ent = dir.Entries();
+       for (auto& kv : ent) {
+           // std::cout << "Patching " << kv.first << " from " << kv.second.MainFile << "\n";
+           AddEntry(prefix + kv.first, kv.second);
+       }
+       for (auto& kv : dir.Comments) Comments[kv.first] = kv.second;
    }
 
    void JT_Dir::PatchFile(std::string file){
@@ -775,82 +785,82 @@ namespace jcr6 {
    }
    JT_Create::~JT_Create(){ Close(); }
 
-   void JT_Create::Close(){
-     using namespace jcr6is;
-     if (closed) return;
-     // write out (and compress) file table
-     if (!CompDrivers.count(FT_storage)) {
-       JamError("Unknown compression method for File Table storage");
-       return;
-     }
-     //std::ofstream ft;
-     FILE * ft;
-     std::ifstream it;
-     int start = ftell(bt); //bt.tellp();
-     int eind{0};
-     int csize{0};
-     char * buf;
-     char * cbuf;
-     chat({"File Table at:",std::to_string(start)});
-     std::string FTFile = MainFile ; FTFile += ".$$DIRTEMP$$" ;
-     //ft.open(FTFile,std::ios::binary|std::ios::trunc);
-     ft = fopen(FTFile.c_str(),"wb");
-     for (auto comment : Comments){
-       WriteByte(ft,1);
-       WriteString(ft,"COMMENT");
-       WriteString(ft,comment.first);
-       WriteString(ft,comment.second);
-     }
-     for (auto ent : Entries){
-       WriteByte(ft,1);
-       WriteString(ft,"FILE");
-       for (auto data : ent.second.dataString ){ jcr6is::WriteByte(ft,1); jcr6is::WriteString(ft,data.first); jcr6is::WriteString(ft,data.second); }
-       for (auto data : ent.second.dataBool   ){ jcr6is::WriteByte(ft,2); jcr6is::WriteString(ft,data.first); jcr6is::WriteBool  (ft,data.second); }
-       for (auto data : ent.second.dataInt    ){ jcr6is::WriteByte(ft,3); jcr6is::WriteString(ft,data.first); jcr6is::WriteInt   (ft,data.second); }
-       WriteByte(ft,255);
-     }
-     WriteByte(ft,255);
-     eind=ftell(ft); //ft.tellp();
-     fclose(ft); //ft.close();
+   void JT_Create::Close() {
+       using namespace jcr6is;
+       if (closed) return;
+       // write out (and compress) file table
+       if (!CompDrivers.count(FT_storage)) {
+           JamError("Unknown compression method for File Table storage");
+           return;
+       }
+       //std::ofstream ft;
+       FILE* ft;
+       std::ifstream it;
+       int start = ftell(bt); //bt.tellp();
+       int eind{ 0 };
+       int csize{ 0 };
+       char* buf;
+       char* cbuf;
+       chat({ "File Table at:",std::to_string(start) });
+       std::string FTFile = MainFile; FTFile += ".$$DIRTEMP$$";
+       //ft.open(FTFile,std::ios::binary|std::ios::trunc);
+       ft = fopen(FTFile.c_str(), "wb");
+       for (auto comment : Comments) {
+           WriteByte(ft, 1);
+           WriteString(ft, "COMMENT");
+           WriteString(ft, comment.first);
+           WriteString(ft, comment.second);
+       }
+       for (auto ent : Entries) {
+           WriteByte(ft, 1);
+           WriteString(ft, "FILE");
+           for (auto data : ent.second.dataString) { jcr6is::WriteByte(ft, 1); jcr6is::WriteString(ft, data.first); jcr6is::WriteString(ft, data.second); }
+           for (auto data : ent.second.dataBool) { jcr6is::WriteByte(ft, 2); jcr6is::WriteString(ft, data.first); jcr6is::WriteBool(ft, data.second); }
+           for (auto data : ent.second.dataInt) { jcr6is::WriteByte(ft, 3); jcr6is::WriteString(ft, data.first); jcr6is::WriteInt(ft, data.second); }
+           WriteByte(ft, 255);
+       }
+       WriteByte(ft, 255);
+       eind = ftell(ft); //ft.tellp();
+       fclose(ft); //ft.close();
 
-     it.open(FTFile,std::ios::binary);
-     buf = new char[eind];
-     cbuf = new char[eind + ((eind*4)/3)];
-     it.read(buf,eind);
-     it.close();
-     csize = CompDrivers[FT_storage].Compress(buf,cbuf,eind);
-     if (csize>=0 && csize<eind){
-       WriteInt(bt,eind);
-       WriteInt(bt,csize);
-       WriteString(bt,FT_storage);
-       //bt.write(cbuf,csize);
-       fwrite(cbuf,1,csize,bt);
-     } else {
-       WriteInt(bt,eind);
-       WriteInt(bt,eind);
-       WriteString(bt,"Store");
-       //bt.write(buf,eind);
-       fwrite(buf,1,eind,bt);
-     }
-     delete[] buf;
-     delete[] cbuf;
+       it.open(FTFile, std::ios::binary);
+       buf = new char[eind];
+       cbuf = new char[eind + ((eind * 4) / 3)];
+       it.read(buf, eind);
+       it.close();
+       csize = CompDrivers[FT_storage].Compress(buf, cbuf, eind);
+       if (csize >= 0 && csize < eind) {
+           WriteInt(bt, eind);
+           WriteInt(bt, csize);
+           WriteString(bt, FT_storage);
+           //bt.write(cbuf,csize);
+           fwrite(cbuf, 1, csize, bt);
+       } else {
+           WriteInt(bt, eind);
+           WriteInt(bt, eind);
+           WriteString(bt, "Store");
+           //bt.write(buf,eind);
+           fwrite(buf, 1, eind, bt);
+       }
+       delete[] buf;
+       delete[] cbuf;
 
-     // This footer is new in JCR6, and this C++ library is the first to
-     // include it. All still functional JCR6 libraries will get this footer
-     // and it's meant for a future feature of JCR6.
-     int footer = ftell(bt)+8; //(int)(bt.tellp()) + 8;
-     WriteRawString(bt,"JCR6");
-     WriteInt(bt,footer);
+       // This footer is new in JCR6, and this C++ library is the first to
+       // include it. All still functional JCR6 libraries will get this footer
+       // and it's meant for a future feature of JCR6.
+       int footer = ftell(bt) + 8; //(int)(bt.tellp()) + 8;
+       WriteRawString(bt, "JCR6");
+       WriteInt(bt, footer);
 
-     // Put the fat offset on the offset spot
-     fseek(bt,offsetoffset,SEEK_SET); //bt.seekp(offsetoffset);
-     WriteInt(bt,start);
+       // Put the fat offset on the offset spot
+       fseek(bt, offsetoffset, SEEK_SET); //bt.seekp(offsetoffset);
+       WriteInt(bt, start);
 
-     // closure
-     //bt.close();
-     fclose(bt);
-     remove(FTFile.c_str());
-     closed=true;
+       // closure
+       //bt.close();
+       fclose(bt);
+       remove(FTFile.c_str());
+       closed = true;
    }
 
    #define loc_configout JAMJCR_Error = "Ok"; if (entryadded) { JamError("You cannot change the global function once an entry has been added!"); return; }

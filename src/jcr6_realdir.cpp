@@ -25,10 +25,18 @@
 #include <QuickStream.hpp>
 #include <QuickString.hpp>
 
+#undef REALDIRLOUDMOUTH
+
+
+#ifdef  REALDIRLOUDMOUTH
+#include <iostream>
+#endif
+
 using namespace std; // I am EVIL! I know!
 
 namespace jcr6 {
 
+	bool RealDir_AutoMerge{ true };
 
 	static bool RDRec(string pth) {
 		return TrickyUnits::IsDir(pth);
@@ -36,33 +44,55 @@ namespace jcr6 {
 
 	static JT_Dir RDGet(string pth) {
 		using namespace TrickyUnits;
-        JT_Dir ret;
-        pth = TReplace(pth, '\\', '/');
+		JT_Dir ret;
+		pth = TReplace(pth, '\\', '/');
 		auto Lijst = GetTree(pth);
 		for (auto file : Lijst) {
-            JT_Entry entry;
-            //foffset = rint(bt);
-            auto fsize = FileSize(pth+"/"+file);
-            entry.MainFile = pth + "/" + file;
-            entry.dataInt["__Offset"] = 0;
-            entry.dataInt["__CSize"] = fsize;
-            entry.dataInt["__Size"] = fsize;
-            entry.dataString["__Entry"] = file;
-            entry.dataString["__Notes"] = "";
-            entry.dataString["__Storage"] = "Store"; // Must be set or bad stuff will happen!
-            entry.dataString["__Author"] = "";            
-            ret.AddEntry(entry.dataString["__Entry"], entry);        
+			bool merge{ false };
+			if (RealDir_AutoMerge) {
+				auto R{ Recognize(pth + "/" + file) };
+				merge = (R != "" && Upper(R) != "NONE");
+			}
+			//foffset = rint(bt);
+			if (merge) {
+#ifdef  REALDIRLOUDMOUTH
+				std::cout << "Adding realdir: " << pth <<"/"<< file << "\n";
+#endif //  REALDIRLOUDMOUTH
+				auto JDMerge = Dir(pth + "/" + file);
+				for (auto entries : JDMerge.Entries()) {
+					JT_Entry entry;
+					entry.MainFile = entries.second.MainFile;
+					for (auto ii : entries.second.dataInt) entry.dataInt[ii.first] = ii.second;
+					for (auto ii : entries.second.dataBool) entry.dataBool[ii.first] = ii.second;
+					for (auto ii : entries.second.dataString) entry.dataString[ii.first] = ii.second;
+					entry.dataString["__Entry"] = file + "/" + entries.second.dataString["__Entry"];
+					ret.AddEntry(entry.dataString["__Entry"], entry);
+
+				}
+			} else {
+			JT_Entry entry;
+				auto fsize = FileSize(pth + "/" + file);
+				entry.MainFile = pth + "/" + file;
+				entry.dataInt["__Offset"] = 0;
+				entry.dataInt["__CSize"] = fsize;
+				entry.dataInt["__Size"] = fsize;
+				entry.dataString["__Entry"] = file;
+				entry.dataString["__Notes"] = "";
+				entry.dataString["__Storage"] = "Store"; // Must be set or bad stuff will happen!
+				entry.dataString["__Author"] = "";
+				ret.AddEntry(entry.dataString["__Entry"], entry);
+			}
 		}
-        return ret;
+		return ret;
 	}
 
 
 	void InitRealDir() {
-        JD_DirDriver Dir;
-        Dir.Recognize = RDRec;
-        Dir.Dir = RDGet;
-        Dir.Name = "RealDir";
-        RegisterDirDriver(Dir);
+		JD_DirDriver Dir;
+		Dir.Recognize = RDRec;
+		Dir.Dir = RDGet;
+		Dir.Name = "RealDir";
+		RegisterDirDriver(Dir);
 	}
 
 }
