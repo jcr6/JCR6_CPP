@@ -1,7 +1,7 @@
 // Lic:
 // src/jcr6_realdir.cpp
 // "Real Dir" driver for JCR6
-// version: 21.04.04
+// version: 21.07.06
 // Copyright (C) 2021 Jeroen P. Broks
 // This software is provided 'as-is', without any express or implied
 // warranty.  In no event will the authors be held liable for any damages
