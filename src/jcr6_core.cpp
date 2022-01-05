@@ -114,6 +114,67 @@ template <typename ecconv> ecconv EndianConvert(ecconv num,bool force=false){
 
 }
 
+
+std::string Buf2String(std::vector<char> buf, bool safe) {
+	using namespace std;
+	string ret{ "" };
+	if (safe) for (size_t i = 0; i < buf.size(); i++) {
+		switch (buf[i]) {
+		case 0:
+			ret += "<NUL>";
+			break;
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+		case 6:
+		case 11:
+		case 14:
+		case 15:
+		case 16:
+		case 17:
+		case 18:
+		case 19:
+		case 20:
+		case 21:
+		case 22:
+		case 23:
+		case 24:
+		case 25:
+		case 28:
+		case 29:
+		case 30:
+		case 31:
+			ret += "<" + to_string((int)buf[i]) + ">"; break;
+		case 7:
+			ret += "<BEL>"; break;
+		case 8:
+			ret += "<BACK>"; break;
+			break;
+		case 9:
+			ret += "<TAB>"; break;
+		case 10:
+			ret += "<LF>"; break;
+		case 12:
+			ret += "<CLS>"; break;
+		case 13:
+			ret += "<CR>"; break;
+		case 26:
+			ret += "<EOF>"; break;
+		case 27:
+			ret += "<ESCAPE>";  break;
+		default:
+			uEndianCheckUp x;
+			x.ec_char = buf[i];
+			ret += "<" + to_string(x.ec_byte) + ">";
+			break;
+		}
+	} else for (size_t i = 0; i < buf.size() && buf[i]; i++) ret += buf[i];
+	return ret;
+}
+
+
 namespace jcr6is{ // JCR6 internal stream routines.
   int ReadInt(std::ifstream &bt){
 	uEndianCheckUp i;
@@ -215,6 +276,11 @@ namespace jcr6 {
 		bufsize = size;
 		Position = 0;
 		chat({ "Buffer in bankstream recreated: ",std::to_string(bufsize)," bytes" });
+	}
+
+	std::string JT_EntryReader::BufAsString(bool safe) { 
+		std::vector<char> _b (buf, buf+bufsize);
+		return Buf2String(_b, safe); 
 	}
 
 	unsigned char JT_EntryReader::ReadByte() {
@@ -1083,6 +1149,10 @@ namespace jcr6 {
 		RegisterDirDriver(dir);
 		RegisterCompressDriver(comp);
 	}
+
+	//std::vector<char>* JT_CreateBuf::GetBuf() { return &buf; }
+
+	std::string JT_CreateBuf::BufAsString(bool safe) { return Buf2String(buf, safe); }
 
 	JT_CreateBuf::JT_CreateBuf(JT_Create* _parent, std::string _Entry, std::string _Storage) {
 		parent = _parent;

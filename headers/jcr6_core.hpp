@@ -98,6 +98,7 @@ namespace jcr6{
 	   std::string ReadString(int l=0);
 	   bool eof();
 	   void newbuf(int size);
+	   std::string BufAsString(bool safe = true);
 	   JT_EntryReader(int size=1);
 	   ~JT_EntryReader();
 	 };
@@ -154,6 +155,8 @@ namespace jcr6{
 		 void Write(long long C);
 		 void Write(std::string S,bool raw=false);
 		 JT_Entry Close(bool autodelete=false);
+		 //std::vector<char> *GetBuf(); // Only use this when you know what you are doing!
+		 std::string BufAsString(bool safe=true);
 		 ~JT_CreateBuf();
 	 };
 
