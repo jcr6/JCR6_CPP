@@ -134,6 +134,7 @@ namespace jcr6{
 		 std::vector<std::string> Lines(std::string entry);
 		 std::string String(std::string entry);
 		 std::map<std::string, std::string> StringMap(std::string entry);
+		 std::vector<char> Characters(std::string entry);
 		 bool EntryExists(std::string name);
 		 bool DirectoryExists(std::string dir);
 	 };
@@ -190,7 +191,8 @@ namespace jcr6{
 	   JT_Entry AddBuff(std::string entryname,std::string storage,char * buffer,int size, bool dataclearnext=true);
 	   JT_Entry AddFile(std::string filename, std::string entryname, std::string storage="Store",bool dataclearnext=true);
 	   JT_Entry AddString(std::string entryname,std::string str,std::string storage="Store",bool dataclearnext=true);
-	   JT_Entry AddStringMap(std::string entryname, std::map<std::string, std::string> map, std::string storage = "store", bool dataclearnext = true);
+	   JT_Entry AddStringMap(std::string entryname, std::map<std::string, std::string> map, std::string storage = "Store", bool dataclearnext = true);
+	   JT_Entry AddCharacters(std::string entryname, std::vector<char> chars, std::string storage = "Store", bool dataclearnext = true);
 	   JT_CreateBuf* StartEntry(std::string entry, std::string storage = "Store");
 
 	   void Import(std::string dependency);

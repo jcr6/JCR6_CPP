@@ -557,6 +557,25 @@ namespace jcr6 {
 		return ret;
 	}
 
+	std::vector<char> JT_Dir::Characters(std::string entry) {
+		std::vector<char> ret;
+		JT_EntryReader bt;
+		B(entry, bt);
+		if (JAMJCR_Error != "" && JAMJCR_Error != "Ok") return std::vector<char>();
+		auto buf = bt.pointme();
+		auto Ent = Entry(entry);
+		//char* tmp = NULL;
+		//tmp = new char[Ent.RealSize() + 5];
+		for (int i = 0; i < Ent.RealSize(); i++) {
+			//tmp[i] = buf[i];
+			//tmp[i + 1] = 0;
+			ret.push_back(buf[i]);
+		}
+		//ret = tmp;
+		//delete[] tmp;
+		return ret;
+	}
+
 
 
 	/*
@@ -1087,6 +1106,13 @@ namespace jcr6 {
 		bt->Write((unsigned char)255);
 		auto e = bt->Close();
 		delete bt;
+		return e;
+	}
+
+	JT_Entry JT_Create::AddCharacters(std::string entryname, std::vector<char> chars, std::string storage, bool dataclearnext) {		
+		auto bt{ StartEntry(entryname,storage) };
+		for (auto c : chars) bt->Write(c);
+		auto e{ bt->Close() };
 		return e;
 	}
 
