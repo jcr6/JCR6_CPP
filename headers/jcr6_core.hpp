@@ -93,6 +93,7 @@ namespace jcr6{
 	   char ReadChar();
 	   int ReadInt();
 	   long ReadLong();
+	   long long ReadLong64();
 	   bool ReadBool();
 	   std::string ReadLine();
 	   std::string ReadString(int l=0);

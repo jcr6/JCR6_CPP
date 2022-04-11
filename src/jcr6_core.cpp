@@ -326,6 +326,13 @@ namespace jcr6 {
 		return EndianConvert(ret.ec_long);
 	}
 
+	long long JT_EntryReader::ReadLong64() {
+		uEndianCheckUp ret;
+		for (int i = 0; i < sizeof(long long); i++) ret.ec_reverse[i] = ReadByte();
+		return EndianConvert(ret.ec_int64);
+		
+	}
+
 	std::string JT_EntryReader::ReadString(int l) {
 		int l2{ l };
 		std::string ret = "";
