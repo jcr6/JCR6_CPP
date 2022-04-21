@@ -231,7 +231,7 @@ void WriteInt(FILE * bt,int i){
 
   //void WriteString(std::ofstream &bt,std::string str){
   void WriteString(FILE *bt,std::string str){
-	WriteInt(bt,str.size());
+	WriteInt(bt,(unsigned int)str.size());
 	WriteRawString(bt,str);
   }
 
