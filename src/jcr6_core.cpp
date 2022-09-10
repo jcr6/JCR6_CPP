@@ -68,8 +68,12 @@ typedef union {
   unsigned char ec_byte;
   char ec_char;
   int ec_int;
+  unsigned int ec_uint;
+  short ec_short;
+  unsigned short ec_ushort;
   long ec_long;
   long long ec_int64;
+  unsigned long long ec_uint64;
   char ec_reverse[10];
 } uEndianCheckUp;
 
@@ -93,12 +97,14 @@ template <typename ecconv> ecconv EndianConvert(ecconv num,bool force=false){
   if (LittleEndian() && !force) return num;
   uEndianCheckUp a1;
   uEndianCheckUp a2;
-  switch (sizeof(ecconv)){
-	case 4:
+  switch (sizeof(ecconv)) {
+  case 1:
+	  a1.ec_short = num; break;
+  case 4:
 	  a1.ec_int = num; break;
-	case 8:
+  case 8:
 	  a1.ec_long = num; break;
-	default:
+  default:
 	  std::cout << "FATAL ERROR! I do not know how to handle size " << sizeof(ecconv) << "!\n";
 	  exit(2);
   }
@@ -271,7 +277,8 @@ namespace jcr6 {
 	bool JT_EntryReader::eof() { return Position >= bufsize; }
 
 	void JT_EntryReader::newbuf(int size) {
-		delete buf;
+		delete[] buf;
+		//std::cout << "NewBuf(" << size << ")\n"; // debug only
 		buf = new char[size];
 		bufsize = size;
 		Position = 0;
@@ -284,7 +291,11 @@ namespace jcr6 {
 	}
 
 	unsigned char JT_EntryReader::ReadByte() {
-		assert((!eof() && "End of buffer reached!"));
+		//assert((!eof() && "End of buffer reached!"));
+		if (Position >= bufsize) {
+			JamError("RB:Entry reader went past EOF!");
+			return 0;
+		}
 		uEndianCheckUp c;
 		c.ec_char = buf[Position];
 #ifdef DEBUGCHAT
@@ -297,7 +308,7 @@ namespace jcr6 {
 	char JT_EntryReader::ReadChar() {
 		//assert((!eof() && "End of buffer reached!"));
 		if (Position >= bufsize) {
-			JamError("Entry reader went past EOF!");
+			JamError("RC:Entry reader went past EOF!");
 			return 0;
 		}
 		char c = buf[Position];
@@ -313,12 +324,23 @@ namespace jcr6 {
 
 	int JT_EntryReader::ReadInt() {
 		uEndianCheckUp ret;
-		for (int i = 0; i < 4; i++) ret.ec_reverse[i] = ReadByte();
+		for (int i = 0; i < 4; i++) ret.ec_reverse[i] = ReadChar();
 #ifdef DEBUGCHAT
 		std::cout << "Got int " << ret.ec_int << '\n';
 #endif
 		return EndianConvert(ret.ec_int);
 	}
+
+	int JT_EntryReader::ReadInt16() {
+		uEndianCheckUp ret;
+		//for (int i = 0; i < 4; i++) ret.ec_reverse[i] = 0; // Make sure it's all empty
+		for (int i = 0; i < 2; i++) ret.ec_reverse[i] = ReadChar();
+#ifdef DEBUGCHAT
+		std::cout << "Got int " << ret.ec_int << '\n';
+#endif
+		return EndianConvert(ret.ec_short);
+	}
+
 
 	long JT_EntryReader::ReadLong() {
 		uEndianCheckUp ret;
@@ -480,6 +502,7 @@ namespace jcr6 {
 			bt.seekg(E.Offset(), std::ios::beg);
 			JT_EntryReader comp{ E.CompressedSize() };
 			data.newbuf(E.RealSize());
+			//std::cout << E.MainFile << "::" << E.Entry() << " (" << E.RealSize() << ")\n"; // debug only
 			bt.read(comp.pointme(), E.CompressedSize());
 			CompDrivers[storage].Expand(comp.pointme(), data.pointme(), comp.getsize(), data.getsize());
 			return;
@@ -1045,7 +1068,7 @@ namespace jcr6 {
 
 	JT_Entry JT_Create::AddBuff(std::string entryname, std::string storage, char* buffer, int size, bool dataclearnext) {
 		using namespace jcr6is;
-		JT_Entry entry;
+		JT_Entry entry;		
 		JAMJCR_Error = "Ok";
 		if (!entryadded) {
 			chat({ "First entry is now being added, let's safe the global config first!" });
@@ -1082,6 +1105,7 @@ namespace jcr6 {
 		entry.dataInt["__Size"] = size;
 		entry.dataInt["__CSize"] = csize;
 		entry.dataString["__Storage"] = storage;
+		entry.dataString["__JCR6FOR"] = "C++";
 		Entries[Upper(entryname)] = entry;
 
 		// clear the next data if needed
@@ -1206,6 +1230,19 @@ namespace jcr6 {
 		i.ec_int = EndianConvert(C);
 		for (int a = 0; a < sizeof(C); a++) Write(i.ec_reverse[a]);
 	}
+
+	void JT_CreateBuf::Write(unsigned short C) {
+		uEndianCheckUp i;
+		i.ec_ushort = EndianConvert(C);
+		for (int a = 0; a < sizeof(C); a++) Write(i.ec_reverse[a]);
+	}
+
+	void JT_CreateBuf::Write(unsigned int C) {
+		uEndianCheckUp i;
+		i.ec_uint = EndianConvert(C);
+		for (int a = 0; a < sizeof(C); a++) Write(i.ec_reverse[a]);
+	}
+
 	void JT_CreateBuf::Write(long long C) {
 		uEndianCheckUp i;
 		i.ec_int64 = EndianConvert(C);

@@ -92,6 +92,7 @@ namespace jcr6{
 	   unsigned char ReadByte();
 	   char ReadChar();
 	   int ReadInt();
+	   int ReadInt16();
 	   long ReadLong();
 	   long long ReadLong64();
 	   bool ReadBool();
@@ -153,7 +154,9 @@ namespace jcr6{
 		 JT_CreateBuf(JT_Create* parent, std::string Entry,std::string aStorage="Store");
 		 void Write(char C);
 		 void Write(unsigned char C);
+		 void Write(unsigned short C);
 		 void Write(int C);
+		 void Write(unsigned int C);
 		 void Write(long long C);
 		 void Write(std::string S,bool raw=false);
 		 JT_Entry Close(bool autodelete=false);
