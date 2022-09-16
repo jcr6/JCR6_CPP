@@ -98,6 +98,8 @@ namespace jcr6{
 	   bool ReadBool();
 	   std::string ReadLine();
 	   std::string ReadString(int l=0);
+	   unsigned int ReadUInt32();
+	   unsigned short ReadUInt16();
 	   bool eof();
 	   void newbuf(int size);
 	   std::string BufAsString(bool safe = true);

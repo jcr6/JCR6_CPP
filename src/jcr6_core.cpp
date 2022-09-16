@@ -67,8 +67,9 @@ static std::string Left(std::string mstr,int pos=1){ return mstr.substr(0,pos); 
 typedef union {
   unsigned char ec_byte;
   char ec_char;
-  int ec_int;
+  int ec_int;  
   unsigned int ec_uint;
+  unsigned int ec_uint32;
   short ec_short;
   unsigned short ec_ushort;
   long ec_long;
@@ -366,6 +367,18 @@ namespace jcr6 {
 		std::cout << ")\n";
 #endif
 		return ret;
+	}
+
+	unsigned int JT_EntryReader::ReadUInt32() {
+		uEndianCheckUp ret;
+		for (int i = 0; i < sizeof(unsigned int); i++) ret.ec_reverse[i] = ReadByte();
+		return EndianConvert(ret.ec_uint32);
+	}
+
+	unsigned short JT_EntryReader::ReadUInt16() {
+		uEndianCheckUp ret;
+		for (int i = 0; i < sizeof(unsigned short); i++) ret.ec_reverse[i] = ReadByte();
+		return EndianConvert(ret.ec_ushort);
 	}
 
 	std::string JT_EntryReader::ReadLine() {
