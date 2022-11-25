@@ -654,6 +654,11 @@ namespace jcr6 {
 		return dataInt["__Block"];
 	}
 
+	void JT_Entry::SAN(std::string author, std::string notes) {
+		dataString["__Author"] = author;
+		dataString["__Notes"] = notes;
+	}
+
 
 	void RegisterCompressDriver(JC_CompressDriver Driver) {
 		JAMJCR_Error = "Ok";
@@ -1079,7 +1084,7 @@ namespace jcr6 {
 	void JT_Create::AddConfig(std::string key, bool value) { loc_configout ConfigBool[key] = value; }
 #undef loc_configout
 
-	JT_Entry JT_Create::AddBuff(std::string entryname, std::string storage, char* buffer, int size, bool dataclearnext) {
+	JT_Entry JT_Create::AddBuff(std::string entryname, std::string storage, char* buffer, int size, std::string author,std::string notes, bool dataclearnext) {
 		using namespace jcr6is;
 		JT_Entry entry;		
 		JAMJCR_Error = "Ok";
@@ -1119,6 +1124,8 @@ namespace jcr6 {
 		entry.dataInt["__CSize"] = csize;
 		entry.dataString["__Storage"] = storage;
 		entry.dataString["__JCR6FOR"] = "C++";
+		entry.dataString["__Author"] = author;
+		entry.dataString["__Notes"] = notes;
 		Entries[Upper(entryname)] = entry;
 
 		// clear the next data if needed
@@ -1130,12 +1137,12 @@ namespace jcr6 {
 		return entry;
 	}
 
-	JT_Entry JT_Create::AddString(std::string entryname, std::string str, std::string storage, bool dataclearnext) {
+	JT_Entry JT_Create::AddString(std::string entryname, std::string str, std::string storage, std::string author, std::string notes, bool dataclearnext) {
 		JT_Entry e;
 		const char* cb = str.c_str();
 		char* b = new char[str.size() + 1];
 		strcpy(b, cb);
-		e = AddBuff(entryname, storage, b, str.size(), dataclearnext);
+		e = AddBuff(entryname, storage, b, str.size(), author, notes,dataclearnext);
 		delete[] b;
 		return e;
 	}
@@ -1165,7 +1172,7 @@ namespace jcr6 {
 		return ret;
 	}
 
-	JT_Entry JT_Create::AddFile(std::string filename, std::string entryname, std::string storage, bool dataclearnext) {
+	JT_Entry JT_Create::AddFile(std::string filename, std::string entryname, std::string storage, std::string author, std::string notes, bool dataclearnext) {
 		JT_Entry e;
 		JAMJCR_Error = "Ok";
 		char* buf1;
@@ -1177,7 +1184,7 @@ namespace jcr6 {
 		buf1 = new char[size];
 		ib.read(buf1, size);
 		ib.close();
-		e = AddBuff(entryname, storage, buf1, size, dataclearnext);
+		e = AddBuff(entryname, storage, buf1, size, author, notes, dataclearnext);
 		delete[] buf1;
 		return e;
 	}

@@ -79,6 +79,7 @@ namespace jcr6{
 	   int RealSize();
 	   int Offset();
 	   int Block();
+	   void SAN(std::string author, std::string Notes = "");
 	 };
 
 	 class JT_EntryReader {
@@ -194,9 +195,9 @@ namespace jcr6{
 	   void AddConfig(std::string key,std::string value);
 	   void AddConfig(std::string key,int value);
 	   void AddConfig(std::string key,bool value);
-	   JT_Entry AddBuff(std::string entryname,std::string storage,char * buffer,int size, bool dataclearnext=true);
-	   JT_Entry AddFile(std::string filename, std::string entryname, std::string storage="Store",bool dataclearnext=true);
-	   JT_Entry AddString(std::string entryname,std::string str,std::string storage="Store",bool dataclearnext=true);
+	   JT_Entry AddBuff(std::string entryname,std::string storage,char * buffer,int size, std::string author="",std::string notes="", bool dataclearnext = true);
+	   JT_Entry AddFile(std::string filename, std::string entryname, std::string storage="Store", std::string author="", std::string notes = "", bool dataclearnext = true);
+	   JT_Entry AddString(std::string entryname,std::string str,std::string storage="Store", std::string author = "", std::string notes = "", bool dataclearnext=true);
 	   JT_Entry AddStringMap(std::string entryname, std::map<std::string, std::string> map, std::string storage = "Store", bool dataclearnext = true);
 	   JT_Entry AddCharacters(std::string entryname, std::vector<char> chars, std::string storage = "Store", bool dataclearnext = true);
 	   JT_CreateBuf* StartEntry(std::string entry, std::string storage = "Store");
