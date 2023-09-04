@@ -533,6 +533,7 @@ namespace jcr6 {
 			bt.read(comp.pointme(), BLK.CompressedSize());
 			_LastBlockBuf = new char[BLK.RealSize()];
 			CompDrivers[storage].Expand(comp.pointme(), _LastBlockBuf, comp.getsize(), BLK.RealSize());
+			_LastBlock = BlockTag;
 		}
 		data.newbuf(E.RealSize());
 		auto o{ data.pointme() };
