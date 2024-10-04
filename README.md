@@ -1,3 +1,8 @@
+# DISCONTINUED IN THIS FORM
+
+JCR6 is now part of the Slyvina Framework [and can be found here](https://github.com/Slyvina/JCR6)
+
+
 ![](https://avatars3.githubusercontent.com/u/47812464?s=200&v=4)
 
 # JCR6 for C++
